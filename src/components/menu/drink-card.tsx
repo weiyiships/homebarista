@@ -13,6 +13,7 @@ export function DrinkCard({ drink, onSelect }: DrinkCardProps) {
   return (
     <button
       type="button"
+      aria-label={drink.name}
       disabled={!isAvailable}
       onClick={() => isAvailable && onSelect(drink)}
       aria-disabled={!isAvailable}
