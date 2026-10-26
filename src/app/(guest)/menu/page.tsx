@@ -29,7 +29,7 @@ export default function MenuPage() {
   }
 
   function handleConfirmCustomization(
-    drink: MenuItemDefinition,
+    _drink: MenuItemDefinition,
     _customization: DrinkCustomization
   ) {
     // In Issue #5, this will submit the order and redirect to /order/[id]
