@@ -9,8 +9,9 @@ describe("DrinkCard Component (Issue #3)", () => {
   it("renders drink name, description, and shot/size indicator", () => {
     render(<DrinkCard drink={sampleDrink} onSelect={vi.fn()} />);
 
-    expect(screen.getByText("Espresso")).toBeInTheDocument();
-    expect(screen.getByText(sampleDrink.description)).toBeInTheDocument();
+    expect(screen.getByText("Espresso")).toBeDefined();
+    expect(screen.getByText(sampleDrink.description)).toBeDefined();
+    expect(screen.getByText(/Single \/ Double shot/i)).toBeDefined();
   });
 
   it("calls onSelect when an available drink card is clicked", () => {
@@ -33,10 +34,10 @@ describe("DrinkCard Component (Issue #3)", () => {
 
     render(<DrinkCard drink={unavailableDrink} onSelect={handleSelect} />);
 
-    expect(screen.getByText(/Unavailable/i)).toBeInTheDocument();
+    expect(screen.getByText(/Unavailable/i)).toBeDefined();
 
     const cardButton = screen.getByRole("button", { name: /Espresso/i });
-    expect(cardButton).toBeDisabled();
+    expect(cardButton.hasAttribute("disabled")).toBe(true);
 
     fireEvent.click(cardButton);
     expect(handleSelect).not.toHaveBeenCalled();
