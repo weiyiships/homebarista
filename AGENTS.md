@@ -30,7 +30,7 @@ Out of scope (do not build unless an issue says so): payments or pricing, native
 | --- | --- | --- |
 | Runtime | Node.js LTS | 22+ |
 | Language | TypeScript, `strict: true` | 5.x |
-| Framework | Next.js App Router (frontend and API route handlers) | 15+ |
+| Framework | Next.js App Router (frontend and API route handlers) | 15 (`package.json`: `^15.1.7`) |
 | UI library | React | 19 |
 | Styling | Tailwind CSS | 4 |
 | Components | shadcn/ui (Radix primitives) + lucide-react icons | latest CLI |
@@ -102,9 +102,9 @@ Real-time updates use **polling every 2–3 seconds** (PRD FR-2, FR-4). Do not a
 │   ├── e2e/               # Playwright specs
 │   └── helpers/           # factories, db reset, auth helpers
 └── .github/
-    ├── workflows/ci.yml
+    ├── workflows/ci.yml           # (not created yet)
     ├── ISSUE_TEMPLATE/
-    └── pull_request_template.md
+    └── pull_request_template.md   # (not created yet)
 ```
 
 **Key patterns**
@@ -204,7 +204,7 @@ The PRD is at [`docs/PRD.md`](docs/PRD.md). Requirement IDs (US-x, FR-x) are sta
 
 ### 2.2 Mockups and prototype
 
-Mockup exports live in `docs/design/` (Figma link: _add link here_). The design direction:
+Mockup exports live in `docs/design/` (No Figma file; designs are in docs/design/). The design direction:
 
 - **Mobile-first, one-handed use at 375px.** Primary actions sit in the bottom third of the screen; tap targets are at least 44×44 px.
 - **Warm café look:** a cream/off-white background, espresso-brown primary color, one accent color for status. Supports light and dark mode through Tailwind theme tokens; never hard-code hex colors in components.
@@ -293,6 +293,7 @@ Screens:
   - `chore/2-ci-pipeline`
   - `docs/13-swagger-docs`
   - `test/14-e2e-order-flow`
+- No author suffixes. If the branch name is already taken, stop and ask.
 - Keep branches short-lived (ideally under 3 days). Rebase on `main` before opening a PR.
 
 ### 3.2 Commit messages
@@ -322,15 +323,20 @@ Small, focused commits. A test commit should come **before** its implementation 
 
 1. Open a PR from the issue branch into `main` when the acceptance criteria are met and all checks pass locally.
 2. Title follows the commit format: `feat: submit order and redirect to status page (#7)`.
-3. The description must include:
-   - `Closes #<issue>` (moves the card to Done on merge)
-   - A summary of what changed and why
-   - The acceptance criteria checklist copied from the issue, with each item checked
-   - How it was tested (unit, integration, E2E) and screenshots or a short recording for UI changes (375px and desktop)
-   - PRD references (e.g. "Implements FR-2")
-4. **Required:** CI green (lint, typecheck, unit, integration, E2E) and **one approving review from the other partner**. Authors never approve or merge their own PRs without review.
-5. Reviewers check: acceptance criteria met, tests written first and meaningful, no secrets, accessibility basics, matches this file.
-6. Squash-merge or rebase-merge, keeping the test-first commits visible in the PR history. Delete the branch after merging.
+3. Copy the issue's labels and milestone to the PR, set the assignee, and add the PR to the Project board (or list these as TODO for the human if you lack permission).
+4. Before opening a PR, run `git diff --stat main...HEAD`. If more than ~400 changed lines (excluding lockfiles and generated files), stop and propose a split. For feature issues, split by layer: PR 1 domain logic + tests, PR 2 UI + page.
+5. The description uses these headings, in this order:
+   - **Summary:** what changed and why.
+   - **Closes:** `Closes #<issue>` (moves the card to Done on merge).
+   - **PRD references:** every US-x and FR-x ID listed in the issue body and its milestone description.
+   - **Acceptance criteria:** the checklist copied from the issue, with each item checked.
+   - **Changes:** the files or areas touched.
+   - **Testing:** paste the actual tail of the output of `npm run lint`, `npm run typecheck`, and `npm test`. Never write "passing" or "clean" without the output. If `.github/workflows/ci.yml` does not exist, write "CI not configured" and do not tick any CI checkbox.
+   - **Screenshots:** 375px and desktop for UI changes. Agents cannot capture them; keep the heading and write "TODO: author to attach 375px and desktop screenshots".
+   - **Not done / uncertain:** anything left undone or unverified.
+6. **Required:** CI green once ci.yml exists (currently not configured) (lint, typecheck, unit, integration, E2E) and **one approving review from the other partner**. Authors never approve or merge their own PRs without review.
+7. Reviewers check: acceptance criteria met, tests written first and meaningful, no secrets, accessibility basics, matches this file.
+8. Squash-merge or rebase-merge, keeping the test-first commits visible in the PR history. Delete the branch after merging.
 
 **Definition of Done:** acceptance criteria met, tests written first and passing in CI, coverage goals met, reviewed and approved, merged to `main`, deployed preview checked, and the issue is in Done.
 
@@ -372,7 +378,7 @@ Small, focused commits. A test commit should come **before** its implementation 
 - **Don't** use raw SQL strings built with concatenation.
 - **Don't** add WebSockets, Redux, GraphQL, or a separate Express server.
 - **Don't** skip, delete, or loosen tests to get CI green.
-- **Don't** make large, multi-issue PRs. If a change grows past about 400 lines, split it.
+- **Don't** make large, multi-issue PRs. Before opening a PR, run `git diff --stat main...HEAD`. If more than ~400 changed lines (excluding lockfiles and generated files), stop and propose a split. For feature issues, split by layer: PR 1 domain logic + tests, PR 2 UI + page.
 
 ### 4.3 Dependencies
 
@@ -425,6 +431,7 @@ Every new dependency must be justified in the PR description. Prefer well-mainta
 
 ## 5. How agents should work on a task
 
+0. Before any work, check the issue's assignee and Project status, and search for existing branches or PRs referencing it (e.g. `gh pr list --search '#<n>'`). If it is assigned to someone else, or a branch/PR already exists, stop and ask. Otherwise ask the human to assign the issue and move the card to In Progress.
 1. Read the GitHub issue, its acceptance criteria, and the linked PRD sections.
 2. Confirm you are on the correct branch (`<type>/<issue>-<description>`); create it from an up-to-date `main` if not.
 3. Make a short plan and list the tests you will write. Ask if anything is unclear.
@@ -432,3 +439,24 @@ Every new dependency must be justified in the PR description. Prefer well-mainta
 5. Run lint, typecheck, and all tests. Fix failures without weakening tests.
 6. Summarize what changed, which acceptance criteria are covered, and anything left undone or uncertain.
 7. Do not open, merge, or close PRs or issues unless a team member asks you to.
+
+---
+
+## 6. Revision history
+
+**v2 (after comparing PR #16 and PR #18 for #3)**
+
+- Section 5: added step 0 (check assignee, Project status, and existing branches/PRs before starting).
+- Section 3.1: no author suffixes in branch names; stop and ask if the name is taken.
+- Section 3.3: copy labels, milestone, assignee, and Project to the PR (or list as TODO).
+- Section 3.3: fixed PR description headings (Summary, Closes, PRD references, Acceptance criteria, Changes, Testing, Screenshots, Not done / uncertain).
+- Section 3.3: PRD references must list every US-x/FR-x ID from the issue and its milestone.
+- Section 3.3: Testing must paste the tail of lint, typecheck, and test output.
+- Section 3.3: Screenshots heading kept with a TODO for the author.
+- Section 3.3: write "CI not configured" when ci.yml is missing; no CI checkbox ticked.
+- Sections 3.3 and 4.2: size check with `git diff --stat main...HEAD`; propose a split above ~400 lines, by layer.
+- Section 3.3: required checks read "CI green once ci.yml exists (currently not configured)".
+- Section 1.3: marked ci.yml and pull_request_template.md as not created yet.
+- Section 1.2: Next.js version reconciled with package.json (15); Section 2.2: Figma placeholder replaced.
+
+Not yet re-tested with a new agent run.
