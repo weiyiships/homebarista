@@ -104,7 +104,7 @@ Real-time updates use **polling every 2–3 seconds** (PRD FR-2, FR-4). Do not a
 └── .github/
     ├── workflows/ci.yml           # (not created yet)
     ├── ISSUE_TEMPLATE/
-    └── pull_request_template.md   # (not created yet)
+    └── pull_request_template.md
 ```
 
 **Key patterns**
