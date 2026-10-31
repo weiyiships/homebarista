@@ -10,7 +10,8 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   title: "Home Barista",
-  description: "Live barista queue and mobile coffee ordering for small gatherings",
+  description:
+    "Live barista queue and mobile coffee ordering for small gatherings",
 };
 
 export default function RootLayout({
@@ -20,8 +21,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="antialiased bg-[var(--background)] text-[var(--foreground)]">
-        <div className="max-w-md mx-auto min-h-screen flex flex-col px-4 pt-4 pb-12">
+      <body className="bg-[var(--background)] text-[var(--foreground)] antialiased">
+        <div className="mx-auto flex min-h-screen max-w-md flex-col px-4 pt-4 pb-12">
           {children}
         </div>
       </body>

@@ -4,25 +4,25 @@ Tokens are defined as CSS variables in `src/app/globals.css`. Use them through T
 
 ## Color tokens
 
-| Token | Light | Dark | Use |
-|---|---|---|---|
-| `--background` | `#fdfbf7` | `#1c1714` | Page background |
-| `--foreground` | `#2d241e` | `#f4eee6` | Body text |
-| `--primary` | `#4a2c11` | `#c9935a` | Primary actions, brand |
-| `--primary-foreground` | `#fdfbf7` | `#1c1714` | Text on primary |
-| `--muted` | `#f3ede2` | `#2e2621` | Cards, subtle surfaces |
-| `--muted-foreground` | `#79685b` | `#a6988d` | Secondary text |
-| `--accent` | `#d97706` | `#f59e0b` | Highlights |
-| `--accent-foreground` | `#ffffff` | `#1c1714` | Text on accent |
-| `--border` | `#e8ded1` | `#3d332c` | Dividers, outlines |
+| Token                  | Light     | Dark      | Use                    |
+| ---------------------- | --------- | --------- | ---------------------- |
+| `--background`         | `#fdfbf7` | `#1c1714` | Page background        |
+| `--foreground`         | `#2d241e` | `#f4eee6` | Body text              |
+| `--primary`            | `#4a2c11` | `#c9935a` | Primary actions, brand |
+| `--primary-foreground` | `#fdfbf7` | `#1c1714` | Text on primary        |
+| `--muted`              | `#f3ede2` | `#2e2621` | Cards, subtle surfaces |
+| `--muted-foreground`   | `#79685b` | `#a6988d` | Secondary text         |
+| `--accent`             | `#d97706` | `#f59e0b` | Highlights             |
+| `--accent-foreground`  | `#ffffff` | `#1c1714` | Text on accent         |
+| `--border`             | `#e8ded1` | `#3d332c` | Dividers, outlines     |
 
 ## Order status tokens
 
-| Status | Token | Light | Dark |
-|---|---|---|---|
-| Received | `--status-received` | `#6b7280` | `#9ca3af` |
-| Brewing | `--status-brewing` | `#d97706` | `#f59e0b` |
-| Ready | `--status-ready` | `#16a34a` | `#22c55e` |
+| Status    | Token                | Light     | Dark      |
+| --------- | -------------------- | --------- | --------- |
+| Received  | `--status-received`  | `#6b7280` | `#9ca3af` |
+| Brewing   | `--status-brewing`   | `#d97706` | `#f59e0b` |
+| Ready     | `--status-ready`     | `#16a34a` | `#22c55e` |
 | Cancelled | `--status-cancelled` | `#dc2626` | `#ef4444` |
 
 Status is never conveyed by color alone; always pair it with a text label or icon.
