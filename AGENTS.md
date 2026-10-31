@@ -2,6 +2,17 @@
 
 Full-stack web app where guests order coffee by QR code and the host runs a live barista queue. The PRD (`docs/PRD.md`) decides _what_ to build; this file decides _how_.
 
+## Project References
+
+- **Product requirements:** [`docs/PRD.md`](docs/PRD.md)
+  - Scope and exclusions: §3 Goals, §4 Non-goals
+  - What to build: §6 User stories, §7 Functional requirements and acceptance criteria
+  - Quality bars: §8 Non-functional requirements
+  - Architecture: §9 Technical approach
+- **UI tokens and rules:** [`DESIGN.md`](DESIGN.md)
+- **API contract:** [`docs/api/openapi.yaml`](docs/api/openapi.yaml)
+- **Research and design artifacts:** `docs/research/`, `docs/design/`
+
 ## Core Principles
 
 1. **High Quality Development:** All code must be production-ready, readable, strictly typed, and follow the layering rules below.
@@ -37,7 +48,7 @@ Full-stack web app where guests order coffee by QR code and the host runs a live
 - Work on a branch named `<type>/<issue>-<description>`, never on `main`. Use Conventional Commits ending in the issue: `feat(domain): add order state machine (#9)`.
 - PRs need `Closes #N`, the acceptance criteria checklist, test evidence, green CI, and one approving review from the other partner.
 - Always run `npm run lint && npm run format:check && npm run typecheck && npm test` and confirm it passes before telling the user a task is complete.
-- Stay within the issue and the PRD: no prices, payments, sugar option, or unrequested features. Prefer local solutions over external APIs to keep costs low and user data private.
+- Stay within the issue and the PRD (§4 Non-goals): no prices, payments, sugar option, or unrequested features. Prefer local solutions over external APIs to keep costs low and user data private.
 - Don't open, merge, or close PRs or issues unless a team member asks.
 
 ## Stick to the truth
