@@ -15,66 +15,21 @@ colors:
   status-ready: "#2E7D32"
   error: "#B3261E"
 typography:
-  display:
-    { fontFamily: Inter, fontSize: 56px, fontWeight: 700, lineHeight: 1.1 }
-  headline-lg:
-    { fontFamily: Inter, fontSize: 36px, fontWeight: 700, lineHeight: 1.2 }
-  headline-md:
-    { fontFamily: Inter, fontSize: 24px, fontWeight: 600, lineHeight: 1.3 }
-  body-md:
-    { fontFamily: Inter, fontSize: 16px, fontWeight: 400, lineHeight: 1.5 }
-  label-md:
-    { fontFamily: Inter, fontSize: 14px, fontWeight: 500, lineHeight: 1.3 }
+  display: { fontFamily: Inter, fontSize: 56px, fontWeight: 700, lineHeight: 1.1 }
+  headline-lg: { fontFamily: Inter, fontSize: 36px, fontWeight: 700, lineHeight: 1.2 }
+  headline-md: { fontFamily: Inter, fontSize: 24px, fontWeight: 600, lineHeight: 1.3 }
+  body-md: { fontFamily: Inter, fontSize: 16px, fontWeight: 400, lineHeight: 1.5 }
+  label-md: { fontFamily: Inter, fontSize: 14px, fontWeight: 500, lineHeight: 1.3 }
 rounded: { sm: 6px, md: 12px }
 spacing: { xs: 4px, sm: 8px, md: 16px, lg: 32px, xl: 64px }
 components:
-  button-primary:
-    {
-      backgroundColor: "{colors.primary}",
-      textColor: "{colors.neutral}",
-      typography: "{typography.label-md}",
-      rounded: "{rounded.sm}",
-      padding: 12px 20px,
-    }
-  button-primary-hover:
-    { backgroundColor: "{colors.on-surface}", textColor: "{colors.neutral}" }
-  button-secondary:
-    {
-      backgroundColor: "{colors.neutral}",
-      textColor: "{colors.primary}",
-      typography: "{typography.label-md}",
-      rounded: "{rounded.sm}",
-      padding: 12px 20px,
-    }
-  navbar:
-    {
-      backgroundColor: "{colors.neutral}",
-      textColor: "{colors.on-surface}",
-      padding: 16px 32px,
-    }
-  drink-card:
-    {
-      backgroundColor: "{colors.neutral}",
-      textColor: "{colors.on-surface}",
-      typography: "{typography.body-md}",
-      rounded: "{rounded.md}",
-      padding: 24px,
-    }
-  order-card:
-    {
-      backgroundColor: "{colors.neutral}",
-      textColor: "{colors.on-surface}",
-      typography: "{typography.body-md}",
-      rounded: "{rounded.md}",
-      padding: 16px,
-    }
-  status-badge:
-    {
-      textColor: "{colors.neutral}",
-      typography: "{typography.label-md}",
-      rounded: "{rounded.sm}",
-      padding: 4px 10px,
-    }
+  button-primary: { backgroundColor: "{colors.primary}", textColor: "{colors.neutral}", typography: "{typography.label-md}", rounded: "{rounded.sm}", padding: 12px 20px }
+  button-primary-hover: { backgroundColor: "{colors.on-surface}", textColor: "{colors.neutral}" }
+  button-secondary: { backgroundColor: "{colors.neutral}", textColor: "{colors.primary}", typography: "{typography.label-md}", rounded: "{rounded.sm}", padding: 12px 20px }
+  navbar: { backgroundColor: "{colors.neutral}", textColor: "{colors.on-surface}", padding: 16px 32px }
+  drink-card: { backgroundColor: "{colors.neutral}", textColor: "{colors.on-surface}", typography: "{typography.body-md}", rounded: "{rounded.md}", padding: 24px }
+  order-card: { backgroundColor: "{colors.neutral}", textColor: "{colors.on-surface}", typography: "{typography.body-md}", rounded: "{rounded.md}", padding: 16px }
+  status-badge: { textColor: "{colors.neutral}", typography: "{typography.label-md}", rounded: "{rounded.sm}", padding: 4px 10px }
 ---
 
 ## Overview
