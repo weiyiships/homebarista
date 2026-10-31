@@ -1,6 +1,6 @@
 # AGENTS.md: Home Barista Order App
 
-Full-stack web app where guests order coffee by QR code and the host runs a live barista queue. The PRD (`docs/PRD.md`) decides *what* to build; this file decides *how*.
+Full-stack web app where guests order coffee by QR code and the host runs a live barista queue. The PRD (`docs/PRD.md`) decides _what_ to build; this file decides _how_.
 
 ## Core Principles
 
