@@ -10,11 +10,7 @@ describe("cn helper utility (AGENTS.md Section 1.3)", () => {
   it("handles conditional class names", () => {
     const isHidden = false;
     const isActive = true;
-    const result = cn(
-      "base-class",
-      isHidden && "hidden",
-      isActive && "active"
-    );
+    const result = cn("base-class", isHidden && "hidden", isActive && "active");
     expect(result).toBe("base-class active");
   });
 

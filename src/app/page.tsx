@@ -3,31 +3,34 @@ import { Coffee, User, ClipboardList } from "lucide-react";
 
 export default function HomePage() {
   return (
-    <main className="flex-1 flex flex-col justify-center items-center text-center space-y-8">
+    <main className="flex flex-1 flex-col items-center justify-center space-y-8 text-center">
       <div className="space-y-3">
-        <div className="w-16 h-16 mx-auto rounded-full bg-[var(--primary)] text-[var(--primary-foreground)] flex items-center justify-center shadow-md">
-          <Coffee className="w-8 h-8" />
+        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[var(--primary)] text-[var(--primary-foreground)] shadow-md">
+          <Coffee className="h-8 w-8" />
         </div>
-        <h1 className="text-3xl font-bold tracking-tight text-[var(--primary)]">Home Barista</h1>
-        <p className="text-sm text-[var(--muted-foreground)] max-w-xs mx-auto">
-          Order freshly crafted coffee from your phone or run the live barista queue.
+        <h1 className="text-3xl font-bold tracking-tight text-[var(--primary)]">
+          Home Barista
+        </h1>
+        <p className="mx-auto max-w-xs text-sm text-[var(--muted-foreground)]">
+          Order freshly crafted coffee from your phone or run the live barista
+          queue.
         </p>
       </div>
 
       <div className="w-full space-y-3 pt-4">
         <Link
           href="/menu"
-          className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-[var(--primary)] text-[var(--primary-foreground)] font-semibold shadow hover:opacity-95 transition min-h-[44px]"
+          className="inline-flex min-h-[44px] w-full items-center justify-center gap-2 rounded-xl bg-[var(--primary)] px-6 py-3.5 font-semibold text-[var(--primary-foreground)] shadow transition hover:opacity-95"
         >
-          <Coffee className="w-5 h-5" />
+          <Coffee className="h-5 w-5" />
           <span>Order Coffee</span>
         </Link>
 
         <Link
           href="/barista/queue"
-          className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl border border-[var(--border)] bg-[var(--muted)] text-[var(--foreground)] font-medium hover:bg-opacity-80 transition min-h-[44px]"
+          className="hover:bg-opacity-80 inline-flex min-h-[44px] w-full items-center justify-center gap-2 rounded-xl border border-[var(--border)] bg-[var(--muted)] px-6 py-3.5 font-medium text-[var(--foreground)] transition"
         >
-          <ClipboardList className="w-5 h-5 text-[var(--muted-foreground)]" />
+          <ClipboardList className="h-5 w-5 text-[var(--muted-foreground)]" />
           <span>Barista Queue</span>
         </Link>
       </div>
@@ -35,9 +38,9 @@ export default function HomePage() {
       <div className="pt-6">
         <Link
           href="/login"
-          className="inline-flex items-center gap-1.5 text-xs text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition"
+          className="inline-flex items-center gap-1.5 text-xs text-[var(--muted-foreground)] transition hover:text-[var(--foreground)]"
         >
-          <User className="w-3.5 h-3.5" />
+          <User className="h-3.5 w-3.5" />
           <span>Customer Login</span>
         </Link>
       </div>

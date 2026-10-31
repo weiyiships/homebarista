@@ -1,4 +1,5 @@
 # PRD: Home Barista Order App
+
 **Owner:** Xuming Zhuge / Weiyi Sun
 
 ---
@@ -30,30 +31,30 @@ When we host friends, drinks get ordered out loud. With more than a few people, 
 
 ## 5. Users
 
-| Role | Description | Auth |
-| --- | --- | --- |
-| Guest | Friend at the gathering, on their phone, ordering without an account | None (name only) |
-| Customer | Returning guest with an optional account | Email and password (JWT session) |
-| Barista | Host, using a phone or laptop near the machine | Shared passcode (JWT session) |
+| Role     | Description                                                          | Auth                             |
+| -------- | -------------------------------------------------------------------- | -------------------------------- |
+| Guest    | Friend at the gathering, on their phone, ordering without an account | None (name only)                 |
+| Customer | Returning guest with an optional account                             | Email and password (JWT session) |
+| Barista  | Host, using a phone or laptop near the machine                       | Shared passcode (JWT session)    |
 
 ## 6. User stories
 
 Each story rests on an assumption to test (Mom Test).
 
-| ID | Priority | Story | Assumption |
-| --- | --- | --- | --- |
-| US-1 | P0 | As a guest, I want to order from my phone via QR without an account, so I don't interrupt the host. | Verbal ordering is awkward or chaotic. |
-| US-2 | P0 | As a guest, I want to customize my drink (size or shots, milk, temperature), so it is made correctly. | Customization errors happen today. |
-| US-3 | P0 | As the barista, I want a live queue in arrival order, so I don't rely on memory. | Orders get forgotten or mixed up. |
-| US-4 | P0 | As the barista, I want to advance an order (received, brewing, ready) or cancel it. | Needed to run the queue. |
-| US-5 | P0 | As a guest, I want to see my order status, so I stop asking if it's done. | Guests wait and ask today. |
-| US-6 | P1 | As the barista, I want to mark drinks or milks unavailable, so guests can't order what I can't make. | Running out mid-session happens. |
-| US-7 | P1 | As the barista, I want a history of completed and cancelled orders, so I can look back at what I served. | The host wants a record of what went out. |
-| US-8 | P2 | As a customer, I want my usual order saved to my account, so reordering is one tap. | Friends repeat orders. |
-| US-9 | P2 | As a guest, I want a notification when my drink is ready. | Guests step away from the machine. |
-| US-10 | P1 | As a returning guest, I want to sign up with my name, email, and password, so the app remembers me. | Friends come to more than one gathering and would sign up if it saves effort. |
-| US-11 | P1 | As a customer, I want to log in and log out on my phone, so my name is filled in and my orders are linked to me. | Typing a name each time is a small but real annoyance. |
-| US-12 | P1 | As a customer, I want to see my past orders, so I can remember what I liked. | Guests forget what they ordered last time. |
+| ID    | Priority | Story                                                                                                            | Assumption                                                                    |
+| ----- | -------- | ---------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| US-1  | P0       | As a guest, I want to order from my phone via QR without an account, so I don't interrupt the host.              | Verbal ordering is awkward or chaotic.                                        |
+| US-2  | P0       | As a guest, I want to customize my drink (size or shots, milk, temperature), so it is made correctly.            | Customization errors happen today.                                            |
+| US-3  | P0       | As the barista, I want a live queue in arrival order, so I don't rely on memory.                                 | Orders get forgotten or mixed up.                                             |
+| US-4  | P0       | As the barista, I want to advance an order (received, brewing, ready) or cancel it.                              | Needed to run the queue.                                                      |
+| US-5  | P0       | As a guest, I want to see my order status, so I stop asking if it's done.                                        | Guests wait and ask today.                                                    |
+| US-6  | P1       | As the barista, I want to mark drinks or milks unavailable, so guests can't order what I can't make.             | Running out mid-session happens.                                              |
+| US-7  | P1       | As the barista, I want a history of completed and cancelled orders, so I can look back at what I served.         | The host wants a record of what went out.                                     |
+| US-8  | P2       | As a customer, I want my usual order saved to my account, so reordering is one tap.                              | Friends repeat orders.                                                        |
+| US-9  | P2       | As a guest, I want a notification when my drink is ready.                                                        | Guests step away from the machine.                                            |
+| US-10 | P1       | As a returning guest, I want to sign up with my name, email, and password, so the app remembers me.              | Friends come to more than one gathering and would sign up if it saves effort. |
+| US-11 | P1       | As a customer, I want to log in and log out on my phone, so my name is filled in and my orders are linked to me. | Typing a name each time is a small but real annoyance.                        |
+| US-12 | P1       | As a customer, I want to see my past orders, so I can remember what I liked.                                     | Guests forget what they ordered last time.                                    |
 
 ## 7. Functional requirements and acceptance criteria
 
@@ -127,16 +128,16 @@ Each story rests on an assumption to test (Mom Test).
 
 ## 9. Technical approach
 
-| Layer | Choice |
-| --- | --- |
-| Framework | Next.js (App Router), TypeScript |
-| UI | Tailwind + shadcn/ui |
-| DB | Postgres (Neon or Supabase) |
-| ORM | Drizzle |
-| Real-time | Polling every 2 to 3s (upgrade to Supabase Realtime only if time allows) |
-| Auth | JWT in httpOnly cookies: customer email and password (bcrypt or argon2 hashing), shared barista passcode; route protection in Next.js middleware |
-| Tests | Vitest (unit), Playwright (end-to-end order flow) |
-| Deploy | Vercel + GitHub Actions CI |
+| Layer     | Choice                                                                                                                                           |
+| --------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Framework | Next.js (App Router), TypeScript                                                                                                                 |
+| UI        | Tailwind + shadcn/ui                                                                                                                             |
+| DB        | Postgres (Neon or Supabase)                                                                                                                      |
+| ORM       | Drizzle                                                                                                                                          |
+| Real-time | Polling every 2 to 3s (upgrade to Supabase Realtime only if time allows)                                                                         |
+| Auth      | JWT in httpOnly cookies: customer email and password (bcrypt or argon2 hashing), shared barista passcode; route protection in Next.js middleware |
+| Tests     | Vitest (unit), Playwright (end-to-end order flow)                                                                                                |
+| Deploy    | Vercel + GitHub Actions CI                                                                                                                       |
 
 **Core data model (draft)**
 

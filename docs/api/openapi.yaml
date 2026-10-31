@@ -1,0 +1,6 @@
+openapi: 3.1.0
+info:
+  title: Home Barista API
+  version: 0.1.0
+  description: Generated from Zod schemas via @asteasolutions/zod-to-openapi once route handlers exist.
+paths: {}
