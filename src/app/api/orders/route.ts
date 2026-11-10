@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { getCustomerFromRequest } from "@/lib/auth/customerSession";
 import { getMenuItemById, listMilkOptions } from "@/lib/db/queries/menu";
 import { createOrder } from "@/lib/db/queries/orders";
 import { checkOrderAvailability } from "@/lib/domain/availability";
@@ -30,9 +31,11 @@ export async function POST(request: Request) {
   try {
     // Re-check availability on the server so a stale, already-open menu
     // cannot order something the barista turned off (FR-5).
-    const [drink, milks] = await Promise.all([
+    // The account comes only from the session cookie, never the body (FR-7).
+    const [drink, milks, customer] = await Promise.all([
       getMenuItemById(validation.data.drink_id),
       listMilkOptions(),
+      getCustomerFromRequest(request),
     ]);
     const availability = checkOrderAvailability(
       drink,
@@ -49,7 +52,7 @@ export async function POST(request: Request) {
       guestName: validation.data.guest_name,
       drinkId: validation.data.drink_id,
       options: validation.data.options,
-      customerId: validation.data.customer_id,
+      customerId: customer?.id ?? null,
     });
 
     return NextResponse.json(

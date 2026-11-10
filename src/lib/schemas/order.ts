@@ -27,7 +27,6 @@ export const OrderRequestSchema = z.object({
     .string({ message: "Drink ID is required" })
     .uuid("Invalid drink ID format"),
   options: z.record(z.string(), z.unknown()).default({}),
-  customer_id: z.string().uuid("Invalid customer ID").optional().nullable(),
 });
 
 export type OrderRequest = z.infer<typeof OrderRequestSchema>;
