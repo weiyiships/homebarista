@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
-import { Coffee, MapPin } from "lucide-react";
-import { LogoutButton } from "@/components/auth/LogoutButton";
+import { MapPin } from "lucide-react";
+import { PAGE_WIDE } from "@/components/site/layout";
+import { cn } from "@/lib/utils";
 import { type Drink } from "@/lib/domain/menu";
 import { DrinkGrid } from "@/components/menu/DrinkGrid";
 import { CustomizationDrawer } from "@/components/menu/CustomizationDrawer";
@@ -26,9 +26,6 @@ interface MenuClientProps {
   customer?: { name: string } | null;
 }
 
-const accountLink =
-  "inline-flex min-h-11 items-center rounded-[6px] px-2.5 text-sm font-medium whitespace-nowrap text-[var(--primary)] hover:bg-[var(--muted)] focus-visible:ring-2 focus-visible:ring-[var(--primary)] focus-visible:outline-none";
-
 /**
  * Client shell for the menu page.
  * Keeps availability live (FR-5), tracks which drink (if any) is selected,
@@ -45,58 +42,26 @@ export function MenuClient({
   const selectedDrink = menu.drinks.find((d) => d.id === selectedId) ?? null;
 
   return (
-    <>
-      <header className="-mx-4 -mt-4 flex items-center justify-between gap-2 border-b border-[var(--border)] bg-[var(--background)] px-4 py-2">
-        <Link
-          href="/"
-          className="inline-flex min-h-11 shrink-0 items-center gap-2 rounded-[6px] pr-2 text-base font-bold tracking-tight whitespace-nowrap text-[var(--foreground)] focus-visible:ring-2 focus-visible:ring-[var(--primary)] focus-visible:outline-none"
-        >
-          <Coffee className="h-6 w-6" aria-hidden="true" />
-          Home Barista
-        </Link>
-        <nav aria-label="Account" className="flex items-center gap-1">
-          {customer ? (
-            <>
-              <Link href="/my-orders" className={accountLink}>
-                My orders
-              </Link>
-              <LogoutButton />
-            </>
-          ) : (
-            <>
-              <Link href="/login" className={accountLink}>
-                Log in
-              </Link>
-              <Link href="/signup" className={accountLink}>
-                Sign up
-              </Link>
-            </>
+    <main className="flex flex-col gap-8 pb-8">
+      <section
+        aria-labelledby="menu-title"
+        data-testid="menu-hero"
+        className="border-b border-[var(--border)] bg-[var(--muted)]"
+      >
+        <div
+          className={cn(
+            PAGE_WIDE,
+            "flex flex-col gap-6 py-8 md:flex-row md:items-center md:justify-between md:py-12",
           )}
-        </nav>
-      </header>
-
-      <main className="flex flex-col gap-6 pb-8">
-        <section
-          aria-labelledby="menu-title"
-          data-testid="menu-hero"
-          className="-mx-4 flex flex-col gap-3 bg-[var(--muted)] px-4 pt-5 pb-4"
         >
-          <div
-            className="flex items-end justify-between gap-2 text-[var(--foreground)]"
-            aria-hidden="true"
-          >
-            {HERO_DRINKS.map((name) => (
-              <DrinkIllustration key={name} name={name} className="h-14 w-14" />
-            ))}
-          </div>
           <div>
             <h1
               id="menu-title"
-              className="text-4xl leading-tight font-bold tracking-tight text-[var(--foreground)]"
+              className="text-4xl leading-tight font-bold tracking-tight text-[var(--foreground)] md:text-5xl"
             >
               Our Menu
             </h1>
-            <p className="mt-1 flex items-center gap-1.5 text-sm font-medium text-[var(--foreground)]">
+            <p className="mt-2 flex items-center gap-1.5 text-sm font-medium text-[var(--foreground)] md:text-base">
               <MapPin className="h-4 w-4" aria-hidden="true" />
               Ordering open · pickup at the bar
             </p>
@@ -106,20 +71,34 @@ export function MenuClient({
               </p>
             )}
           </div>
-        </section>
+          <div
+            className="flex items-end justify-between gap-2 text-[var(--foreground)] md:justify-end md:gap-6"
+            aria-hidden="true"
+          >
+            {HERO_DRINKS.map((name) => (
+              <DrinkIllustration
+                key={name}
+                name={name}
+                className="h-14 w-14 md:h-20 md:w-20"
+              />
+            ))}
+          </div>
+        </div>
+      </section>
 
+      <div className={PAGE_WIDE}>
         <DrinkGrid
           drinks={menu.drinks}
           onSelect={(drink) => setSelectedId(drink.id)}
         />
-        <CustomizationDrawer
-          drink={selectedDrink}
-          isOpen={selectedDrink !== null}
-          onClose={() => setSelectedId(null)}
-          unavailableMilks={menu.unavailableMilks}
-          defaultGuestName={customer?.name ?? ""}
-        />
-      </main>
-    </>
+      </div>
+      <CustomizationDrawer
+        drink={selectedDrink}
+        isOpen={selectedDrink !== null}
+        onClose={() => setSelectedId(null)}
+        unavailableMilks={menu.unavailableMilks}
+        defaultGuestName={customer?.name ?? ""}
+      />
+    </main>
   );
 }

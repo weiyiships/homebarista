@@ -8,6 +8,8 @@ import {
   toAvailabilityResponse,
   type AvailabilityView,
 } from "@/lib/domain/availability";
+import { PAGE_LIST } from "@/components/site/layout";
+import { cn } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
 
@@ -39,7 +41,7 @@ export default async function BaristaAvailabilityPage() {
   }
 
   return (
-    <main className="flex flex-col gap-6 py-6">
+    <main className={cn(PAGE_LIST, "flex flex-col gap-6 py-6")}>
       <BaristaNav current="availability" />
       <header className="flex flex-col gap-1">
         <h1 className="text-3xl font-bold text-[var(--foreground)]">

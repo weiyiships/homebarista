@@ -1,8 +1,10 @@
 import Link from "next/link";
+import { PAGE_STATUS } from "@/components/site/layout";
+import { cn } from "@/lib/utils";
 
 export default function OrderNotFound() {
   return (
-    <main className="flex flex-col gap-4 py-12">
+    <main className={cn(PAGE_STATUS, "flex flex-col gap-4 py-12")}>
       <h1 className="text-3xl font-bold text-[var(--foreground)]">
         Order not found
       </h1>

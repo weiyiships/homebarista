@@ -5,6 +5,8 @@ import {
   CUSTOMER_COOKIE,
   verifyCustomerToken,
 } from "@/lib/auth/customerSession";
+import { PAGE_FORM } from "@/components/site/layout";
+import { cn } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
 
@@ -17,7 +19,7 @@ export default async function SignupPage() {
   if (customer) redirect("/menu");
 
   return (
-    <main className="flex flex-col gap-6 py-8">
+    <main className={cn(PAGE_FORM, "flex flex-col gap-6 py-8")}>
       <header className="flex flex-col gap-2">
         <h1 className="text-3xl font-bold text-[var(--foreground)]">
           Create an account
