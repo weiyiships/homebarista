@@ -17,4 +17,15 @@ describe("HomePage Component (Issue #1)", () => {
     expect(orderLink.getAttribute("href")).toBe("/menu");
     expect(baristaLink.getAttribute("href")).toBe("/barista/queue");
   });
+
+  it("offers optional customer signup without blocking guest ordering", () => {
+    render(<HomePage />);
+    expect(
+      screen.getByRole("link", { name: /Create an account/i }),
+    ).toHaveAttribute("href", "/signup");
+    expect(screen.getByRole("link", { name: /Order Coffee/i })).toHaveAttribute(
+      "href",
+      "/menu",
+    );
+  });
 });
