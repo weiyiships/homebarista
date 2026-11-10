@@ -1,6 +1,11 @@
 import { expect, test } from "@playwright/test";
 import { expectNoA11yViolations } from "./support/a11y";
-import { logInAsBarista, newPhone, placeLatteOrder } from "./support/flows";
+import {
+  logInAsBarista,
+  newPhone,
+  placeLatteOrder,
+  uniqueName,
+} from "./support/flows";
 
 test.describe("website layout at 1280px (#42)", () => {
   test("landing page is a full-width website with header, hero, and footer", async ({
@@ -53,16 +58,18 @@ test.describe("website layout at 1280px (#42)", () => {
     browser,
     page,
   }) => {
+    const cleoName = uniqueName("Column Cleo");
+    const rexName = uniqueName("Column Rex");
     const guest = await newPhone(browser);
-    await placeLatteOrder(guest, "Column Cleo");
-    await placeLatteOrder(guest, "Column Rex");
+    await placeLatteOrder(guest, cleoName);
+    await placeLatteOrder(guest, rexName);
 
     await logInAsBarista(page);
-    const cleo = page.getByRole("article", { name: "Column Cleo" });
+    const cleo = page.getByRole("article", { name: cleoName });
     await cleo.getByRole("button", { name: "Start brewing" }).click();
     await expect(cleo.getByTestId("queue-status-badge")).toHaveText("Brewing");
 
-    const rex = page.getByRole("article", { name: "Column Rex" });
+    const rex = page.getByRole("article", { name: rexName });
     const [cleoBox, rexBox] = await Promise.all([
       cleo.boundingBox(),
       rex.boundingBox(),
