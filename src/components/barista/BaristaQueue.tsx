@@ -25,6 +25,8 @@ export type { QueueOrder } from "./useQueuePolling";
 
 export interface BaristaQueueProps {
   initialOrders: QueueOrder[];
+  /** Start in the "reconnecting" state, e.g. when the first load failed. */
+  initiallyOffline?: boolean;
 }
 
 const STATUS_BADGE: Record<
@@ -53,9 +55,14 @@ const STATUS_BADGE: Record<
  * every 2.5 s. Orders that reach `picked_up` or `cancelled` leave the queue as
  * soon as the server confirms the update.
  */
-export function BaristaQueue({ initialOrders }: BaristaQueueProps) {
-  const { orders, now, connectionLost, applyStatusChange } =
-    useQueuePolling(initialOrders);
+export function BaristaQueue({
+  initialOrders,
+  initiallyOffline = false,
+}: BaristaQueueProps) {
+  const { orders, now, connectionLost, applyStatusChange } = useQueuePolling(
+    initialOrders,
+    initiallyOffline,
+  );
   const activeOrders = sortOldestFirst(filterActiveOrders(orders));
 
   return (

@@ -1,3 +1,6 @@
+import type { QueueOrderDto } from "@/lib/schemas/barista";
+import type { OrderStatus } from "@/lib/schemas/order";
+
 /**
  * Pure rules for the live barista queue (FR-3, US-3).
  */
@@ -69,4 +72,25 @@ export function describeOrderOptions(options: OrderOptions): string[] {
     options.milk ? `${options.milk} milk` : null,
     options.temp,
   ].filter((label): label is string => label !== null);
+}
+
+export interface StoredQueueRow {
+  id: string;
+  guestName: string;
+  status: OrderStatus;
+  createdAt: Date;
+  drinkName: string | null;
+  optionsJson: unknown;
+}
+
+/** Maps a stored order row to the GET /api/barista/queue item shape. */
+export function toQueueOrderDto(row: StoredQueueRow): QueueOrderDto {
+  return {
+    id: row.id,
+    guest_name: row.guestName,
+    drink_name: row.drinkName ?? "Unknown drink",
+    status: row.status,
+    created_at: row.createdAt.toISOString(),
+    options: parseOrderOptions(row.optionsJson),
+  };
 }

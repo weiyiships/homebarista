@@ -2,46 +2,30 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import type { OrderOptions } from "@/lib/domain/queue";
-import { QueueResponseSchema, type QueueOrderDto } from "@/lib/schemas/barista";
+import { QueueResponseSchema } from "@/lib/schemas/barista";
 import type { OrderStatus } from "@/lib/schemas/order";
+import { toQueueOrder, type QueueOrder } from "./queueOrder";
+
+export type { QueueOrder } from "./queueOrder";
 
 export const QUEUE_POLL_INTERVAL_MS = 2500;
 const CLOCK_TICK_MS = 1000;
 const LOGIN_REDIRECT = `/barista/login?next=${encodeURIComponent("/barista")}`;
-
-export interface QueueOrder {
-  id: string;
-  guestName: string;
-  drinkName: string;
-  status: OrderStatus;
-  /** ISO timestamp of when the order arrived. */
-  createdAt: string;
-  options: OrderOptions;
-}
-
-export function toQueueOrder(dto: QueueOrderDto): QueueOrder {
-  return {
-    id: dto.id,
-    guestName: dto.guest_name,
-    drinkName: dto.drink_name,
-    status: dto.status,
-    createdAt: dto.created_at,
-    options: dto.options,
-  };
-}
 
 /**
  * Keeps the barista queue fresh by polling GET /api/barista/queue every
  * 2.5 s (FR-2: new orders visible within 3 s) and ticks a clock for the
  * "time waiting" label.
  */
-export function useQueuePolling(initialOrders: QueueOrder[]) {
+export function useQueuePolling(
+  initialOrders: QueueOrder[],
+  initiallyOffline = false,
+) {
   const router = useRouter();
   const routerRef = useRef(router);
   routerRef.current = router;
   const [orders, setOrders] = useState<QueueOrder[]>(initialOrders);
-  const [connectionLost, setConnectionLost] = useState(false);
+  const [connectionLost, setConnectionLost] = useState(initiallyOffline);
   const [now, setNow] = useState(() => new Date());
   // Bumped on every local change so a poll that started earlier cannot
   // overwrite a status the barista just set.

@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { hasBaristaSession } from "@/lib/auth/baristaSession";
 import { listActiveOrders } from "@/lib/db/queries/orders";
-import { parseOrderOptions, sortOldestFirst } from "@/lib/domain/queue";
+import { sortOldestFirst, toQueueOrderDto } from "@/lib/domain/queue";
 import type { QueueResponse } from "@/lib/schemas/barista";
 
 /**
@@ -16,14 +16,7 @@ export async function GET(request: NextRequest) {
   try {
     const rows = await listActiveOrders();
     const body: QueueResponse = {
-      orders: sortOldestFirst(rows).map((row) => ({
-        id: row.id,
-        guest_name: row.guestName,
-        drink_name: row.drinkName ?? "Unknown drink",
-        status: row.status,
-        created_at: row.createdAt.toISOString(),
-        options: parseOrderOptions(row.optionsJson),
-      })),
+      orders: sortOldestFirst(rows).map(toQueueOrderDto),
     };
     return NextResponse.json(body, {
       headers: { "Cache-Control": "no-store" },
