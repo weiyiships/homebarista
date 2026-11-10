@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { act, render, screen } from "@testing-library/react";
+import { act, render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MenuClient } from "./MenuClient";
 import { type Drink } from "@/lib/domain/menu";
@@ -175,5 +175,45 @@ describe("MenuClient customer account (#12)", () => {
     await userEvent.setup().click(latteCard());
 
     expect(screen.getByLabelText(/your name/i)).toHaveValue("Alice");
+  });
+});
+
+describe("MenuClient café layout (#40)", () => {
+  beforeEach(() => {
+    vi.stubGlobal("fetch", vi.fn());
+  });
+
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  it("has a header bar linking home with the account actions", () => {
+    render(<MenuClient drinks={[latte]} unavailableMilks={[]} />);
+
+    const header = screen.getByRole("banner");
+    expect(
+      within(header).getByRole("link", { name: "Home Barista" }),
+    ).toHaveAttribute("href", "/");
+    expect(
+      within(header).getByRole("navigation", { name: "Account" }),
+    ).toBeInTheDocument();
+  });
+
+  it("shows a hero with the menu title, ordering status, and artwork", () => {
+    const { container } = render(
+      <MenuClient drinks={[latte]} unavailableMilks={[]} />,
+    );
+
+    const hero = screen.getByRole("region", { name: "Our Menu" });
+    expect(
+      within(hero).getByRole("heading", { level: 1, name: "Our Menu" }),
+    ).toBeInTheDocument();
+    expect(
+      within(hero).getByText("Ordering open · pickup at the bar"),
+    ).toBeInTheDocument();
+    expect(
+      container.querySelectorAll('[data-testid="menu-hero"] svg[data-drink]')
+        .length,
+    ).toBeGreaterThanOrEqual(3);
   });
 });
