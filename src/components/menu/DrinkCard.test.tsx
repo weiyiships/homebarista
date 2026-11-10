@@ -114,4 +114,16 @@ describe("DrinkCard", () => {
       );
     });
   });
+
+  it("names the card by its visible text (WCAG 2.5.3)", () => {
+    render(
+      <DrinkCard
+        drink={makeDrink({ name: "Latte", available: false })}
+        onSelect={() => {}}
+      />,
+    );
+    const card = screen.getByRole("button");
+    expect(card).toHaveAccessibleName(card.textContent ?? "");
+    expect(card).toHaveAccessibleName(/^Latte.*Unavailable$/);
+  });
 });
