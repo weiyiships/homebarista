@@ -1,4 +1,4 @@
-import { getAvailableMenuItems } from "@/lib/db/queries/menu";
+import { listMenuItems } from "@/lib/db/queries/menu";
 import { type Drink } from "@/lib/domain/menu";
 import { MenuClient } from "./MenuClient";
 
@@ -66,7 +66,7 @@ export default async function MenuPage() {
   let drinks: Drink[];
 
   try {
-    const rows = await getAvailableMenuItems();
+    const rows = await listMenuItems();
     drinks =
       rows.length > 0
         ? rows.map((r) => ({

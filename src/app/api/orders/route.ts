@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
+import { getMenuItemById, listMilkOptions } from "@/lib/db/queries/menu";
 import { createOrder } from "@/lib/db/queries/orders";
+import { checkOrderAvailability } from "@/lib/domain/availability";
 import { OrderRequestSchema } from "@/lib/schemas/order";
 
 export async function POST(request: Request) {
@@ -26,6 +28,23 @@ export async function POST(request: Request) {
   }
 
   try {
+    // Re-check availability on the server so a stale, already-open menu
+    // cannot order something the barista turned off (FR-5).
+    const [drink, milks] = await Promise.all([
+      getMenuItemById(validation.data.drink_id),
+      listMilkOptions(),
+    ]);
+    const availability = checkOrderAvailability(
+      drink,
+      validation.data.options,
+      milks,
+    );
+    if (!availability.ok) {
+      return availability.reason === "drink_not_found"
+        ? NextResponse.json({ errors: [availability.message] }, { status: 422 })
+        : NextResponse.json({ error: availability.message }, { status: 409 });
+    }
+
     const order = await createOrder({
       guestName: validation.data.guest_name,
       drinkId: validation.data.drink_id,
