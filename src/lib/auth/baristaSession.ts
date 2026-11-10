@@ -78,3 +78,12 @@ export function baristaCookieOptions() {
     maxAge: BARISTA_SESSION_TTL_SECONDS,
   };
 }
+
+interface CookieSource {
+  cookies: { get(name: string): { value: string } | undefined };
+}
+
+/** True when the request carries a valid barista session cookie. */
+export async function hasBaristaSession(request: CookieSource) {
+  return verifyBaristaToken(request.cookies.get(BARISTA_COOKIE)?.value);
+}
