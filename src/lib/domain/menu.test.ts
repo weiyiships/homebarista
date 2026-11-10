@@ -222,13 +222,29 @@ describe("validateCustomization", () => {
       expect(result.valid).toBe(false);
     });
 
-    it("latte without milk selection is invalid", () => {
-      const latte = makeDrink({
-        name: "Latte",
+    it("cappuccino without milk selection is invalid", () => {
+      const cappuccino = makeDrink({
+        name: "Cappuccino",
         takesMilk: true,
         sizeType: "size",
       });
-      const result = validateCustomization(latte, {
+      const result = validateCustomization(cappuccino, {
+        temp: "Hot",
+        sizing: "Medium",
+      });
+      expect(result.valid).toBe(false);
+      expect(result.errors.some((e) => e.toLowerCase().includes("milk"))).toBe(
+        true,
+      );
+    });
+
+    it("mocha without milk selection is invalid", () => {
+      const mocha = makeDrink({
+        name: "Mocha",
+        takesMilk: true,
+        sizeType: "size",
+      });
+      const result = validateCustomization(mocha, {
         temp: "Hot",
         sizing: "Medium",
       });
