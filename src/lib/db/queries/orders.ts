@@ -1,4 +1,5 @@
-import { and, eq, sql } from "drizzle-orm";
+import { and, asc, eq, inArray, sql } from "drizzle-orm";
+import { ACTIVE_ORDER_STATUSES } from "@/lib/domain/orderStatus";
 import { db } from "../index";
 import { menuItems, orderItems, orders, type Order } from "../schema";
 
@@ -95,4 +96,34 @@ export async function updateOrderStatusIfCurrent(
     .returning();
 
   return order ?? null;
+}
+
+export interface ActiveOrderRow {
+  id: string;
+  guestName: string;
+  status: Order["status"];
+  createdAt: Date;
+  drinkName: string | null;
+  optionsJson: unknown;
+}
+
+/**
+ * Lists orders still in the barista queue (received, brewing, ready),
+ * oldest first, with the drink name and chosen options.
+ */
+export async function listActiveOrders(): Promise<ActiveOrderRow[]> {
+  return db
+    .select({
+      id: orders.id,
+      guestName: orders.guestName,
+      status: orders.status,
+      createdAt: orders.createdAt,
+      drinkName: menuItems.name,
+      optionsJson: orderItems.optionsJson,
+    })
+    .from(orders)
+    .leftJoin(orderItems, eq(orderItems.orderId, orders.id))
+    .leftJoin(menuItems, eq(orderItems.menuItemId, menuItems.id))
+    .where(inArray(orders.status, [...ACTIVE_ORDER_STATUSES]))
+    .orderBy(asc(orders.createdAt), asc(orders.id));
 }
