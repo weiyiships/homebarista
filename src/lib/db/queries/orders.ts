@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { and, eq, sql } from "drizzle-orm";
 import { db } from "../index";
 import { menuItems, orderItems, orders, type Order } from "../schema";
 
@@ -61,4 +61,38 @@ export async function getOrderById(id: string) {
     ...order,
     items,
   };
+}
+
+/**
+ * Returns the current status of an order, or null when it does not exist.
+ */
+export async function getOrderStatus(
+  id: string,
+): Promise<Order["status"] | null> {
+  const [row] = await db
+    .select({ status: orders.status })
+    .from(orders)
+    .where(eq(orders.id, id))
+    .limit(1);
+
+  return row?.status ?? null;
+}
+
+/**
+ * Atomically moves an order from `from` to `to`. Returns null when the order's
+ * status is no longer `from` (e.g. a double tap or a second device got there
+ * first), so callers never apply a transition to a stale status.
+ */
+export async function updateOrderStatusIfCurrent(
+  id: string,
+  from: Order["status"],
+  to: Order["status"],
+): Promise<Order | null> {
+  const [order] = await db
+    .update(orders)
+    .set({ status: to, updatedAt: sql`now()` })
+    .where(and(eq(orders.id, id), eq(orders.status, from)))
+    .returning();
+
+  return order ?? null;
 }

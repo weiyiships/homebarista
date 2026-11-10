@@ -42,3 +42,17 @@ export const OrderResponseSchema = z.object({
 });
 
 export type OrderResponse = z.infer<typeof OrderResponseSchema>;
+
+// ---------------------------------------------------------------------------
+// Barista status updates (FR-3, US-4)
+// ---------------------------------------------------------------------------
+
+export const OrderIdParamSchema = z.string().uuid("Invalid order ID format");
+
+export const OrderStatusUpdateSchema = z.object({
+  action: z.enum(["advance", "cancel"], {
+    message: "Action must be 'advance' or 'cancel'",
+  }),
+});
+
+export type OrderStatusUpdate = z.infer<typeof OrderStatusUpdateSchema>;
