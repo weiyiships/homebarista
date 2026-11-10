@@ -2,10 +2,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { NextRequest } from "next/server";
 import { DELETE, POST } from "./route";
-import {
-  BARISTA_COOKIE,
-  verifyBaristaToken,
-} from "@/lib/auth/baristaSession";
+import { BARISTA_COOKIE, verifyBaristaToken } from "@/lib/auth/baristaSession";
 
 function post(body: unknown) {
   return POST(

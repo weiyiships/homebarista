@@ -3,10 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { NextRequest } from "next/server";
 import { GET } from "./route";
 import { listActiveOrders } from "@/lib/db/queries/orders";
-import {
-  BARISTA_COOKIE,
-  createBaristaToken,
-} from "@/lib/auth/baristaSession";
+import { BARISTA_COOKIE, createBaristaToken } from "@/lib/auth/baristaSession";
 
 vi.mock("@/lib/db/queries/orders", () => ({
   listActiveOrders: vi.fn(),
@@ -15,7 +12,9 @@ vi.mock("@/lib/db/queries/orders", () => ({
 function get(token?: string) {
   const headers = new Headers();
   if (token) headers.set("cookie", `${BARISTA_COOKIE}=${token}`);
-  return GET(new NextRequest("http://localhost/api/barista/queue", { headers }));
+  return GET(
+    new NextRequest("http://localhost/api/barista/queue", { headers }),
+  );
 }
 
 const rows = [

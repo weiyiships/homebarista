@@ -42,9 +42,7 @@ export interface OrderOptions {
 
 function readLabel(source: Record<string, unknown>, key: string) {
   const value = source[key];
-  return typeof value === "string" && value.trim() !== ""
-    ? value.trim()
-    : null;
+  return typeof value === "string" && value.trim() !== "" ? value.trim() : null;
 }
 
 /** Reads the stored `options_json` of an order item into known fields. */

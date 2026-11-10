@@ -2,10 +2,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { NextRequest } from "next/server";
 import { middleware } from "./middleware";
-import {
-  BARISTA_COOKIE,
-  createBaristaToken,
-} from "@/lib/auth/baristaSession";
+import { BARISTA_COOKIE, createBaristaToken } from "@/lib/auth/baristaSession";
 
 function request(path: string, token?: string, method = "GET") {
   const headers = new Headers();
