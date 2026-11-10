@@ -18,6 +18,8 @@ export interface CustomizationDrawerProps {
   drink: Drink | null;
   isOpen: boolean;
   onClose: () => void;
+  /** Milk labels the barista turned off; shown disabled (FR-5). */
+  unavailableMilks?: readonly string[];
   onAddToOrder?: (customization: {
     temp: string;
     sizing: string;
@@ -28,6 +30,8 @@ export interface CustomizationDrawerProps {
 // ---------------------------------------------------------------------------
 // Component
 // ---------------------------------------------------------------------------
+
+const NO_UNAVAILABLE_MILKS: readonly string[] = [];
 
 /**
  * CustomizationDrawer — client component.
@@ -40,6 +44,7 @@ export function CustomizationDrawer({
   drink,
   isOpen,
   onClose,
+  unavailableMilks = NO_UNAVAILABLE_MILKS,
   onAddToOrder,
 }: CustomizationDrawerProps) {
   const router = useRouter();
@@ -52,9 +57,11 @@ export function CustomizationDrawer({
   const [toastError, setToastError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  // Reset state whenever the active drink changes or drawer opens
+  // Reset state whenever a different drink is chosen or the drawer opens.
+  // Keyed on the id so a menu poll refreshing the same drink keeps choices.
+  const drinkId = drink?.id;
   useEffect(() => {
-    if (drink) {
+    if (drinkId) {
       setTemp("");
       setSizing("");
       setMilk("");
@@ -62,7 +69,14 @@ export function CustomizationDrawer({
       setToastError(null);
       setIsLoading(false);
     }
-  }, [drink, isOpen]);
+  }, [drinkId, isOpen]);
+
+  // Drop a milk choice the barista just turned off.
+  useEffect(() => {
+    if (milk && unavailableMilks.includes(milk)) {
+      setMilk("");
+    }
+  }, [milk, unavailableMilks]);
 
   // Handle Escape key to close the drawer
   useEffect(() => {
@@ -83,10 +97,11 @@ export function CustomizationDrawer({
   }
 
   const options = getDrinkOptions(drink);
+  const drinkUnavailable = !drink.available;
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!drink || isLoading) return;
+    if (!drink || isLoading || !drink.available) return;
 
     const validationErrors: string[] = [];
 
@@ -227,6 +242,15 @@ export function CustomizationDrawer({
           onSubmit={handleSubmit}
           className="mt-6 flex flex-1 flex-col gap-6"
         >
+          {drinkUnavailable && (
+            <p
+              role="alert"
+              className="rounded-[6px] border border-[var(--status-cancelled)] bg-red-50 p-4 text-sm font-medium text-[var(--status-cancelled)] dark:bg-red-950/30"
+            >
+              {drink.name} is no longer available. Please choose another drink.
+            </p>
+          )}
+
           {/* Validation errors */}
           {errors.length > 0 && (
             <div
@@ -346,14 +370,17 @@ export function CustomizationDrawer({
               >
                 {options.milk.map((opt) => {
                   const isSelected = milk === opt.label;
+                  const isUnavailable = unavailableMilks.includes(opt.label);
                   return (
                     <label
                       key={opt.label}
                       className={cn(
-                        "flex cursor-pointer items-center justify-center rounded-[6px] border px-4 py-2.5 text-sm font-medium transition-colors",
-                        isSelected
-                          ? "border-[var(--primary)] bg-[var(--primary)] text-[var(--primary-foreground)]"
-                          : "border-[var(--border)] bg-white text-[var(--foreground)] hover:bg-[var(--muted)] dark:bg-stone-900",
+                        "flex flex-col items-center justify-center rounded-[6px] border px-4 py-2.5 text-sm font-medium transition-colors",
+                        isUnavailable
+                          ? "cursor-not-allowed border-dashed border-[var(--border)] bg-[var(--muted)] text-[var(--muted-foreground)]"
+                          : isSelected
+                            ? "cursor-pointer border-[var(--primary)] bg-[var(--primary)] text-[var(--primary-foreground)]"
+                            : "cursor-pointer border-[var(--border)] bg-white text-[var(--foreground)] hover:bg-[var(--muted)] dark:bg-stone-900",
                       )}
                     >
                       <input
@@ -361,10 +388,16 @@ export function CustomizationDrawer({
                         name="milk"
                         value={opt.label}
                         checked={isSelected}
+                        disabled={isUnavailable}
                         onChange={() => setMilk(opt.label)}
                         className="sr-only"
                       />
-                      <span>{opt.label}</span>
+                      <span className={cn(isUnavailable && "line-through")}>
+                        {opt.label}
+                      </span>
+                      {isUnavailable && (
+                        <span className="text-xs font-normal">Unavailable</span>
+                      )}
                     </label>
                   );
                 })}
@@ -376,7 +409,7 @@ export function CustomizationDrawer({
           <div className="mt-auto pt-6">
             <button
               type="submit"
-              disabled={isLoading}
+              disabled={isLoading || drinkUnavailable}
               className="w-full rounded-[6px] bg-[var(--primary)] px-5 py-3 text-sm font-medium text-[var(--primary-foreground)] transition-colors hover:bg-[var(--foreground)] focus-visible:ring-2 focus-visible:ring-[var(--primary)] focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-60"
             >
               {isLoading ? "Placing order..." : "Place Order"}

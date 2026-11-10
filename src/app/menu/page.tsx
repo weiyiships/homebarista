@@ -1,6 +1,10 @@
-import { getAvailableMenuItems } from "@/lib/db/queries/menu";
+import { listMenuItems, listMilkOptions } from "@/lib/db/queries/menu";
+import { fromMenuDrinkDto, toMenuResponse } from "@/lib/domain/availability";
 import { type Drink } from "@/lib/domain/menu";
 import { MenuClient } from "./MenuClient";
+
+// Availability changes at any time (FR-5), so never serve a cached menu.
+export const dynamic = "force-dynamic";
 
 // ---------------------------------------------------------------------------
 // Static fallback seed data (used when DB is unavailable during development)
@@ -58,28 +62,27 @@ const STATIC_DRINKS: Drink[] = [
 /**
  * /menu — Server Component.
  *
- * Fetches available menu items from the DB.
- * Falls back to static seed data if the DB is unavailable (e.g. dev without
- * DATABASE_URL set).
+ * Fetches every menu item (unavailable ones render disabled) and the milks
+ * the barista turned off. Falls back to static seed data if the DB is
+ * unavailable (e.g. dev without DATABASE_URL set).
  */
 export default async function MenuPage() {
-  let drinks: Drink[];
+  let drinks: Drink[] = STATIC_DRINKS;
+  let unavailableMilks: string[] = [];
 
   try {
-    const rows = await getAvailableMenuItems();
-    drinks =
-      rows.length > 0
-        ? rows.map((r) => ({
-            id: r.id,
-            name: r.name,
-            available: r.available,
-            takesMilk: r.takesMilk,
-            sizeType: r.sizeType,
-          }))
-        : STATIC_DRINKS;
+    const [rows, milks] = await Promise.all([
+      listMenuItems(),
+      listMilkOptions(),
+    ]);
+    if (rows.length > 0) {
+      const menu = toMenuResponse(rows, milks);
+      drinks = menu.drinks.map(fromMenuDrinkDto);
+      unavailableMilks = menu.unavailable_milks;
+    }
   } catch {
     drinks = STATIC_DRINKS;
   }
 
-  return <MenuClient drinks={drinks} />;
+  return <MenuClient drinks={drinks} unavailableMilks={unavailableMilks} />;
 }
