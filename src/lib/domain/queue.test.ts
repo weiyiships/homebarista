@@ -4,6 +4,7 @@ import {
   formatElapsed,
   parseOrderOptions,
   sortOldestFirst,
+  toQueueOrderDto,
 } from "./queue";
 
 describe("sortOldestFirst", () => {
@@ -117,5 +118,40 @@ describe("describeOrderOptions", () => {
     expect(
       describeOrderOptions({ sizing: "Double", milk: null, temp: "Hot" }),
     ).toEqual(["Double", "Hot"]);
+  });
+});
+
+describe("toQueueOrderDto", () => {
+  it("maps a stored order row to the queue API shape", () => {
+    expect(
+      toQueueOrderDto({
+        id: "11111111-2222-4333-a444-555555555555",
+        guestName: "Alice",
+        status: "received",
+        createdAt: new Date("2026-11-10T12:00:00.000Z"),
+        drinkName: "Latte",
+        optionsJson: { temp: "Iced", sizing: "Large", milk: "Oat" },
+      }),
+    ).toEqual({
+      id: "11111111-2222-4333-a444-555555555555",
+      guest_name: "Alice",
+      drink_name: "Latte",
+      status: "received",
+      created_at: "2026-11-10T12:00:00.000Z",
+      options: { sizing: "Large", milk: "Oat", temp: "Iced" },
+    });
+  });
+
+  it("uses a placeholder when the drink is missing", () => {
+    expect(
+      toQueueOrderDto({
+        id: "11111111-2222-4333-a444-555555555555",
+        guestName: "Alice",
+        status: "received",
+        createdAt: new Date("2026-11-10T12:00:00.000Z"),
+        drinkName: null,
+        optionsJson: {},
+      }).drink_name,
+    ).toBe("Unknown drink");
   });
 });
