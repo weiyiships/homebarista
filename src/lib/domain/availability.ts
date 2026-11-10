@@ -5,6 +5,8 @@
  * No DB imports. Works on plain objects matching the schema shape.
  */
 
+import type { Drink } from "./menu";
+
 // ---------------------------------------------------------------------------
 // Types
 // ---------------------------------------------------------------------------
@@ -131,6 +133,17 @@ export function toMenuResponse(
       size_type: d.sizeType,
     })),
     unavailable_milks: unavailableMilkLabels(milks),
+  };
+}
+
+/** Maps a menu payload drink back to the domain `Drink` the UI renders. */
+export function fromMenuDrinkDto(dto: MenuDrinkDto): Drink {
+  return {
+    id: dto.id,
+    name: dto.name,
+    available: dto.available,
+    takesMilk: dto.takes_milk,
+    sizeType: dto.size_type,
   };
 }
 

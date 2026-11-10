@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   checkOrderAvailability,
+  fromMenuDrinkDto,
   toAvailabilityResponse,
   toMenuResponse,
   unavailableMilkLabels,
@@ -180,6 +181,26 @@ describe("checkOrderAvailability", () => {
       ok: false,
       reason: "milk_unavailable",
       message: "That milk is not on the menu.",
+    });
+  });
+});
+
+describe("fromMenuDrinkDto", () => {
+  it("maps the menu payload back to a domain drink", () => {
+    expect(
+      fromMenuDrinkDto({
+        id: "id-Latte",
+        name: "Latte",
+        available: false,
+        takes_milk: true,
+        size_type: "size",
+      }),
+    ).toEqual({
+      id: "id-Latte",
+      name: "Latte",
+      available: false,
+      takesMilk: true,
+      sizeType: "size",
     });
   });
 });
