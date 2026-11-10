@@ -1,5 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
+import { SiteFooter } from "@/components/site/SiteFooter";
+import { SiteHeader } from "@/components/site/SiteHeader";
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -21,8 +23,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="bg-[var(--background)] text-[var(--foreground)] antialiased">
-        <div className="mx-auto flex min-h-screen max-w-md flex-col px-4 pt-4 pb-12">
-          {children}
+        <div className="flex min-h-screen flex-col">
+          <SiteHeader />
+          <div className="flex flex-1 flex-col">{children}</div>
+          <SiteFooter />
         </div>
       </body>
     </html>

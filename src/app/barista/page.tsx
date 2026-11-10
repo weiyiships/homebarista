@@ -6,6 +6,8 @@ import { toQueueOrder, type QueueOrder } from "@/components/barista/queueOrder";
 import { BARISTA_COOKIE, verifyBaristaToken } from "@/lib/auth/baristaSession";
 import { listActiveOrders } from "@/lib/db/queries/orders";
 import { sortOldestFirst, toQueueOrderDto } from "@/lib/domain/queue";
+import { PAGE_WIDE } from "@/components/site/layout";
+import { cn } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
 
@@ -34,7 +36,7 @@ export default async function BaristaPage() {
   }
 
   return (
-    <main className="flex flex-col gap-6 py-6">
+    <main className={cn(PAGE_WIDE, "flex flex-col gap-6 py-6")}>
       <BaristaNav current="queue" />
       <header className="flex flex-col gap-1">
         <h1 className="text-3xl font-bold text-[var(--foreground)]">

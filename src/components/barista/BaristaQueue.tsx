@@ -50,6 +50,19 @@ const STATUS_BADGE: Record<
   },
 };
 
+const BOARD_COLUMNS: readonly ActiveOrderStatus[] = [
+  "received",
+  "brewing",
+  "ready",
+];
+
+/** Static class names so Tailwind generates them. */
+const BOARD_COLUMN_CLASS: Record<ActiveOrderStatus, string> = {
+  received: "lg:col-start-1",
+  brewing: "lg:col-start-2",
+  ready: "lg:col-start-3",
+};
+
 /**
  * Live barista queue (FR-3, US-3, US-4): active orders oldest-first, refreshed
  * every 2.5 s. Orders that reach `picked_up` or `cancelled` leave the queue as
@@ -98,17 +111,45 @@ export function BaristaQueue({
           No active orders. New orders will show up here.
         </p>
       ) : (
-        <ol className="flex flex-col gap-4">
-          {activeOrders.map((order) => (
-            <li key={order.id}>
-              <QueueCard
-                order={order}
-                now={now}
-                onStatusChange={applyStatusChange}
-              />
-            </li>
-          ))}
-        </ol>
+        <>
+          {/* Desktop board headings; each card's badge carries its status. */}
+          <div
+            data-testid="queue-board-columns"
+            aria-hidden="true"
+            className="hidden gap-4 lg:grid lg:grid-cols-3"
+          >
+            {BOARD_COLUMNS.map((status) => (
+              <p
+                key={status}
+                className="flex items-center justify-between border-b-2 border-[var(--foreground)] pb-2 text-sm font-semibold tracking-wide text-[var(--foreground)] uppercase"
+              >
+                {STATUS_BADGE[status].label}
+                <span className="text-[var(--muted-foreground)] tabular-nums">
+                  {activeOrders.filter((o) => o.status === status).length}
+                </span>
+              </p>
+            ))}
+          </div>
+          {/*
+           * One oldest-first list in reading order. On desktop, CSS grid
+           * places each card in its status column; dense flow keeps every
+           * column oldest-first.
+           */}
+          <ol
+            aria-label="Active orders"
+            className="flex flex-col gap-4 lg:grid lg:grid-flow-dense lg:grid-cols-3 lg:items-start"
+          >
+            {activeOrders.map((order) => (
+              <li key={order.id} className={BOARD_COLUMN_CLASS[order.status]}>
+                <QueueCard
+                  order={order}
+                  now={now}
+                  onStatusChange={applyStatusChange}
+                />
+              </li>
+            ))}
+          </ol>
+        </>
       )}
     </div>
   );

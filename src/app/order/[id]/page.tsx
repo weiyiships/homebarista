@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 import { OrderTracker } from "@/components/order/OrderTracker";
 import { getOrderTracking } from "@/lib/db/queries/tracking";
 import { OrderIdParamSchema, type OrderTracking } from "@/lib/schemas/order";
+import { PAGE_STATUS } from "@/components/site/layout";
+import { cn } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
 
@@ -24,7 +26,7 @@ export default async function OrderStatusPage({ params }: OrderPageProps) {
     order = await getOrderTracking(idResult.data);
   } catch {
     return (
-      <main className="flex flex-col gap-4 py-12">
+      <main className={cn(PAGE_STATUS, "flex flex-col gap-4 py-12")}>
         <p
           role="alert"
           className="rounded-[12px] border border-[var(--status-cancelled)] p-4 text-[var(--foreground)]"
@@ -43,7 +45,7 @@ export default async function OrderStatusPage({ params }: OrderPageProps) {
   if (!order) notFound();
 
   return (
-    <main className="py-8">
+    <main className={cn(PAGE_STATUS, "py-8")}>
       <OrderTracker initialOrder={order} />
     </main>
   );
