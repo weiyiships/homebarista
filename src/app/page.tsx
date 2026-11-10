@@ -27,7 +27,7 @@ export default function HomePage() {
         </Link>
 
         <Link
-          href="/barista/queue"
+          href="/barista"
           className="hover:bg-opacity-80 inline-flex min-h-[44px] w-full items-center justify-center gap-2 rounded-xl border border-[var(--border)] bg-[var(--muted)] px-6 py-3.5 font-medium text-[var(--foreground)] transition"
         >
           <ClipboardList className="h-5 w-5 text-[var(--muted-foreground)]" />
