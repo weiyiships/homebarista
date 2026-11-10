@@ -114,4 +114,16 @@ describe("DrinkCard", () => {
       );
     });
   });
+
+  it("names the card by its visible text (WCAG 2.5.3)", () => {
+    render(
+      <DrinkCard
+        drink={makeDrink({ name: "Latte", available: false })}
+        onSelect={() => {}}
+      />,
+    );
+    expect(screen.getByRole("button")).toHaveAccessibleName(
+      "Latte Smooth espresso with steamed milk. Unavailable",
+    );
+  });
 });

@@ -11,10 +11,10 @@
     --accent: #d97706;
     --accent-foreground: #ffffff;
     --border: #e8ded1;
-    --status-received: #6b7280;
-    --status-brewing: #d97706;
-    --status-ready: #16a34a;
-    --status-cancelled: #dc2626;
+    --status-received: #5f6b7a;
+    --status-brewing: #a15c07;
+    --status-ready: #2e7d32;
+    --status-cancelled: #b3261e;
   }
 
   @media (prefers-color-scheme: dark) {
