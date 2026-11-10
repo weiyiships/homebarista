@@ -65,7 +65,7 @@ export function SiteHeaderView({ customer, currentPath }: SiteHeaderViewProps) {
 
         <nav
           aria-label="Main"
-          className="order-3 -mx-3 flex w-full items-center gap-1 border-t border-[var(--border)] md:order-none md:mx-0 md:w-auto md:border-0"
+          className="order-3 -ml-3 flex w-full items-center gap-1 md:order-none md:ml-0 md:w-auto"
         >
           {links.map(({ href, label }) => {
             const current = isCurrent(path, href);
