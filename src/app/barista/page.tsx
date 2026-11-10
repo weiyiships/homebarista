@@ -1,5 +1,6 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { BaristaNav } from "@/components/barista/BaristaNav";
 import { BaristaQueue } from "@/components/barista/BaristaQueue";
 import { toQueueOrder, type QueueOrder } from "@/components/barista/queueOrder";
 import { BARISTA_COOKIE, verifyBaristaToken } from "@/lib/auth/baristaSession";
@@ -34,6 +35,7 @@ export default async function BaristaPage() {
 
   return (
     <main className="flex flex-col gap-6 py-6">
+      <BaristaNav current="queue" />
       <header className="flex flex-col gap-1">
         <h1 className="text-3xl font-bold text-[var(--foreground)]">
           Barista queue

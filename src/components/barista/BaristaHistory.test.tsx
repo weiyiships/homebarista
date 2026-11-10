@@ -94,12 +94,12 @@ describe("BaristaHistory", () => {
       formatClockTime("2026-11-10T12:00:00.000Z"),
     );
     expect(ordered).toHaveAttribute("dateTime", "2026-11-10T12:00:00.000Z");
-    expect(ordered.parentElement).toHaveTextContent(/ordered/i);
+    expect(ordered.closest("div")).toHaveTextContent(/ordered/i);
     const finished = within(aliceCard).getByText(
       formatClockTime("2026-11-10T12:06:00.000Z"),
     );
     expect(finished).toHaveAttribute("dateTime", "2026-11-10T12:06:00.000Z");
-    expect(finished.parentElement).toHaveTextContent(/picked up/i);
+    expect(finished.closest("div")).toHaveTextContent(/picked up/i);
 
     const bobCard = screen.getByRole("article", { name: /bob/i });
     expect(
