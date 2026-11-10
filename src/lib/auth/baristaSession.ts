@@ -1,4 +1,5 @@
 import { jwtVerify, SignJWT } from "jose";
+import { getJwtSecret, sessionCookieOptions } from "./jwt";
 
 /**
  * Shared-passcode barista session (FR-3, PRD §9): a signed HS256 JWT in an
@@ -10,18 +11,6 @@ export const BARISTA_SESSION_TTL_SECONDS = 60 * 60 * 12;
 
 const AUDIENCE = "barista";
 const ROLE = "barista";
-const MIN_SECRET_LENGTH = 32;
-
-function getSecret(): Uint8Array {
-  const secret = process.env.JWT_SECRET ?? "";
-  if (secret.length < MIN_SECRET_LENGTH) {
-    throw new Error(
-      `JWT_SECRET must be set to at least ${MIN_SECRET_LENGTH} characters.`,
-    );
-  }
-  return new TextEncoder().encode(secret);
-}
-
 async function sha256(value: string): Promise<Uint8Array> {
   const digest = await crypto.subtle.digest(
     "SHA-256",
@@ -50,7 +39,7 @@ export async function createBaristaToken(): Promise<string> {
     .setAudience(AUDIENCE)
     .setIssuedAt()
     .setExpirationTime(`${BARISTA_SESSION_TTL_SECONDS}s`)
-    .sign(getSecret());
+    .sign(getJwtSecret());
 }
 
 /** True only for an unexpired, correctly signed barista token. */
@@ -59,7 +48,7 @@ export async function verifyBaristaToken(
 ): Promise<boolean> {
   if (!token) return false;
   try {
-    const { payload } = await jwtVerify(token, getSecret(), {
+    const { payload } = await jwtVerify(token, getJwtSecret(), {
       audience: AUDIENCE,
       algorithms: ["HS256"],
     });
@@ -70,13 +59,7 @@ export async function verifyBaristaToken(
 }
 
 export function baristaCookieOptions() {
-  return {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax" as const,
-    path: "/",
-    maxAge: BARISTA_SESSION_TTL_SECONDS,
-  };
+  return sessionCookieOptions(BARISTA_SESSION_TTL_SECONDS);
 }
 
 interface CookieSource {
