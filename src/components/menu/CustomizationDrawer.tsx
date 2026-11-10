@@ -20,6 +20,8 @@ export interface CustomizationDrawerProps {
   onClose: () => void;
   /** Milk labels the barista turned off; shown disabled (FR-5). */
   unavailableMilks?: readonly string[];
+  /** Signed-in customer's name, prefilled into the name field (US-11). */
+  defaultGuestName?: string;
   onAddToOrder?: (customization: {
     temp: string;
     sizing: string;
@@ -45,11 +47,12 @@ export function CustomizationDrawer({
   isOpen,
   onClose,
   unavailableMilks = NO_UNAVAILABLE_MILKS,
+  defaultGuestName = "",
   onAddToOrder,
 }: CustomizationDrawerProps) {
   const router = useRouter();
 
-  const [guestName, setGuestName] = useState<string>("");
+  const [guestName, setGuestName] = useState<string>(defaultGuestName);
   const [temp, setTemp] = useState<string>("");
   const [sizing, setSizing] = useState<string>("");
   const [milk, setMilk] = useState<string>("");
