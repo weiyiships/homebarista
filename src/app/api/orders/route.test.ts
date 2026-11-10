@@ -2,10 +2,15 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { POST } from "./route";
 import { createOrder } from "@/lib/db/queries/orders";
 import { getMenuItemById, listMilkOptions } from "@/lib/db/queries/menu";
+import { getCustomerFromRequest } from "@/lib/auth/customerSession";
 
 vi.mock("@/lib/db/queries/orders", () => ({
   createOrder: vi.fn(),
   getOrderById: vi.fn(),
+}));
+
+vi.mock("@/lib/auth/customerSession", () => ({
+  getCustomerFromRequest: vi.fn(async () => null),
 }));
 
 vi.mock("@/lib/db/queries/menu", () => ({
@@ -167,7 +172,7 @@ describe("POST /api/orders route handler", () => {
       guestName: "Alice",
       drinkId: validDrinkId,
       options: { temp: "Hot", sizing: "Single" },
-      customerId: undefined,
+      customerId: null,
     });
   });
 
@@ -247,5 +252,58 @@ describe("POST /api/orders route handler", () => {
 
     const response = await POST(request);
     expect(response.status).toBe(422);
+  });
+
+  describe("customer accounts (FR-2, FR-7)", () => {
+    const customerId = "99999999-2222-4333-a444-555555555555";
+
+    function mockCreated() {
+      vi.mocked(createOrder).mockResolvedValueOnce({
+        id: "order-uuid-123",
+        guestName: "Alice",
+        customerId,
+        status: "received",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      });
+    }
+
+    it("links the order to the signed-in customer", async () => {
+      vi.mocked(getCustomerFromRequest).mockResolvedValueOnce({
+        id: customerId,
+        name: "Alice",
+      });
+      mockCreated();
+
+      const response = await POST(
+        orderRequest({
+          guest_name: "Alice",
+          drink_id: validDrinkId,
+          options: { temp: "Hot", sizing: "Small", milk: "Whole" },
+        }),
+      );
+
+      expect(response.status).toBe(201);
+      expect(createOrder).toHaveBeenCalledWith(
+        expect.objectContaining({ customerId }),
+      );
+    });
+
+    it("ignores a customer_id sent in the body", async () => {
+      mockCreated();
+
+      await POST(
+        orderRequest({
+          guest_name: "Mallory",
+          drink_id: validDrinkId,
+          options: { temp: "Hot", sizing: "Small", milk: "Whole" },
+          customer_id: customerId,
+        }),
+      );
+
+      expect(createOrder).toHaveBeenCalledWith(
+        expect.objectContaining({ customerId: null }),
+      );
+    });
   });
 });
