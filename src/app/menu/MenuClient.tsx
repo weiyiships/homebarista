@@ -27,7 +27,7 @@ interface MenuClientProps {
 }
 
 const accountLink =
-  "inline-flex min-h-11 items-center rounded-[6px] px-3 text-sm font-medium text-[var(--primary)] hover:bg-[var(--muted)] focus-visible:ring-2 focus-visible:ring-[var(--primary)] focus-visible:outline-none";
+  "inline-flex min-h-11 items-center rounded-[6px] px-2.5 text-sm font-medium whitespace-nowrap text-[var(--primary)] hover:bg-[var(--muted)] focus-visible:ring-2 focus-visible:ring-[var(--primary)] focus-visible:outline-none";
 
 /**
  * Client shell for the menu page.
@@ -49,7 +49,7 @@ export function MenuClient({
       <header className="-mx-4 -mt-4 flex items-center justify-between gap-2 border-b border-[var(--border)] bg-[var(--background)] px-4 py-2">
         <Link
           href="/"
-          className="inline-flex min-h-11 items-center gap-2 rounded-[6px] pr-2 text-base font-bold tracking-tight text-[var(--foreground)] focus-visible:ring-2 focus-visible:ring-[var(--primary)] focus-visible:outline-none"
+          className="inline-flex min-h-11 shrink-0 items-center gap-2 rounded-[6px] pr-2 text-base font-bold tracking-tight whitespace-nowrap text-[var(--foreground)] focus-visible:ring-2 focus-visible:ring-[var(--primary)] focus-visible:outline-none"
         >
           <Coffee className="h-6 w-6" aria-hidden="true" />
           Home Barista
@@ -68,7 +68,7 @@ export function MenuClient({
                 Log in
               </Link>
               <Link href="/signup" className={accountLink}>
-                Create an account
+                Sign up
               </Link>
             </>
           )}
