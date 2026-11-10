@@ -1,11 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import {
-  act,
-  render,
-  screen,
-  waitFor,
-  within,
-} from "@testing-library/react";
+import { act, render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { BaristaQueue, type QueueOrder } from "./BaristaQueue";
 
@@ -206,9 +200,7 @@ describe("BaristaQueue", () => {
       const bobCard = screen.getByRole("article", { name: /bob/i });
       expect(within(bobCard).getByText("2m 00s")).toBeInTheDocument();
 
-      fetchMock.mockResolvedValue(
-        jsonResponse({ orders: [] }),
-      );
+      fetchMock.mockResolvedValue(jsonResponse({ orders: [] }));
       await act(() => vi.advanceTimersByTimeAsync(1000));
 
       expect(within(bobCard).getByText("2m 01s")).toBeInTheDocument();
@@ -221,16 +213,12 @@ describe("BaristaQueue", () => {
       await act(() => vi.advanceTimersByTimeAsync(2500));
 
       expect(screen.getByText("Bob")).toBeInTheDocument();
-      expect(screen.getByRole("status")).toHaveTextContent(
-        /reconnecting/i,
-      );
+      expect(screen.getByRole("status")).toHaveTextContent(/reconnecting/i);
 
       fetchMock.mockResolvedValueOnce(jsonResponse({ orders: [newOrder] }));
       await act(() => vi.advanceTimersByTimeAsync(2500));
 
-      expect(screen.getByRole("status")).not.toHaveTextContent(
-        /reconnecting/i,
-      );
+      expect(screen.getByRole("status")).not.toHaveTextContent(/reconnecting/i);
       expect(screen.getByText("Dee")).toBeInTheDocument();
     });
 
