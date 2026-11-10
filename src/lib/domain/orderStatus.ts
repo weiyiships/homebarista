@@ -84,6 +84,8 @@ export function resolveStatusTransition(
 /** Keeps only orders that belong in the live barista queue. */
 export function filterActiveOrders<T extends { status: OrderStatus }>(
   orders: readonly T[],
-): T[] {
-  return orders.filter((order) => isActiveStatus(order.status));
+): Array<T & { status: ActiveOrderStatus }> {
+  return orders.filter((order): order is T & { status: ActiveOrderStatus } =>
+    isActiveStatus(order.status),
+  );
 }
