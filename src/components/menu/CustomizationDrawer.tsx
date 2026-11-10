@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { X } from "lucide-react";
 import {
   getDrinkOptions,
@@ -32,8 +33,8 @@ export interface CustomizationDrawerProps {
  * CustomizationDrawer — client component.
  *
  * Renders temperature (hot/iced always), size OR shots depending on drink type,
- * and milk ONLY for milk drinks. Validates selection before allowing "Add to order".
- * Matches DESIGN.md tokens and elevation rules.
+ * and milk ONLY for milk drinks. Wires "Place Order" button to POST /api/orders,
+ * handles loading, toast errors, and redirection to /order/[id].
  */
 export function CustomizationDrawer({
   drink,
@@ -41,10 +42,15 @@ export function CustomizationDrawer({
   onClose,
   onAddToOrder,
 }: CustomizationDrawerProps) {
+  const router = useRouter();
+
+  const [guestName, setGuestName] = useState<string>("");
   const [temp, setTemp] = useState<string>("");
   const [sizing, setSizing] = useState<string>("");
   const [milk, setMilk] = useState<string>("");
   const [errors, setErrors] = useState<string[]>([]);
+  const [toastError, setToastError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   // Reset state whenever the active drink changes or drawer opens
   useEffect(() => {
@@ -53,6 +59,8 @@ export function CustomizationDrawer({
       setSizing("");
       setMilk("");
       setErrors([]);
+      setToastError(null);
+      setIsLoading(false);
     }
   }, [drink, isOpen]);
 
@@ -76,9 +84,15 @@ export function CustomizationDrawer({
 
   const options = getDrinkOptions(drink);
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!drink) return;
+    if (!drink || isLoading) return;
+
+    const validationErrors: string[] = [];
+
+    if (!guestName.trim()) {
+      validationErrors.push("Your name is required.");
+    }
 
     const selection = {
       temp: temp || undefined,
@@ -86,22 +100,91 @@ export function CustomizationDrawer({
       milk: milk || undefined,
     };
 
-    const result = validateCustomization(drink, selection);
-    if (!result.valid) {
-      setErrors(result.errors);
+    const drinkValidation = validateCustomization(drink, selection);
+    if (!drinkValidation.valid) {
+      validationErrors.push(...drinkValidation.errors);
+    }
+
+    if (validationErrors.length > 0) {
+      setErrors(validationErrors);
       return;
     }
 
     setErrors([]);
-    onAddToOrder?.({
-      temp,
-      sizing,
-      ...(drink.takesMilk && milk ? { milk } : {}),
-    });
+    setToastError(null);
+    setIsLoading(true);
+
+    try {
+      const orderPayload = {
+        guest_name: guestName.trim(),
+        drink_id: drink.id,
+        options: {
+          temp,
+          sizing,
+          ...(drink.takesMilk && milk ? { milk } : {}),
+        },
+      };
+
+      const response = await fetch("/api/orders", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(orderPayload),
+      });
+
+      if (!response.ok) {
+        const errorData = (await response.json().catch(() => null)) as {
+          error?: string;
+          errors?: string[];
+        } | null;
+
+        const errorMsg =
+          errorData?.error ||
+          errorData?.errors?.join(", ") ||
+          "Failed to place order. Please try again.";
+        setToastError(errorMsg);
+        return;
+      }
+
+      const data = (await response.json()) as { id: string };
+
+      onAddToOrder?.({
+        temp,
+        sizing,
+        ...(drink.takesMilk && milk ? { milk } : {}),
+      });
+
+      onClose();
+      router.push(`/order/${data.id}`);
+    } catch {
+      setToastError(
+        "Network error. Please check your connection and try again.",
+      );
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (
     <div className="fixed inset-0 z-50 flex justify-end">
+      {/* Toast notification for errors */}
+      {toastError && (
+        <div
+          role="alert"
+          aria-live="assertive"
+          className="fixed right-4 bottom-4 z-50 flex max-w-sm items-center gap-3 rounded-[6px] border border-[var(--status-cancelled)] bg-white p-4 text-sm text-[var(--status-cancelled)] shadow-lg dark:bg-stone-900"
+        >
+          <span className="flex-1">{toastError}</span>
+          <button
+            type="button"
+            onClick={() => setToastError(null)}
+            aria-label="Dismiss error"
+            className="text-[var(--muted-foreground)] hover:text-[var(--foreground)]"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        </div>
+      )}
+
       {/* Backdrop */}
       <div
         className="fixed inset-0 bg-black/40 transition-opacity"
@@ -157,6 +240,24 @@ export function CustomizationDrawer({
               </ul>
             </div>
           )}
+
+          {/* Guest Name input */}
+          <div className="space-y-2">
+            <label
+              htmlFor="guest-name"
+              className="text-sm font-semibold text-[var(--foreground)]"
+            >
+              Your Name
+            </label>
+            <input
+              id="guest-name"
+              type="text"
+              value={guestName}
+              onChange={(e) => setGuestName(e.target.value)}
+              placeholder="e.g. Alex"
+              className="w-full rounded-[6px] border border-[var(--border)] bg-white px-3.5 py-2.5 text-sm text-[var(--foreground)] placeholder:text-[var(--muted-foreground)] focus-visible:ring-2 focus-visible:ring-[var(--primary)] focus-visible:outline-none dark:bg-stone-900"
+            />
+          </div>
 
           {/* Temperature */}
           <fieldset className="space-y-2">
@@ -275,9 +376,10 @@ export function CustomizationDrawer({
           <div className="mt-auto pt-6">
             <button
               type="submit"
-              className="w-full rounded-[6px] bg-[var(--primary)] px-5 py-3 text-sm font-medium text-[var(--primary-foreground)] transition-colors hover:bg-[var(--foreground)] focus-visible:ring-2 focus-visible:ring-[var(--primary)] focus-visible:outline-none"
+              disabled={isLoading}
+              className="w-full rounded-[6px] bg-[var(--primary)] px-5 py-3 text-sm font-medium text-[var(--primary-foreground)] transition-colors hover:bg-[var(--foreground)] focus-visible:ring-2 focus-visible:ring-[var(--primary)] focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-60"
             >
-              Add to order
+              {isLoading ? "Placing order..." : "Place Order"}
             </button>
           </div>
         </form>

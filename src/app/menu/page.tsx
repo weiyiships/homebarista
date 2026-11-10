@@ -8,42 +8,42 @@ import { MenuClient } from "./MenuClient";
 
 const STATIC_DRINKS: Drink[] = [
   {
-    id: "static-espresso",
+    id: "00000000-0000-0000-0000-000000000001",
     name: "Espresso",
     available: true,
     takesMilk: false,
     sizeType: "shots",
   },
   {
-    id: "static-americano",
+    id: "00000000-0000-0000-0000-000000000002",
     name: "Americano",
     available: true,
     takesMilk: false,
     sizeType: "shots",
   },
   {
-    id: "static-latte",
+    id: "00000000-0000-0000-0000-000000000003",
     name: "Latte",
     available: true,
     takesMilk: true,
     sizeType: "size",
   },
   {
-    id: "static-cappuccino",
+    id: "00000000-0000-0000-0000-000000000004",
     name: "Cappuccino",
     available: true,
     takesMilk: true,
     sizeType: "size",
   },
   {
-    id: "static-flat-white",
+    id: "00000000-0000-0000-0000-000000000005",
     name: "Flat White",
     available: true,
     takesMilk: true,
     sizeType: "size",
   },
   {
-    id: "static-mocha",
+    id: "00000000-0000-0000-0000-000000000006",
     name: "Mocha",
     available: true,
     takesMilk: true,
