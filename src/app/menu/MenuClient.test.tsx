@@ -139,6 +139,10 @@ describe("MenuClient customer account (#12)", () => {
 
     expect(screen.getByText("Signed in as Alice")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Log out" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "My orders" })).toHaveAttribute(
+      "href",
+      "/my-orders",
+    );
     expect(
       screen.queryByRole("link", { name: "Log in" }),
     ).not.toBeInTheDocument();
@@ -154,6 +158,9 @@ describe("MenuClient customer account (#12)", () => {
     expect(
       screen.getByRole("link", { name: "Create an account" }),
     ).toHaveAttribute("href", "/signup");
+    expect(
+      screen.queryByRole("link", { name: "My orders" }),
+    ).not.toBeInTheDocument();
   });
 
   it("prefills the customer's name when they pick a drink", async () => {
