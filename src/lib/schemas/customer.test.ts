@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { SignupSchema } from "./customer";
+import { LoginSchema, SignupSchema } from "./customer";
 
 function issues(input: unknown) {
   const result = SignupSchema.safeParse(input);
@@ -52,6 +52,23 @@ describe("SignupSchema", () => {
     ]);
     // 4 bytes per emoji in UTF-8: 19 × 4 = 76 bytes.
     expect(issues({ ...valid, password: "😀".repeat(19) })).toEqual([
+      "password",
+    ]);
+  });
+});
+
+describe("LoginSchema", () => {
+  it("normalizes the email and keeps the password as typed", () => {
+    expect(
+      LoginSchema.parse({ email: " Bob@X.co ", password: " pw " }),
+    ).toEqual({ email: "bob@x.co", password: " pw " });
+  });
+
+  it("requires an email and a password", () => {
+    const result = LoginSchema.safeParse({ email: "bob", password: "" });
+    expect(result.success).toBe(false);
+    expect(result.error?.issues.map((i) => i.path[0])).toEqual([
+      "email",
       "password",
     ]);
   });

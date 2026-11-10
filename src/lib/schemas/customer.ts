@@ -32,3 +32,17 @@ export const CustomerResponseSchema = z.object({
 });
 
 export type CustomerResponse = z.infer<typeof CustomerResponseSchema>;
+
+export const LoginSchema = z.object({
+  email: z
+    .string({ message: "Email is required" })
+    .trim()
+    .toLowerCase()
+    .email("Enter a valid email address"),
+  password: z
+    .string({ message: "Password is required" })
+    .min(1, "Password is required")
+    .max(1024, "Password is too long"),
+});
+
+export type LoginInput = z.infer<typeof LoginSchema>;

@@ -4,6 +4,7 @@ import {
   CUSTOMER_SESSION_TTL_SECONDS,
   createCustomerToken,
   customerCookieOptions,
+  getCustomerFromRequest,
   verifyCustomerToken,
 } from "./customerSession";
 import { createBaristaToken, verifyBaristaToken } from "./baristaSession";
@@ -60,5 +61,35 @@ describe("customer session", () => {
       path: "/",
       maxAge: CUSTOMER_SESSION_TTL_SECONDS,
     });
+  });
+});
+
+describe("getCustomerFromRequest", () => {
+  beforeEach(() => {
+    vi.stubEnv("JWT_SECRET", "test-secret-that-is-at-least-32-characters-long");
+  });
+
+  afterEach(() => {
+    vi.unstubAllEnvs();
+  });
+
+  it("reads the session from the cookie header", async () => {
+    const token = await createCustomerToken(customer);
+    const request = new Request("http://localhost/", {
+      headers: { cookie: `theme=dark; hb_customer_session=${token}; x=1` },
+    });
+
+    await expect(getCustomerFromRequest(request)).resolves.toEqual(customer);
+  });
+
+  it("returns null without a session cookie", async () => {
+    const request = new Request("http://localhost/", {
+      headers: { cookie: "theme=dark" },
+    });
+
+    await expect(getCustomerFromRequest(request)).resolves.toBeNull();
+    await expect(
+      getCustomerFromRequest(new Request("http://localhost/")),
+    ).resolves.toBeNull();
   });
 });

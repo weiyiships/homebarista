@@ -1,6 +1,11 @@
 import { listMenuItems, listMilkOptions } from "@/lib/db/queries/menu";
 import { fromMenuDrinkDto, toMenuResponse } from "@/lib/domain/availability";
 import { type Drink } from "@/lib/domain/menu";
+import { cookies } from "next/headers";
+import {
+  CUSTOMER_COOKIE,
+  verifyCustomerToken,
+} from "@/lib/auth/customerSession";
 import { MenuClient } from "./MenuClient";
 
 // Availability changes at any time (FR-5), so never serve a cached menu.
@@ -84,5 +89,16 @@ export default async function MenuPage() {
     drinks = STATIC_DRINKS;
   }
 
-  return <MenuClient drinks={drinks} unavailableMilks={unavailableMilks} />;
+  const cookieStore = await cookies();
+  const customer = await verifyCustomerToken(
+    cookieStore.get(CUSTOMER_COOKIE)?.value,
+  );
+
+  return (
+    <MenuClient
+      drinks={drinks}
+      unavailableMilks={unavailableMilks}
+      customer={customer ? { name: customer.name } : null}
+    />
+  );
 }

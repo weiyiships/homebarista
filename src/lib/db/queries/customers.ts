@@ -56,3 +56,24 @@ export async function createCustomer(data: {
     throw error;
   }
 }
+
+export interface StoredCustomer extends PublicCustomer {
+  passwordHash: string;
+}
+
+/** Looks a customer up by email, case-insensitively. */
+export async function findCustomerByEmail(
+  email: string,
+): Promise<StoredCustomer | null> {
+  const [customer] = await db
+    .select({
+      id: customers.id,
+      name: customers.name,
+      email: customers.email,
+      passwordHash: customers.passwordHash,
+    })
+    .from(customers)
+    .where(eq(sql`lower(${customers.email})`, email.toLowerCase()))
+    .limit(1);
+  return customer ?? null;
+}
