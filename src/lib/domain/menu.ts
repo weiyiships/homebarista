@@ -134,3 +134,17 @@ export function validateCustomization(
 
   return { valid: errors.length === 0, errors };
 }
+
+const DESCRIPTIONS: Record<string, string> = {
+  Espresso: "Concentrated, bold shot of coffee.",
+  Americano: "Espresso diluted with hot water.",
+  Latte: "Smooth espresso with steamed milk.",
+  Cappuccino: "Equal parts espresso, steamed and foamed milk.",
+  "Flat White": "Rich espresso with velvety microfoam.",
+  Mocha: "Espresso, chocolate, and steamed milk.",
+};
+
+/** One-line description shown on menu cards and the customization dialog. */
+export function describeDrink(name: string): string {
+  return DESCRIPTIONS[name] ?? "A delicious handcrafted coffee drink.";
+}

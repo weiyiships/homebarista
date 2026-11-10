@@ -2,15 +2,16 @@
 
 @layer base {
   :root {
-    --background: #fdfbf7;
-    --foreground: #2d241e;
-    --primary: #4a2c11;
-    --primary-foreground: #fdfbf7;
-    --muted: #f3ede2;
-    --muted-foreground: #79685b;
-    --accent: #d97706;
+    /* Monochrome café (#40): black on white, gray for secondary text. */
+    --background: #ffffff;
+    --foreground: #111111;
+    --primary: #111111;
+    --primary-foreground: #ffffff;
+    --muted: #f2f2f2;
+    --muted-foreground: #555555;
+    --accent: #111111;
     --accent-foreground: #ffffff;
-    --border: #e8ded1;
+    --border: #dddddd;
     --status-received: #5f6b7a;
     --status-brewing: #a15c07;
     --status-ready: #2e7d32;
@@ -19,15 +20,15 @@
 
   @media (prefers-color-scheme: dark) {
     :root {
-      --background: #1c1714;
-      --foreground: #f4eee6;
-      --primary: #c9935a;
-      --primary-foreground: #1c1714;
-      --muted: #2e2621;
-      --muted-foreground: #a6988d;
-      --accent: #f59e0b;
-      --accent-foreground: #1c1714;
-      --border: #3d332c;
+      --background: #0f0f0f;
+      --foreground: #f5f5f5;
+      --primary: #f5f5f5;
+      --primary-foreground: #0f0f0f;
+      --muted: #1f1f1f;
+      --muted-foreground: #a8a8a8;
+      --accent: #f5f5f5;
+      --accent-foreground: #0f0f0f;
+      --border: #333333;
       --status-received: #9ca3af;
       --status-brewing: #f59e0b;
       --status-ready: #22c55e;
