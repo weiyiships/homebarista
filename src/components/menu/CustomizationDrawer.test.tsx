@@ -1,8 +1,16 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { CustomizationDrawer } from "./CustomizationDrawer";
 import { type Drink } from "@/lib/domain/menu";
+
+// Mock router
+const mockPush = vi.fn();
+vi.mock("next/navigation", () => ({
+  useRouter: () => ({
+    push: mockPush,
+  }),
+}));
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -24,6 +32,11 @@ function makeDrink(overrides: Partial<Drink> = {}): Drink {
 // ---------------------------------------------------------------------------
 
 describe("CustomizationDrawer", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.stubGlobal("fetch", vi.fn());
+  });
+
   it("does not render when isOpen is false", () => {
     render(
       <CustomizationDrawer
@@ -161,23 +174,22 @@ describe("CustomizationDrawer", () => {
     });
   });
 
-  describe("Validation before Add to order", () => {
-    it("displays validation errors and prevents submission when options are missing", async () => {
-      const onAddToOrder = vi.fn();
+  describe("Validation before Place Order", () => {
+    it("displays validation errors and prevents submission when name and options are missing", async () => {
       render(
         <CustomizationDrawer
           drink={makeDrink({ takesMilk: true, sizeType: "size" })}
           isOpen={true}
           onClose={vi.fn()}
-          onAddToOrder={onAddToOrder}
         />,
       );
 
       await userEvent.click(
-        screen.getByRole("button", { name: /add to order/i }),
+        screen.getByRole("button", { name: /place order/i }),
       );
 
       expect(screen.getByRole("alert")).toBeInTheDocument();
+      expect(screen.getByText(/your name is required/i)).toBeInTheDocument();
       expect(
         screen.getByText(/temperature selection is required/i),
       ).toBeInTheDocument();
@@ -187,65 +199,101 @@ describe("CustomizationDrawer", () => {
       expect(
         screen.getByText(/milk selection is required/i),
       ).toBeInTheDocument();
-      expect(onAddToOrder).not.toHaveBeenCalled();
+      expect(fetch).not.toHaveBeenCalled();
     });
 
-    it("submits successfully when valid selections are made for a milk drink", async () => {
-      const onAddToOrder = vi.fn();
+    it("submits successfully to /api/orders and redirects to /order/[id]", async () => {
+      const onClose = vi.fn();
+      const mockOrderResponse = { id: "order-xyz-789" };
+
+      vi.mocked(fetch).mockResolvedValueOnce({
+        ok: true,
+        json: async () => mockOrderResponse,
+      } as Response);
+
       render(
         <CustomizationDrawer
-          drink={makeDrink({ takesMilk: true, sizeType: "size" })}
+          drink={makeDrink({
+            id: "11111111-2222-3333-4444-555555555555",
+            takesMilk: true,
+            sizeType: "size",
+          })}
           isOpen={true}
-          onClose={vi.fn()}
-          onAddToOrder={onAddToOrder}
+          onClose={onClose}
         />,
       );
 
+      await userEvent.type(screen.getByLabelText(/your name/i), "Sarah");
       await userEvent.click(screen.getByLabelText("Hot"));
       await userEvent.click(screen.getByLabelText("Medium"));
       await userEvent.click(screen.getByLabelText("Oat"));
 
       await userEvent.click(
-        screen.getByRole("button", { name: /add to order/i }),
+        screen.getByRole("button", { name: /place order/i }),
       );
 
-      expect(screen.queryByRole("alert")).not.toBeInTheDocument();
-      expect(onAddToOrder).toHaveBeenCalledWith({
-        temp: "Hot",
-        sizing: "Medium",
-        milk: "Oat",
+      await waitFor(() => {
+        expect(fetch).toHaveBeenCalledWith(
+          "/api/orders",
+          expect.objectContaining({
+            method: "POST",
+            body: JSON.stringify({
+              guest_name: "Sarah",
+              drink_id: "11111111-2222-3333-4444-555555555555",
+              options: {
+                temp: "Hot",
+                sizing: "Medium",
+                milk: "Oat",
+              },
+            }),
+          }),
+        );
       });
+
+      expect(onClose).toHaveBeenCalled();
+      expect(mockPush).toHaveBeenCalledWith("/order/order-xyz-789");
     });
 
-    it("submits successfully for non-milk drinks without milk option", async () => {
-      const onAddToOrder = vi.fn();
-      const espresso = makeDrink({
-        name: "Espresso",
-        takesMilk: false,
-        sizeType: "shots",
-      });
+    it("displays error toast when API call fails", async () => {
+      vi.mocked(fetch).mockResolvedValueOnce({
+        ok: false,
+        json: async () => ({ error: "Server busy, please retry" }),
+      } as Response);
 
       render(
         <CustomizationDrawer
-          drink={espresso}
+          drink={makeDrink({
+            takesMilk: false,
+            sizeType: "shots",
+          })}
           isOpen={true}
           onClose={vi.fn()}
-          onAddToOrder={onAddToOrder}
         />,
       );
 
+      await userEvent.type(screen.getByLabelText(/your name/i), "Dave");
       await userEvent.click(screen.getByLabelText("Iced"));
       await userEvent.click(screen.getByLabelText("Double"));
 
       await userEvent.click(
-        screen.getByRole("button", { name: /add to order/i }),
+        screen.getByRole("button", { name: /place order/i }),
       );
 
-      expect(screen.queryByRole("alert")).not.toBeInTheDocument();
-      expect(onAddToOrder).toHaveBeenCalledWith({
-        temp: "Iced",
-        sizing: "Double",
+      await waitFor(() => {
+        expect(
+          screen.getByText(/server busy, please retry/i),
+        ).toBeInTheDocument();
       });
+
+      expect(mockPush).not.toHaveBeenCalled();
+
+      // Dismiss error toast
+      await userEvent.click(
+        screen.getByRole("button", { name: /dismiss error/i }),
+      );
+      expect(
+        screen.queryByText(/server busy, please retry/i),
+      ).not.toBeInTheDocument();
     });
   });
 });
