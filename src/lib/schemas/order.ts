@@ -56,3 +56,25 @@ export const OrderStatusUpdateSchema = z.object({
 });
 
 export type OrderStatusUpdate = z.infer<typeof OrderStatusUpdateSchema>;
+
+// ---------------------------------------------------------------------------
+// Guest order tracking (FR-4, US-5)
+// ---------------------------------------------------------------------------
+
+export const OrderTrackingSchema = z.object({
+  id: z.string().uuid(),
+  guest_name: z.string(),
+  status: OrderStatusEnum,
+  drink_name: z.string(),
+  options: z.object({
+    sizing: z.string().nullable(),
+    milk: z.string().nullable(),
+    temp: z.string().nullable(),
+  }),
+  created_at: z.string().datetime(),
+  updated_at: z.string().datetime(),
+  /** Orders the barista makes first; only set while `received`. */
+  orders_ahead: z.number().int().nonnegative().nullable(),
+});
+
+export type OrderTracking = z.infer<typeof OrderTrackingSchema>;

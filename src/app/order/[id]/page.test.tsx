@@ -1,63 +1,79 @@
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
 import OrderStatusPage from "./page";
-import { getOrderById } from "@/lib/db/queries/orders";
+import { getOrderTracking } from "@/lib/db/queries/tracking";
+import { notFound } from "next/navigation";
 
-vi.mock("@/lib/db/queries/orders", () => ({
-  getOrderById: vi.fn(),
+vi.mock("@/lib/db/queries/tracking", () => ({
+  getOrderTracking: vi.fn(),
 }));
 
-describe("OrderStatusPage Component (Issue #5)", () => {
-  it("renders order status, guest name, and drink name when order is found", async () => {
-    vi.mocked(getOrderById).mockResolvedValueOnce({
-      id: "HB-9999",
-      guestName: "Emma",
-      customerId: null,
-      status: "brewing",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      items: [
-        {
-          id: "item-1",
-          orderId: "HB-9999",
-          menuItemId: "drink-1",
-          optionsJson: { temp: "Hot", sizing: "Medium" },
-          drinkName: "Flat White",
-        },
-      ],
+vi.mock("next/navigation", () => ({
+  notFound: vi.fn(() => {
+    throw new Error("NEXT_NOT_FOUND");
+  }),
+}));
+
+const id = "33333333-2222-4333-a444-555555555555";
+
+function renderPage(orderId: string) {
+  return OrderStatusPage({ params: Promise.resolve({ id: orderId }) });
+}
+
+describe("/order/[id] page", () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it("renders the order's live status", async () => {
+    vi.mocked(getOrderTracking).mockResolvedValueOnce({
+      id,
+      guest_name: "Emma",
+      status: "received",
+      drink_name: "Flat White",
+      options: { sizing: "Medium", milk: "Whole", temp: "Hot" },
+      created_at: "2026-11-10T12:00:00.000Z",
+      updated_at: "2026-11-10T12:00:00.000Z",
+      orders_ahead: 1,
     });
 
-    const jsx = await OrderStatusPage({
-      params: Promise.resolve({ id: "HB-9999" }),
-    });
+    render(await renderPage(id));
 
-    render(jsx);
-
-    expect(screen.getByText("Emma’s Order")).toBeInTheDocument();
-    expect(screen.getByText("HB-9999")).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { level: 1, name: "Emma’s order" }),
+    ).toBeInTheDocument();
     expect(screen.getByTestId("order-status-badge")).toHaveTextContent(
-      "brewing",
+      "Received",
     );
     expect(screen.getByText("Flat White")).toBeInTheDocument();
+    expect(screen.getByText("1 order ahead of you")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /back to menu/i })).toHaveAttribute(
       "href",
       "/menu",
     );
   });
 
-  it("gracefully displays fallback order details when order is not found in DB", async () => {
-    vi.mocked(getOrderById).mockResolvedValueOnce(null);
+  it("shows not found for an unknown order instead of placeholder data", async () => {
+    vi.mocked(getOrderTracking).mockResolvedValueOnce(null);
 
-    const jsx = await OrderStatusPage({
-      params: Promise.resolve({ id: "fallback-id-123" }),
-    });
+    await expect(renderPage(id)).rejects.toThrow("NEXT_NOT_FOUND");
+    expect(notFound).toHaveBeenCalled();
+  });
 
-    render(jsx);
-
-    expect(screen.getByText("fallback-id-123")).toBeInTheDocument();
-    expect(screen.getByTestId("order-status-badge")).toHaveTextContent(
-      "received",
+  it("shows not found for a malformed id without querying", async () => {
+    await expect(renderPage("fallback-id-123")).rejects.toThrow(
+      "NEXT_NOT_FOUND",
     );
-    expect(screen.getByText("Custom Coffee")).toBeInTheDocument();
+    expect(getOrderTracking).not.toHaveBeenCalled();
+  });
+
+  it("shows an error when the order cannot be loaded", async () => {
+    vi.mocked(getOrderTracking).mockRejectedValueOnce(new Error("db down"));
+
+    render(await renderPage(id));
+
+    expect(screen.getByRole("alert")).toHaveTextContent(
+      /couldn’t load your order/i,
+    );
   });
 });
