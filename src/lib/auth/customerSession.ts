@@ -56,3 +56,21 @@ export async function verifyCustomerToken(
 export function customerCookieOptions() {
   return sessionCookieOptions(CUSTOMER_SESSION_TTL_SECONDS);
 }
+
+function readCookie(header: string | null, name: string): string | undefined {
+  if (!header) return undefined;
+  for (const part of header.split(";")) {
+    const [rawKey, ...rest] = part.trim().split("=");
+    if (rawKey === name) return decodeURIComponent(rest.join("="));
+  }
+  return undefined;
+}
+
+/** The signed-in customer for a route handler request, or null. */
+export async function getCustomerFromRequest(
+  request: Request,
+): Promise<CustomerSession | null> {
+  return verifyCustomerToken(
+    readCookie(request.headers.get("cookie"), CUSTOMER_COOKIE),
+  );
+}
