@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Coffee, User, ClipboardList } from "lucide-react";
+import { Coffee, User, UserPlus, ClipboardList } from "lucide-react";
 
 export default function HomePage() {
   return (
@@ -35,7 +35,14 @@ export default function HomePage() {
         </Link>
       </div>
 
-      <div className="pt-6">
+      <div className="flex items-center gap-4 pt-6">
+        <Link
+          href="/signup"
+          className="inline-flex items-center gap-1.5 text-xs text-[var(--muted-foreground)] transition hover:text-[var(--foreground)]"
+        >
+          <UserPlus className="h-3.5 w-3.5" />
+          <span>Create an account</span>
+        </Link>
         <Link
           href="/login"
           className="inline-flex items-center gap-1.5 text-xs text-[var(--muted-foreground)] transition hover:text-[var(--foreground)]"
