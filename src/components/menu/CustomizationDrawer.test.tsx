@@ -296,4 +296,80 @@ describe("CustomizationDrawer", () => {
       ).not.toBeInTheDocument();
     });
   });
+  describe("Availability (FR-5)", () => {
+    it("disables milks the barista turned off", () => {
+      render(
+        <CustomizationDrawer
+          drink={makeDrink()}
+          isOpen={true}
+          onClose={vi.fn()}
+          unavailableMilks={["Oat"]}
+        />,
+      );
+
+      expect(screen.getByRole("radio", { name: /oat/i })).toBeDisabled();
+      expect(screen.getByRole("radio", { name: /whole/i })).toBeEnabled();
+      expect(
+        screen.getByRole("group", { name: "Milk Choice" }),
+      ).toHaveTextContent(/unavailable/i);
+    });
+
+    it("clears a selected milk when it becomes unavailable", async () => {
+      const drink = makeDrink();
+      const { rerender } = render(
+        <CustomizationDrawer drink={drink} isOpen={true} onClose={vi.fn()} />,
+      );
+      await userEvent.click(screen.getByLabelText("Oat"));
+      expect(screen.getByRole("radio", { name: /oat/i })).toBeChecked();
+
+      rerender(
+        <CustomizationDrawer
+          drink={drink}
+          isOpen={true}
+          onClose={vi.fn()}
+          unavailableMilks={["Oat"]}
+        />,
+      );
+
+      expect(screen.getByRole("radio", { name: /oat/i })).not.toBeChecked();
+    });
+
+    it("keeps selections when the same drink is refreshed by a poll", async () => {
+      const { rerender } = render(
+        <CustomizationDrawer
+          drink={makeDrink()}
+          isOpen={true}
+          onClose={vi.fn()}
+        />,
+      );
+      await userEvent.click(screen.getByLabelText("Iced"));
+
+      rerender(
+        <CustomizationDrawer
+          drink={makeDrink()}
+          isOpen={true}
+          onClose={vi.fn()}
+        />,
+      );
+
+      expect(screen.getByLabelText("Iced")).toBeChecked();
+    });
+
+    it("blocks ordering when the open drink becomes unavailable", () => {
+      render(
+        <CustomizationDrawer
+          drink={makeDrink({ available: false })}
+          isOpen={true}
+          onClose={vi.fn()}
+        />,
+      );
+
+      expect(screen.getByRole("alert")).toHaveTextContent(
+        "Latte is no longer available. Please choose another drink.",
+      );
+      expect(
+        screen.getByRole("button", { name: /place order/i }),
+      ).toBeDisabled();
+    });
+  });
 });
