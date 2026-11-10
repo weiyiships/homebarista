@@ -45,6 +45,9 @@ export function MenuClient({
             <span className="mr-auto text-sm text-[var(--muted-foreground)]">
               Signed in as {customer.name}
             </span>
+            <Link href="/my-orders" className={accountLink}>
+              My orders
+            </Link>
             <LogoutButton />
           </>
         ) : (
