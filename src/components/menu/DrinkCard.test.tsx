@@ -122,8 +122,8 @@ describe("DrinkCard", () => {
         onSelect={() => {}}
       />,
     );
-    const card = screen.getByRole("button");
-    expect(card).toHaveAccessibleName(card.textContent ?? "");
-    expect(card).toHaveAccessibleName(/^Latte.*Unavailable$/);
+    expect(screen.getByRole("button")).toHaveAccessibleName(
+      "Latte Smooth espresso with steamed milk. Unavailable",
+    );
   });
 });

@@ -61,7 +61,6 @@ export function DrinkCard({ drink, onSelect }: DrinkCardProps) {
       role="button"
       tabIndex={disabled ? -1 : 0}
       aria-disabled={disabled}
-      aria-label={`${drink.name}${disabled ? " — unavailable" : ""}`}
       onClick={handleClick}
       onKeyDown={handleKeyDown}
       className={cn(
