@@ -373,3 +373,31 @@ describe("CustomizationDrawer", () => {
     });
   });
 });
+
+describe("CustomizationDrawer customer autofill (FR-1, #12)", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.stubGlobal("fetch", vi.fn());
+  });
+
+  it("fills in the signed-in customer's name", () => {
+    render(
+      <CustomizationDrawer
+        drink={makeDrink()}
+        isOpen
+        onClose={() => {}}
+        defaultGuestName="Alice"
+      />,
+    );
+
+    expect(screen.getByLabelText(/your name/i)).toHaveValue("Alice");
+  });
+
+  it("leaves the name empty for guests", () => {
+    render(
+      <CustomizationDrawer drink={makeDrink()} isOpen onClose={() => {}} />,
+    );
+
+    expect(screen.getByLabelText(/your name/i)).toHaveValue("");
+  });
+});

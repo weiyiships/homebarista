@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { act, render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { MenuClient } from "./MenuClient";
 import { type Drink } from "@/lib/domain/menu";
 
@@ -115,5 +116,57 @@ describe("MenuClient live availability", () => {
     await act(() => vi.advanceTimersByTimeAsync(5000));
 
     expect(fetchMock).not.toHaveBeenCalled();
+  });
+});
+
+describe("MenuClient customer account (#12)", () => {
+  beforeEach(() => {
+    vi.stubGlobal("fetch", vi.fn());
+  });
+
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  it("shows who is signed in with a log out button", () => {
+    render(
+      <MenuClient
+        drinks={[latte]}
+        unavailableMilks={[]}
+        customer={{ name: "Alice" }}
+      />,
+    );
+
+    expect(screen.getByText("Signed in as Alice")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Log out" })).toBeInTheDocument();
+    expect(
+      screen.queryByRole("link", { name: "Log in" }),
+    ).not.toBeInTheDocument();
+  });
+
+  it("offers optional log in and signup to guests", () => {
+    render(<MenuClient drinks={[latte]} unavailableMilks={[]} />);
+
+    expect(screen.getByRole("link", { name: "Log in" })).toHaveAttribute(
+      "href",
+      "/login",
+    );
+    expect(
+      screen.getByRole("link", { name: "Create an account" }),
+    ).toHaveAttribute("href", "/signup");
+  });
+
+  it("prefills the customer's name when they pick a drink", async () => {
+    render(
+      <MenuClient
+        drinks={[latte]}
+        unavailableMilks={[]}
+        customer={{ name: "Alice" }}
+      />,
+    );
+
+    await userEvent.setup().click(latteCard());
+
+    expect(screen.getByLabelText(/your name/i)).toHaveValue("Alice");
   });
 });
