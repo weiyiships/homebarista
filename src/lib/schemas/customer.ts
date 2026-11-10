@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { OrderStatusEnum } from "./order";
 
 /** bcrypt only uses the first 72 bytes of a password. */
 const BCRYPT_MAX_BYTES = 72;
@@ -46,3 +47,30 @@ export const LoginSchema = z.object({
 });
 
 export type LoginInput = z.infer<typeof LoginSchema>;
+
+// ---------------------------------------------------------------------------
+// Customer order history (FR-8, US-12)
+// ---------------------------------------------------------------------------
+
+export const CustomerOrderSchema = z.object({
+  id: z.string().uuid(),
+  drink_name: z.string(),
+  status: OrderStatusEnum,
+  options: z.object({
+    sizing: z.string().nullable(),
+    milk: z.string().nullable(),
+    temp: z.string().nullable(),
+  }),
+  created_at: z.string().datetime(),
+  updated_at: z.string().datetime(),
+});
+
+/** Response of GET /api/customers/me/orders. */
+export const CustomerOrdersResponseSchema = z.object({
+  orders: z.array(CustomerOrderSchema),
+});
+
+export type CustomerOrderDto = z.infer<typeof CustomerOrderSchema>;
+export type CustomerOrdersResponse = z.infer<
+  typeof CustomerOrdersResponseSchema
+>;

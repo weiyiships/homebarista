@@ -156,3 +156,35 @@ export async function listFinishedOrders(): Promise<FinishedOrderRow[]> {
     .where(inArray(orders.status, [...FINISHED_ORDER_STATUSES]))
     .orderBy(desc(orders.updatedAt), desc(orders.createdAt));
 }
+
+export interface CustomerOrderRow {
+  id: string;
+  status: Order["status"];
+  createdAt: Date;
+  updatedAt: Date;
+  drinkName: string | null;
+  optionsJson: unknown;
+}
+
+/**
+ * Lists one customer's orders, newest first (FR-8). Ownership is enforced
+ * here: only rows whose `customer_id` matches are ever read.
+ */
+export async function listOrdersForCustomer(
+  customerId: string,
+): Promise<CustomerOrderRow[]> {
+  return db
+    .select({
+      id: orders.id,
+      status: orders.status,
+      createdAt: orders.createdAt,
+      updatedAt: orders.updatedAt,
+      drinkName: menuItems.name,
+      optionsJson: orderItems.optionsJson,
+    })
+    .from(orders)
+    .leftJoin(orderItems, eq(orderItems.orderId, orders.id))
+    .leftJoin(menuItems, eq(orderItems.menuItemId, menuItems.id))
+    .where(eq(orders.customerId, customerId))
+    .orderBy(desc(orders.createdAt), desc(orders.id));
+}
