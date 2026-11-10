@@ -32,3 +32,16 @@ export const QueueResponseSchema = z.object({
 
 export type QueueOrderDto = z.infer<typeof QueueOrderSchema>;
 export type QueueResponse = z.infer<typeof QueueResponseSchema>;
+
+export const HistoryOrderSchema = QueueOrderSchema.extend({
+  status: z.enum(["picked_up", "cancelled"]),
+  finished_at: z.string().datetime(),
+});
+
+/** Response of GET /api/barista/history (FR-6, US-7). */
+export const HistoryResponseSchema = z.object({
+  orders: z.array(HistoryOrderSchema),
+});
+
+export type HistoryOrderDto = z.infer<typeof HistoryOrderSchema>;
+export type HistoryResponse = z.infer<typeof HistoryResponseSchema>;

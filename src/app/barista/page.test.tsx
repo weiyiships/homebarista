@@ -77,6 +77,21 @@ describe("/barista page", () => {
     expect(screen.getByText("Oat milk")).toBeInTheDocument();
   });
 
+  it("links to the history tab from the queue tab", async () => {
+    vi.mocked(listActiveOrders).mockResolvedValueOnce([]);
+
+    render(await BaristaPage());
+
+    expect(screen.getByRole("link", { name: "Queue" })).toHaveAttribute(
+      "aria-current",
+      "page",
+    );
+    expect(screen.getByRole("link", { name: "History" })).toHaveAttribute(
+      "href",
+      "/barista/history",
+    );
+  });
+
   it("shows a reconnecting state when the queue cannot load", async () => {
     vi.mocked(listActiveOrders).mockRejectedValueOnce(new Error("db down"));
 

@@ -1,4 +1,5 @@
-import { and, asc, eq, inArray, sql } from "drizzle-orm";
+import { and, asc, desc, eq, inArray, sql } from "drizzle-orm";
+import { FINISHED_ORDER_STATUSES } from "@/lib/domain/history";
 import { ACTIVE_ORDER_STATUSES } from "@/lib/domain/orderStatus";
 import { db } from "../index";
 import { menuItems, orderItems, orders, type Order } from "../schema";
@@ -126,4 +127,32 @@ export async function listActiveOrders(): Promise<ActiveOrderRow[]> {
     .leftJoin(menuItems, eq(orderItems.menuItemId, menuItems.id))
     .where(inArray(orders.status, [...ACTIVE_ORDER_STATUSES]))
     .orderBy(asc(orders.createdAt), asc(orders.id));
+}
+
+export interface FinishedOrderRow extends ActiveOrderRow {
+  /** When the order reached its final status (`updated_at`). */
+  finishedAt: Date;
+}
+
+/**
+ * Lists picked-up and cancelled orders, most recently finished first, with
+ * the drink name and chosen options. Finished statuses are terminal, so the
+ * last `updated_at` is the finish time.
+ */
+export async function listFinishedOrders(): Promise<FinishedOrderRow[]> {
+  return db
+    .select({
+      id: orders.id,
+      guestName: orders.guestName,
+      status: orders.status,
+      createdAt: orders.createdAt,
+      finishedAt: orders.updatedAt,
+      drinkName: menuItems.name,
+      optionsJson: orderItems.optionsJson,
+    })
+    .from(orders)
+    .leftJoin(orderItems, eq(orderItems.orderId, orders.id))
+    .leftJoin(menuItems, eq(orderItems.menuItemId, menuItems.id))
+    .where(inArray(orders.status, [...FINISHED_ORDER_STATUSES]))
+    .orderBy(desc(orders.updatedAt), desc(orders.createdAt));
 }
