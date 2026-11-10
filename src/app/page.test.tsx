@@ -15,7 +15,7 @@ describe("HomePage Component (Issue #1)", () => {
     const baristaLink = screen.getByRole("link", { name: /Barista Queue/i });
 
     expect(orderLink.getAttribute("href")).toBe("/menu");
-    expect(baristaLink.getAttribute("href")).toBe("/barista/queue");
+    expect(baristaLink.getAttribute("href")).toBe("/barista");
   });
 
   it("offers optional customer signup without blocking guest ordering", () => {
