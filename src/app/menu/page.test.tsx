@@ -43,7 +43,7 @@ describe("/menu page", () => {
 
     render(await MenuPage());
 
-    expect(screen.getByRole("link", { name: "Log in" })).toBeInTheDocument();
+    expect(screen.queryByText(/Signed in as/)).not.toBeInTheDocument();
     expect(screen.getByRole("button", { name: /^latte/i })).toBeInTheDocument();
   });
 });

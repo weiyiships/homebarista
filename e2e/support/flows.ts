@@ -70,3 +70,11 @@ export async function newPhone(browser: Browser): Promise<Page> {
   });
   return context.newPage();
 }
+
+/**
+ * Guest name unique to this test attempt. Retries share the database, so a
+ * reused name would match a leftover card from the failed attempt.
+ */
+export function uniqueName(base: string): string {
+  return `${base} ${Date.now() % 100_000}-${test.info().retry}`;
+}

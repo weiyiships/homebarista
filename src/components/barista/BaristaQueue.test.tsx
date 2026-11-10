@@ -133,6 +133,39 @@ describe("BaristaQueue", () => {
     expect(names).toEqual(["Alice", "Bob"]);
   });
 
+  it("places each order in its Received / Brewing / Ready board column on desktop", () => {
+    const brewing: QueueOrder = {
+      ...orders[1],
+      id: "44444444-2222-4333-a444-555555555555",
+      guestName: "Dee",
+      status: "brewing",
+      createdAt: "2026-11-10T12:00:30.000Z",
+    };
+    render(<BaristaQueue initialOrders={[...orders, brewing]} />);
+
+    const columns = screen.getByTestId("queue-board-columns");
+    expect(columns).toHaveTextContent("Received1");
+    expect(columns).toHaveTextContent("Brewing1");
+    expect(columns).toHaveTextContent("Ready1");
+
+    const column = (name: RegExp) =>
+      screen.getByRole("article", { name }).closest("li")?.className ?? "";
+    expect(column(/bob/i)).toContain("lg:col-start-1");
+    expect(column(/dee/i)).toContain("lg:col-start-2");
+    expect(column(/alice/i)).toContain("lg:col-start-3");
+  });
+
+  it("keeps one oldest-first list in reading order for phones and screen readers", () => {
+    render(<BaristaQueue initialOrders={orders} />);
+
+    const list = screen.getByRole("list", { name: "Active orders" });
+    expect(list.className).toContain("lg:grid-flow-dense");
+    const names = within(list)
+      .getAllByRole("article")
+      .map((card) => within(card).getByRole("heading").textContent);
+    expect(names).toEqual(["Alice", "Bob"]);
+  });
+
   it("shows drink, size or shots, milk, temperature, and time waiting", () => {
     vi.useFakeTimers({ toFake: ["Date"] });
     vi.setSystemTime(new Date("2026-11-10T12:03:05.000Z"));

@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { CustomizationDrawer } from "./CustomizationDrawer";
@@ -399,5 +399,54 @@ describe("CustomizationDrawer customer autofill (FR-1, #12)", () => {
     );
 
     expect(screen.getByLabelText(/your name/i)).toHaveValue("");
+  });
+});
+
+describe("CustomizationDrawer image-led modal (#40)", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.stubGlobal("fetch", vi.fn());
+  });
+
+  it("shows the drink illustration above the options", () => {
+    render(
+      <CustomizationDrawer
+        drink={makeDrink({ name: "Mocha" })}
+        isOpen
+        onClose={() => {}}
+      />,
+    );
+    const dialog = screen.getByRole("dialog", { name: "Customize Mocha" });
+    const art = dialog.querySelector('svg[data-drink="Mocha"]');
+    const firstOption = screen.getByRole("radio", { name: "Hot" });
+
+    expect(art).not.toBeNull();
+    expect(
+      (art as Node).compareDocumentPosition(firstOption) &
+        Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
+  });
+
+  it("keeps Place Order in a bottom action bar", () => {
+    render(
+      <CustomizationDrawer drink={makeDrink()} isOpen onClose={() => {}} />,
+    );
+
+    const button = screen.getByRole("button", { name: "Place Order" });
+    expect(button.closest("footer")).not.toBeNull();
+  });
+
+  it("shows each option group as a two-column grid of large buttons", () => {
+    render(
+      <CustomizationDrawer drink={makeDrink()} isOpen onClose={() => {}} />,
+    );
+
+    for (const group of ["Temperature", "Size", "Milk Choice"]) {
+      const radios = within(screen.getByRole("radiogroup", { name: group }));
+      expect(radios.getAllByRole("radio").length).toBeGreaterThanOrEqual(2);
+      expect(
+        screen.getByRole("radiogroup", { name: group }).className,
+      ).toContain("grid-cols-2");
+    }
   });
 });

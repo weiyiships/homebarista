@@ -1,12 +1,22 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
-import { LogoutButton } from "@/components/auth/LogoutButton";
+import { MapPin } from "lucide-react";
+import { PAGE_WIDE } from "@/components/site/layout";
+import { cn } from "@/lib/utils";
 import { type Drink } from "@/lib/domain/menu";
 import { DrinkGrid } from "@/components/menu/DrinkGrid";
 import { CustomizationDrawer } from "@/components/menu/CustomizationDrawer";
 import { useMenuPolling } from "@/components/menu/useMenuPolling";
+import { DrinkIllustration } from "@/components/menu/DrinkIllustration";
+
+const HERO_DRINKS = [
+  "Espresso",
+  "Latte",
+  "Cappuccino",
+  "Mocha",
+  "Americano",
+] as const;
 
 interface MenuClientProps {
   drinks: Drink[];
@@ -15,9 +25,6 @@ interface MenuClientProps {
   /** Signed-in customer, or null for guests (US-11). */
   customer?: { name: string } | null;
 }
-
-const accountLink =
-  "inline-flex min-h-11 items-center rounded-[6px] px-3 text-sm font-medium text-[var(--primary)] hover:bg-[var(--muted)] focus-visible:ring-2 focus-visible:ring-[var(--primary)] focus-visible:outline-none";
 
 /**
  * Client shell for the menu page.
@@ -35,39 +42,56 @@ export function MenuClient({
   const selectedDrink = menu.drinks.find((d) => d.id === selectedId) ?? null;
 
   return (
-    <main className="mx-auto max-w-[1200px] px-8 py-8">
-      <nav
-        aria-label="Account"
-        className="mb-4 flex flex-wrap items-center justify-end gap-1"
+    <main className="flex flex-col gap-8 pb-8">
+      <section
+        aria-labelledby="menu-title"
+        data-testid="menu-hero"
+        className="border-b border-[var(--border)] bg-[var(--muted)]"
       >
-        {customer ? (
-          <>
-            <span className="mr-auto text-sm text-[var(--muted-foreground)]">
-              Signed in as {customer.name}
-            </span>
-            <Link href="/my-orders" className={accountLink}>
-              My orders
-            </Link>
-            <LogoutButton />
-          </>
-        ) : (
-          <>
-            <Link href="/login" className={accountLink}>
-              Log in
-            </Link>
-            <Link href="/signup" className={accountLink}>
-              Create an account
-            </Link>
-          </>
-        )}
-      </nav>
-      <h1 className="mb-6 text-[36px] leading-tight font-bold text-[var(--foreground)]">
-        Our Menu
-      </h1>
-      <DrinkGrid
-        drinks={menu.drinks}
-        onSelect={(drink) => setSelectedId(drink.id)}
-      />
+        <div
+          className={cn(
+            PAGE_WIDE,
+            "flex flex-col gap-6 py-8 md:flex-row md:items-center md:justify-between md:py-12",
+          )}
+        >
+          <div>
+            <h1
+              id="menu-title"
+              className="text-4xl leading-tight font-bold tracking-tight text-[var(--foreground)] md:text-5xl"
+            >
+              Our Menu
+            </h1>
+            <p className="mt-2 flex items-center gap-1.5 text-sm font-medium text-[var(--foreground)] md:text-base">
+              <MapPin className="h-4 w-4" aria-hidden="true" />
+              Ordering open · pickup at the bar
+            </p>
+            {customer && (
+              <p className="mt-1 text-sm text-[var(--muted-foreground)]">
+                Signed in as {customer.name}
+              </p>
+            )}
+          </div>
+          <div
+            className="flex items-end justify-between gap-2 text-[var(--foreground)] md:justify-end md:gap-6"
+            aria-hidden="true"
+          >
+            {HERO_DRINKS.map((name) => (
+              <DrinkIllustration
+                key={name}
+                name={name}
+                className="h-14 w-14 md:h-20 md:w-20"
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <div className={PAGE_WIDE}>
+        <DrinkGrid
+          drinks={menu.drinks}
+          onSelect={(drink) => setSelectedId(drink.id)}
+        />
+      </div>
       <CustomizationDrawer
         drink={selectedDrink}
         isOpen={selectedDrink !== null}

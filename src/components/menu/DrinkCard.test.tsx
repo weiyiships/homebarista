@@ -126,4 +126,21 @@ describe("DrinkCard", () => {
       "Latte Smooth espresso with steamed milk. Unavailable",
     );
   });
+
+  it("lays out text on the left and the drink illustration on the right", () => {
+    const { container } = render(
+      <DrinkCard drink={makeDrink({ name: "Mocha" })} onSelect={vi.fn()} />,
+    );
+    const card = screen.getByRole("button");
+    const heading = screen.getByRole("heading", { name: "Mocha" });
+    const art = container.querySelector('svg[data-drink="Mocha"]');
+
+    expect(art).not.toBeNull();
+    expect(card).toContainElement(art as HTMLElement);
+    // Text column comes first in reading order, artwork after it.
+    expect(
+      heading.compareDocumentPosition(art as Node) &
+        Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
+  });
 });

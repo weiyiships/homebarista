@@ -22,6 +22,14 @@ test.describe("guest ordering (US-1, US-2, US-5)", () => {
         page.getByRole("button", { name: new RegExp(`^${drink}`, "i") }),
       ).toBeVisible();
     }
+    // Header bar stays on one line at 375px: no link label wraps.
+    for (const link of await page.getByRole("banner").getByRole("link").all()) {
+      const box = await link.boundingBox();
+      expect(
+        box?.height ?? Infinity,
+        await link.innerText(),
+      ).toBeLessThanOrEqual(44);
+    }
     await expectNoA11yViolations(page);
 
     await placeLatteOrder(page, "Guest Gina");

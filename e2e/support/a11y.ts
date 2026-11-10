@@ -3,6 +3,9 @@ import { expect, type Page } from "@playwright/test";
 
 /** Fails on any WCAG 2.1 A/AA violation axe can detect on the current page. */
 export async function expectNoA11yViolations(page: Page): Promise<void> {
+  // Let client-side navigations settle: Next.js re-renders the streamed
+  // <title> during router.refresh(), and axe must not run in that gap.
+  await expect(page).toHaveTitle(/\S/);
   const results = await new AxeBuilder({ page })
     .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
     .analyze();

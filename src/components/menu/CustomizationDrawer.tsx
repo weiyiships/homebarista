@@ -4,11 +4,13 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { X } from "lucide-react";
 import {
+  describeDrink,
   getDrinkOptions,
   validateCustomization,
   type Drink,
 } from "@/lib/domain/menu";
 import { cn } from "@/lib/utils";
+import { DrinkIllustration } from "./DrinkIllustration";
 
 // ---------------------------------------------------------------------------
 // Props
@@ -34,6 +36,18 @@ export interface CustomizationDrawerProps {
 // ---------------------------------------------------------------------------
 
 const NO_UNAVAILABLE_MILKS: readonly string[] = [];
+
+/** Large two-column option button; the hidden radio's focus shows on the label. */
+function optionClass(isSelected: boolean, isUnavailable = false): string {
+  return cn(
+    "flex min-h-12 flex-col items-start justify-center rounded-[6px] border px-4 py-3 text-left text-base font-medium transition-colors focus-within:ring-2 focus-within:ring-[var(--primary)] focus-within:ring-offset-2 focus-within:ring-offset-[var(--background)]",
+    isUnavailable
+      ? "cursor-not-allowed border-dashed border-[var(--border)] bg-[var(--muted)] text-[var(--muted-foreground)]"
+      : isSelected
+        ? "cursor-pointer border-[var(--primary)] bg-[var(--primary)] text-[var(--primary-foreground)]"
+        : "cursor-pointer border-[var(--foreground)] bg-[var(--background)] text-[var(--foreground)] hover:bg-[var(--muted)]",
+  );
+}
 
 /**
  * CustomizationDrawer — client component.
@@ -183,13 +197,13 @@ export function CustomizationDrawer({
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex justify-end">
+    <div className="fixed inset-0 z-50 flex items-stretch justify-center sm:items-center sm:p-6">
       {/* Toast notification for errors */}
       {toastError && (
         <div
           role="alert"
           aria-live="assertive"
-          className="fixed right-4 bottom-4 z-50 flex max-w-sm items-center gap-3 rounded-[6px] border border-[var(--status-cancelled)] bg-white p-4 text-sm text-[var(--status-cancelled)] shadow-lg dark:bg-stone-900"
+          className="fixed right-4 bottom-24 z-[60] flex max-w-sm items-center gap-3 rounded-[6px] border border-[var(--status-cancelled)] bg-[var(--background)] p-4 text-sm text-[var(--status-cancelled)] shadow-lg"
         >
           <span className="flex-1">{toastError}</span>
           <button
@@ -205,31 +219,20 @@ export function CustomizationDrawer({
 
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-black/40 transition-opacity"
+        className="fixed inset-0 bg-black/50 transition-opacity"
         aria-hidden="true"
         onClick={onClose}
       />
 
-      {/* Drawer panel */}
+      {/* Modal panel: full-screen sheet on phones, centered dialog from sm up */}
       <div
         role="dialog"
         aria-modal="true"
         aria-labelledby="drawer-title"
-        className="relative z-10 flex h-full w-full max-w-md flex-col overflow-y-auto border-l border-[var(--border)] bg-[var(--background)] p-6 shadow-xl"
+        className="relative z-10 flex h-full w-full flex-col overflow-hidden bg-[var(--background)] shadow-xl sm:h-auto sm:max-h-[90vh] sm:max-w-lg sm:rounded-[12px] sm:border sm:border-[var(--border)]"
       >
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-[var(--border)] pb-4">
-          <div>
-            <h2
-              id="drawer-title"
-              className="text-2xl font-bold text-[var(--foreground)]"
-            >
-              Customize {drink.name}
-            </h2>
-            <p className="text-sm text-[var(--muted-foreground)]">
-              Choose your options below
-            </p>
-          </div>
+        <div className="flex items-center justify-end border-b border-[var(--border)] px-3 py-2">
           <button
             type="button"
             onClick={onClose}
@@ -241,183 +244,188 @@ export function CustomizationDrawer({
         </div>
 
         {/* Form */}
-        <form
-          onSubmit={handleSubmit}
-          className="mt-6 flex flex-1 flex-col gap-6"
-        >
-          {drinkUnavailable && (
-            <p
-              role="alert"
-              className="rounded-[6px] border border-[var(--status-cancelled)] bg-red-50 p-4 text-sm font-medium text-[var(--status-cancelled)] dark:bg-red-950/30"
-            >
-              {drink.name} is no longer available. Please choose another drink.
-            </p>
-          )}
-
-          {/* Validation errors */}
-          {errors.length > 0 && (
-            <div
-              role="alert"
-              className="rounded-[6px] border border-[var(--status-cancelled)] bg-red-50 p-4 text-sm text-[var(--status-cancelled)] dark:bg-red-950/30"
-            >
-              <ul className="list-inside list-disc space-y-1">
-                {errors.map((error, idx) => (
-                  <li key={idx}>{error}</li>
-                ))}
-              </ul>
+        <form onSubmit={handleSubmit} className="flex min-h-0 flex-1 flex-col">
+          <div className="flex-1 overflow-y-auto">
+            <div className="flex h-48 items-center justify-center bg-[var(--muted)]">
+              <DrinkIllustration name={drink.name} className="h-40 w-40" />
             </div>
-          )}
+            <div className="flex flex-col gap-6 p-5">
+              <div className="border-b border-[var(--border)] pb-4">
+                <h2
+                  id="drawer-title"
+                  className="text-2xl font-bold text-[var(--foreground)]"
+                >
+                  <span className="sr-only">Customize </span>
+                  {drink.name}
+                </h2>
+                <p className="mt-1 text-sm text-[var(--muted-foreground)]">
+                  {describeDrink(drink.name)}
+                </p>
+              </div>
 
-          {/* Guest Name input */}
-          <div className="space-y-2">
-            <label
-              htmlFor="guest-name"
-              className="text-sm font-semibold text-[var(--foreground)]"
-            >
-              Your Name
-            </label>
-            <input
-              id="guest-name"
-              type="text"
-              value={guestName}
-              onChange={(e) => setGuestName(e.target.value)}
-              placeholder="e.g. Alex"
-              className="w-full rounded-[6px] border border-[var(--border)] bg-white px-3.5 py-2.5 text-sm text-[var(--foreground)] placeholder:text-[var(--muted-foreground)] focus-visible:ring-2 focus-visible:ring-[var(--primary)] focus-visible:outline-none dark:bg-stone-900"
-            />
+              {drinkUnavailable && (
+                <p
+                  role="alert"
+                  className="rounded-[6px] border border-[var(--status-cancelled)] bg-red-50 p-4 text-sm font-medium text-[var(--status-cancelled)] dark:bg-red-950/30"
+                >
+                  {drink.name} is no longer available. Please choose another
+                  drink.
+                </p>
+              )}
+
+              {/* Validation errors */}
+              {errors.length > 0 && (
+                <div
+                  role="alert"
+                  className="rounded-[6px] border border-[var(--status-cancelled)] bg-red-50 p-4 text-sm text-[var(--status-cancelled)] dark:bg-red-950/30"
+                >
+                  <ul className="list-inside list-disc space-y-1">
+                    {errors.map((error, idx) => (
+                      <li key={idx}>{error}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {/* Guest Name input */}
+              <div className="space-y-2">
+                <label
+                  htmlFor="guest-name"
+                  className="text-sm font-semibold text-[var(--foreground)]"
+                >
+                  Your Name
+                </label>
+                <input
+                  id="guest-name"
+                  type="text"
+                  value={guestName}
+                  onChange={(e) => setGuestName(e.target.value)}
+                  placeholder="e.g. Alex"
+                  className="min-h-11 w-full rounded-[6px] border border-[var(--border)] bg-[var(--background)] px-3.5 py-2.5 text-base text-[var(--foreground)] placeholder:text-[var(--muted-foreground)] focus-visible:ring-2 focus-visible:ring-[var(--primary)] focus-visible:outline-none"
+                />
+              </div>
+
+              {/* Temperature */}
+              <fieldset className="space-y-2">
+                <legend className="text-sm font-semibold text-[var(--foreground)]">
+                  Temperature
+                </legend>
+                <div
+                  className="grid grid-cols-2 gap-3"
+                  role="radiogroup"
+                  aria-label="Temperature"
+                >
+                  {options.temp.map((opt) => {
+                    const isSelected = temp === opt.label;
+                    return (
+                      <label
+                        key={opt.label}
+                        className={optionClass(isSelected)}
+                      >
+                        <input
+                          type="radio"
+                          name="temperature"
+                          value={opt.label}
+                          checked={isSelected}
+                          onChange={() => setTemp(opt.label)}
+                          className="sr-only"
+                        />
+                        <span>{opt.label}</span>
+                      </label>
+                    );
+                  })}
+                </div>
+              </fieldset>
+
+              {/* Size / Shots */}
+              <fieldset className="space-y-2">
+                <legend className="text-sm font-semibold text-[var(--foreground)]">
+                  {drink.sizeType === "size" ? "Size" : "Shots"}
+                </legend>
+                <div
+                  className="grid grid-cols-2 gap-3"
+                  role="radiogroup"
+                  aria-label={drink.sizeType === "size" ? "Size" : "Shots"}
+                >
+                  {options.sizing.map((opt) => {
+                    const isSelected = sizing === opt.label;
+                    return (
+                      <label
+                        key={opt.label}
+                        className={optionClass(isSelected)}
+                      >
+                        <input
+                          type="radio"
+                          name="sizing"
+                          value={opt.label}
+                          checked={isSelected}
+                          onChange={() => setSizing(opt.label)}
+                          className="sr-only"
+                        />
+                        <span>{opt.label}</span>
+                      </label>
+                    );
+                  })}
+                </div>
+              </fieldset>
+
+              {/* Milk Options (ONLY for milk drinks) */}
+              {drink.takesMilk && options.milk.length > 0 && (
+                <fieldset className="space-y-2">
+                  <legend className="text-sm font-semibold text-[var(--foreground)]">
+                    Milk Choice
+                  </legend>
+                  <div
+                    className="grid grid-cols-2 gap-3"
+                    role="radiogroup"
+                    aria-label="Milk Choice"
+                  >
+                    {options.milk.map((opt) => {
+                      const isSelected = milk === opt.label;
+                      const isUnavailable = unavailableMilks.includes(
+                        opt.label,
+                      );
+                      return (
+                        <label
+                          key={opt.label}
+                          className={optionClass(isSelected, isUnavailable)}
+                        >
+                          <input
+                            type="radio"
+                            name="milk"
+                            value={opt.label}
+                            checked={isSelected}
+                            disabled={isUnavailable}
+                            onChange={() => setMilk(opt.label)}
+                            className="sr-only"
+                          />
+                          <span className={cn(isUnavailable && "line-through")}>
+                            {opt.label}
+                          </span>
+                          {isUnavailable && (
+                            <span className="text-xs font-normal">
+                              Unavailable
+                            </span>
+                          )}
+                        </label>
+                      );
+                    })}
+                  </div>
+                </fieldset>
+              )}
+            </div>
           </div>
 
-          {/* Temperature */}
-          <fieldset className="space-y-2">
-            <legend className="text-sm font-semibold text-[var(--foreground)]">
-              Temperature
-            </legend>
-            <div
-              className="flex gap-3"
-              role="radiogroup"
-              aria-label="Temperature"
-            >
-              {options.temp.map((opt) => {
-                const isSelected = temp === opt.label;
-                return (
-                  <label
-                    key={opt.label}
-                    className={cn(
-                      "flex flex-1 cursor-pointer items-center justify-center rounded-[6px] border px-4 py-2.5 text-sm font-medium transition-colors",
-                      isSelected
-                        ? "border-[var(--primary)] bg-[var(--primary)] text-[var(--primary-foreground)]"
-                        : "border-[var(--border)] bg-white text-[var(--foreground)] hover:bg-[var(--muted)] dark:bg-stone-900",
-                    )}
-                  >
-                    <input
-                      type="radio"
-                      name="temperature"
-                      value={opt.label}
-                      checked={isSelected}
-                      onChange={() => setTemp(opt.label)}
-                      className="sr-only"
-                    />
-                    <span>{opt.label}</span>
-                  </label>
-                );
-              })}
-            </div>
-          </fieldset>
-
-          {/* Size / Shots */}
-          <fieldset className="space-y-2">
-            <legend className="text-sm font-semibold text-[var(--foreground)]">
-              {drink.sizeType === "size" ? "Size" : "Shots"}
-            </legend>
-            <div
-              className="flex gap-3"
-              role="radiogroup"
-              aria-label={drink.sizeType === "size" ? "Size" : "Shots"}
-            >
-              {options.sizing.map((opt) => {
-                const isSelected = sizing === opt.label;
-                return (
-                  <label
-                    key={opt.label}
-                    className={cn(
-                      "flex flex-1 cursor-pointer items-center justify-center rounded-[6px] border px-4 py-2.5 text-sm font-medium transition-colors",
-                      isSelected
-                        ? "border-[var(--primary)] bg-[var(--primary)] text-[var(--primary-foreground)]"
-                        : "border-[var(--border)] bg-white text-[var(--foreground)] hover:bg-[var(--muted)] dark:bg-stone-900",
-                    )}
-                  >
-                    <input
-                      type="radio"
-                      name="sizing"
-                      value={opt.label}
-                      checked={isSelected}
-                      onChange={() => setSizing(opt.label)}
-                      className="sr-only"
-                    />
-                    <span>{opt.label}</span>
-                  </label>
-                );
-              })}
-            </div>
-          </fieldset>
-
-          {/* Milk Options (ONLY for milk drinks) */}
-          {drink.takesMilk && options.milk.length > 0 && (
-            <fieldset className="space-y-2">
-              <legend className="text-sm font-semibold text-[var(--foreground)]">
-                Milk Choice
-              </legend>
-              <div
-                className="grid grid-cols-2 gap-3"
-                role="radiogroup"
-                aria-label="Milk Choice"
-              >
-                {options.milk.map((opt) => {
-                  const isSelected = milk === opt.label;
-                  const isUnavailable = unavailableMilks.includes(opt.label);
-                  return (
-                    <label
-                      key={opt.label}
-                      className={cn(
-                        "flex flex-col items-center justify-center rounded-[6px] border px-4 py-2.5 text-sm font-medium transition-colors",
-                        isUnavailable
-                          ? "cursor-not-allowed border-dashed border-[var(--border)] bg-[var(--muted)] text-[var(--muted-foreground)]"
-                          : isSelected
-                            ? "cursor-pointer border-[var(--primary)] bg-[var(--primary)] text-[var(--primary-foreground)]"
-                            : "cursor-pointer border-[var(--border)] bg-white text-[var(--foreground)] hover:bg-[var(--muted)] dark:bg-stone-900",
-                      )}
-                    >
-                      <input
-                        type="radio"
-                        name="milk"
-                        value={opt.label}
-                        checked={isSelected}
-                        disabled={isUnavailable}
-                        onChange={() => setMilk(opt.label)}
-                        className="sr-only"
-                      />
-                      <span className={cn(isUnavailable && "line-through")}>
-                        {opt.label}
-                      </span>
-                      {isUnavailable && (
-                        <span className="text-xs font-normal">Unavailable</span>
-                      )}
-                    </label>
-                  );
-                })}
-              </div>
-            </fieldset>
-          )}
-
-          {/* Action buttons */}
-          <div className="mt-auto pt-6">
+          {/* Bottom action bar */}
+          <footer className="border-t border-[var(--border)] bg-[var(--background)] p-4">
             <button
               type="submit"
               disabled={isLoading || drinkUnavailable}
-              className="w-full rounded-[6px] bg-[var(--primary)] px-5 py-3 text-sm font-medium text-[var(--primary-foreground)] transition-colors hover:bg-[var(--foreground)] focus-visible:ring-2 focus-visible:ring-[var(--primary)] focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-60"
+              className="min-h-12 w-full rounded-[6px] bg-[var(--primary)] px-5 py-3 text-base font-semibold text-[var(--primary-foreground)] transition-opacity hover:opacity-90 focus-visible:ring-2 focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--background)] focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-60"
             >
               {isLoading ? "Placing order..." : "Place Order"}
             </button>
-          </div>
+          </footer>
         </form>
       </div>
     </div>

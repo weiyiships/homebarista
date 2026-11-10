@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
+  describeDrink,
   filterAvailableDrinks,
   getDrinkOptions,
   isDrinkAvailable,
@@ -317,5 +318,19 @@ describe("validateCustomization", () => {
       expect(result.valid).toBe(true);
       expect(result.errors).toHaveLength(0);
     });
+  });
+});
+
+describe("describeDrink", () => {
+  it("describes each menu drink", () => {
+    expect(describeDrink("Flat White")).toBe(
+      "Rich espresso with velvety microfoam.",
+    );
+  });
+
+  it("falls back for unknown drinks", () => {
+    expect(describeDrink("Cortado")).toBe(
+      "A delicious handcrafted coffee drink.",
+    );
   });
 });

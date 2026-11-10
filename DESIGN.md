@@ -3,13 +3,13 @@ version: alpha
 name: Home Barista
 description: A full-stack website for small gatherings where guests order coffee, the host runs a live barista queue, and everyone sees order status update in real time.
 colors:
-  primary: "#5B3A29"
-  secondary: "#76655A"
-  tertiary: "#C8742B"
+  primary: "#111111"
+  secondary: "#555555"
+  tertiary: "#111111"
   neutral: "#FFFFFF"
-  surface: "#F6F0E7"
-  on-surface: "#2B1D16"
-  border: "#E4D9CB"
+  surface: "#F2F2F2"
+  on-surface: "#111111"
+  border: "#DDDDDD"
   status-received: "#5F6B7A"
   status-brewing: "#A15C07"
   status-ready: "#2E7D32"
@@ -34,14 +34,15 @@ components:
 
 ## Overview
 
-A warm, calm café website, not a generic dashboard: cream page, white cards, espresso-brown actions, one caramel accent. Guests see a menu like a café board; the barista sees a glanceable work queue. Orders are the content; decoration stays out of the way.
+A crisp, monochrome café ordering site, not a generic dashboard: white page, black text and actions, light-gray bands behind artwork and headers, and original line-drawn drink illustrations. Guests see a menu like a café board; the barista sees a glanceable work queue. Orders are the content; decoration stays out of the way.
 
 ## Colors
 
 - **Primary** {colors.primary}: primary buttons, links, selected options, focus rings.
-- **Surface** {colors.surface}: page background. Cards and navbar are {colors.neutral} with a {colors.border} border.
+- **Surface** {colors.surface}: header and hero bands and the artwork panel on drink cards. The page, cards, and dialogs are {colors.neutral} with a {colors.border} border.
 - **On-surface** {colors.on-surface}: body text and headings. **Secondary** {colors.secondary}: descriptions, timestamps, helper text.
-- **Tertiary** {colors.tertiary}: the one accent per screen (active stepper step, new-order highlight). Never text on cream.
+- **Tertiary** {colors.tertiary}: same as primary. The palette is monochrome, and emphasis comes from weight, size, and filled vs outlined shapes, not a second color.
+- **Dark mode** inverts the palette: near-black page `#0F0F0F`, near-white text and actions `#F5F5F5`, gray `#A8A8A8` for secondary text. Every token pair keeps WCAG AA (guarded by `src/app/theme.test.ts`).
 - **Status:** received {colors.status-received}, brewing {colors.status-brewing}, ready {colors.status-ready}, cancelled {colors.error}. Only on badges and the stepper, always with a label and icon.
 
 ## Typography

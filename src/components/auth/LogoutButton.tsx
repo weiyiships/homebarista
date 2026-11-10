@@ -34,7 +34,7 @@ export function LogoutButton() {
         type="button"
         onClick={() => void logOut()}
         disabled={pending}
-        className="inline-flex min-h-11 items-center gap-1.5 rounded-[6px] px-3 text-sm font-medium text-[var(--primary)] hover:bg-[var(--muted)] focus-visible:ring-2 focus-visible:ring-[var(--primary)] focus-visible:outline-none disabled:opacity-60"
+        className="inline-flex min-h-11 items-center gap-1.5 rounded-[6px] px-2.5 text-sm font-medium whitespace-nowrap text-[var(--primary)] hover:bg-[var(--muted)] focus-visible:ring-2 focus-visible:ring-[var(--primary)] focus-visible:outline-none disabled:opacity-60"
       >
         {pending ? (
           <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />

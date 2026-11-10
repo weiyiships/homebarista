@@ -5,6 +5,7 @@ import {
   logInAsBarista,
   newPhone,
   placeLatteOrder,
+  uniqueName,
 } from "./support/flows";
 
 test.describe("barista queue (US-3, US-4) and live tracking (US-5)", () => {
@@ -12,13 +13,14 @@ test.describe("barista queue (US-3, US-4) and live tracking (US-5)", () => {
     browser,
   }) => {
     const guest = await newPhone(browser);
-    const orderId = await placeLatteOrder(guest, "Barista Bea");
+    const bea = uniqueName("Barista Bea");
+    const orderId = await placeLatteOrder(guest, bea);
 
     const barista = await newPhone(browser);
     await logInAsBarista(barista);
     await expectNoA11yViolations(barista);
 
-    const card = barista.getByRole("article", { name: "Barista Bea" });
+    const card = barista.getByRole("article", { name: bea });
     await expect(card).toBeVisible();
     await expect(card.getByText("Latte")).toBeVisible();
     await expect(card.getByText("Oat milk")).toBeVisible();
@@ -54,20 +56,22 @@ test.describe("barista queue (US-3, US-4) and live tracking (US-5)", () => {
     await logInAsBarista(barista);
 
     const guest = await newPhone(browser);
-    await placeLatteOrder(guest, "Speedy Sam");
+    const sam = uniqueName("Speedy Sam");
+    await placeLatteOrder(guest, sam);
 
-    await expect(
-      barista.getByRole("article", { name: "Speedy Sam" }),
-    ).toBeVisible({ timeout: 3_000 });
+    await expect(barista.getByRole("article", { name: sam })).toBeVisible({
+      timeout: 3_000,
+    });
   });
 
   test("cancelling needs confirmation", async ({ browser }) => {
     const guest = await newPhone(browser);
-    await placeLatteOrder(guest, "Cancel Cody");
+    const cody = uniqueName("Cancel Cody");
+    await placeLatteOrder(guest, cody);
     const barista = await newPhone(browser);
     await logInAsBarista(barista);
 
-    const card = barista.getByRole("article", { name: "Cancel Cody" });
+    const card = barista.getByRole("article", { name: cody });
     await card.getByRole("button", { name: "Cancel" }).click();
     await barista.getByRole("button", { name: "Cancel order" }).click();
 

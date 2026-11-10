@@ -9,6 +9,8 @@ import {
 import { BARISTA_COOKIE, verifyBaristaToken } from "@/lib/auth/baristaSession";
 import { listFinishedOrders } from "@/lib/db/queries/orders";
 import { buildHistory } from "@/lib/domain/history";
+import { PAGE_LIST } from "@/components/site/layout";
+import { cn } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
 
@@ -36,7 +38,7 @@ export default async function BaristaHistoryPage() {
   }
 
   return (
-    <main className="flex flex-col gap-6 py-6">
+    <main className={cn(PAGE_LIST, "flex flex-col gap-6 py-6")}>
       <BaristaNav current="history" />
       <header className="flex flex-col gap-1">
         <h1 className="text-3xl font-bold text-[var(--foreground)]">

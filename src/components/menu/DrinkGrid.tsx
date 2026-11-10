@@ -19,7 +19,7 @@ interface DrinkGridProps {
 /**
  * DrinkGrid — responsive grid of DrinkCards.
  *
- * Layout: 1 col mobile → 2 col tablet → 3 col desktop.
+ * Layout: horizontal cards in a 3 / 2 / 1 column grid (DESIGN.md, #42).
  * Uses CSS custom properties from globals.css — no hard-coded hex.
  */
 export function DrinkGrid({ drinks, onSelect }: DrinkGridProps) {
@@ -33,7 +33,7 @@ export function DrinkGrid({ drinks, onSelect }: DrinkGridProps) {
 
   return (
     <ul
-      className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3"
+      className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3"
       aria-label="Drink menu"
     >
       {drinks.map((drink) => (

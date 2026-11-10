@@ -10,6 +10,8 @@ import {
 import { listOrdersForCustomer } from "@/lib/db/queries/orders";
 import { buildCustomerOrders } from "@/lib/domain/customerOrders";
 import type { CustomerOrderDto } from "@/lib/schemas/customer";
+import { PAGE_LIST } from "@/components/site/layout";
+import { cn } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
 
@@ -32,7 +34,7 @@ export default async function MyOrdersPage() {
   }
 
   return (
-    <main className="flex flex-col gap-6 py-8">
+    <main className={cn(PAGE_LIST, "flex flex-col gap-6 py-8")}>
       <header className="flex flex-col gap-2">
         <Link
           href="/menu"
