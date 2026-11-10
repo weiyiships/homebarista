@@ -155,9 +155,10 @@ describe("MenuClient customer account (#12)", () => {
       "href",
       "/login",
     );
-    expect(
-      screen.getByRole("link", { name: "Create an account" }),
-    ).toHaveAttribute("href", "/signup");
+    expect(screen.getByRole("link", { name: "Sign up" })).toHaveAttribute(
+      "href",
+      "/signup",
+    );
     expect(
       screen.queryByRole("link", { name: "My orders" }),
     ).not.toBeInTheDocument();
