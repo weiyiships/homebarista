@@ -28,4 +28,11 @@ describe("HomePage Component (Issue #1)", () => {
       "/menu",
     );
   });
+
+  it("explains how it works in three steps", () => {
+    render(<HomePage />);
+
+    const section = screen.getByRole("region", { name: "How it works" });
+    expect(section.querySelectorAll("li")).toHaveLength(3);
+  });
 });

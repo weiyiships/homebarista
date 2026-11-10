@@ -128,7 +128,7 @@ describe("MenuClient customer account (#12)", () => {
     vi.unstubAllGlobals();
   });
 
-  it("shows who is signed in with a log out button", () => {
+  it("greets the signed-in customer", () => {
     render(
       <MenuClient
         drinks={[latte]}
@@ -138,30 +138,12 @@ describe("MenuClient customer account (#12)", () => {
     );
 
     expect(screen.getByText("Signed in as Alice")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Log out" })).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "My orders" })).toHaveAttribute(
-      "href",
-      "/my-orders",
-    );
-    expect(
-      screen.queryByRole("link", { name: "Log in" }),
-    ).not.toBeInTheDocument();
   });
 
-  it("offers optional log in and signup to guests", () => {
+  it("does not greet guests", () => {
     render(<MenuClient drinks={[latte]} unavailableMilks={[]} />);
 
-    expect(screen.getByRole("link", { name: "Log in" })).toHaveAttribute(
-      "href",
-      "/login",
-    );
-    expect(screen.getByRole("link", { name: "Sign up" })).toHaveAttribute(
-      "href",
-      "/signup",
-    );
-    expect(
-      screen.queryByRole("link", { name: "My orders" }),
-    ).not.toBeInTheDocument();
+    expect(screen.queryByText(/Signed in as/)).not.toBeInTheDocument();
   });
 
   it("prefills the customer's name when they pick a drink", async () => {
@@ -188,16 +170,19 @@ describe("MenuClient café layout (#40)", () => {
     vi.unstubAllGlobals();
   });
 
-  it("has a header bar linking home with the account actions", () => {
+  it("leaves the page header to the site layout", () => {
     render(<MenuClient drinks={[latte]} unavailableMilks={[]} />);
 
-    const header = screen.getByRole("banner");
-    expect(
-      within(header).getByRole("link", { name: "Home Barista" }),
-    ).toHaveAttribute("href", "/");
-    expect(
-      within(header).getByRole("navigation", { name: "Account" }),
-    ).toBeInTheDocument();
+    expect(screen.queryByRole("banner")).not.toBeInTheDocument();
+  });
+
+  it("lays drinks out in a 3 / 2 / 1 column grid", () => {
+    render(<MenuClient drinks={[latte]} unavailableMilks={[]} />);
+
+    const grid = screen.getByRole("list", { name: "Drink menu" });
+    expect(grid.className).toContain("grid-cols-1");
+    expect(grid.className).toContain("md:grid-cols-2");
+    expect(grid.className).toContain("lg:grid-cols-3");
   });
 
   it("shows a hero with the menu title, ordering status, and artwork", () => {
