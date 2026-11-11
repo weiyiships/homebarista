@@ -1,4 +1,4 @@
-# homebarista
+# Homebarista
 
 Guests order coffee from their phones at small gatherings, and the host runs a live barista queue.
 
