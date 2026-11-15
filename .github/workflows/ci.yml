@@ -82,3 +82,34 @@ jobs:
             playwright-report/
             test-results/
           retention-days: 7
+
+  # Runs only after every check above passes. PRs deploy a preview; pushes to
+  # main deploy to production. Vercel's Git integration has auto-deploys turned
+  # off in vercel.json, so this job is the only thing that deploys.
+  deploy:
+    needs: [check, integration, e2e]
+    # Forked PRs can't read environment secrets, so they skip the preview.
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment:
+      name: ${{ github.event_name == 'push' && 'production' || 'preview' }}
+      url: ${{ steps.deploy.outputs.url }}
+    concurrency:
+      group: deploy-${{ github.event_name == 'push' && 'production' || github.ref }}
+      cancel-in-progress: false
+    env:
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      PROD_FLAG: ${{ github.event_name == 'push' && '--prod' || '' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm install --global vercel@65.16.0
+      - id: deploy
+        run: |
+          url=$(vercel deploy $PROD_FLAG --yes --token="$VERCEL_TOKEN")
+          echo "url=$url" >> "$GITHUB_OUTPUT"
