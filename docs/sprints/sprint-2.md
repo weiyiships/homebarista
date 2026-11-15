@@ -21,51 +21,61 @@ Also delivered around the end of this sprint, outside the milestone: the home-pa
 
 ## Standups
 
-### Standup 1 — Barista Dashboard
+> Written up after the sprint. Each Completed and Next item matches the issues and pull requests in the planning table above.
+
+### Standup 1 — Customer accounts and availability
 
 Participants: weiyiships, jooguh-dev
 
-weiyiships
+**weiyiships**
 
-- Completed: Built the order tracking UI with a progress indicator showing the current order status.
-- Next: Add queue position information and make the tracking page responsive on mobile devices.
-- Blockers: Queue position needs to be returned by the backend.
-  jooguh-dev
-- Completed: Implemented the order state transition logic and basic barista queue API.
-- Next: Build the barista dashboard and support advancing or cancelling orders.
-- Blockers: Need to ensure invalid status transitions are rejected.
-  Team Discussion: Decided to use periodic polling instead of WebSockets to keep the real-time implementation manageable for small gatherings.
+- Completed: Live order tracking page with queue position (#8 → #31).
+- Next: Customer signup with bcrypt hashing and JWT cookies (#11).
+- Blockers: Need to confirm how customer sessions are handled across different pages.
 
-### Standup 2 — Live Status Updates
+**jooguh-dev**
 
-Participants: weiyiships, jooguh-dev
-
-weiyiships
-
-- Completed: Integrated order tracking with backend responses and added automatic refresh every 2.5 seconds.
-- Next: Improve loading and error states, and test order tracking on mobile screens.
-- Blockers: Noticed that queue position can briefly appear outdated after an order is cancelled.
-  jooguh-dev
-- Completed: Implemented the barista queue dashboard and order status update endpoints.
-- Next: Fix queue position calculations and implement passcode-based barista authentication.
-- Blockers: Need to make sure cancelled and completed orders are excluded from the active queue.
-  Team Discussion: Agreed to calculate queue position from active orders on the backend rather than maintaining a separate frontend count.
-
-### Standup 3 — Queue Integration & Availability
-
-Participants: weiyiships, jooguh-dev
-
-weiyiships
-
-- Completed: Improved the mobile ordering experience and verified that order status changes appear on the guest tracking page.
-- Next: Add unavailable-item indicators to the guest menu and test the complete ordering workflow.
-- Blockers: None.
-  jooguh-dev
-- Completed: Added barista passcode authentication, protected management endpoints, and corrected active queue calculations.
-- Next: Implement drink and milk availability controls and add order history.
+- Completed: Order status state machine and the status endpoint (#7 → #29).
+- Next: Drink and milk availability toggles (#9) and the barista order history (#10).
 - Blockers: Need to ensure unavailable options are validated by the backend, not just disabled in the UI.
 
-Team Discussion: Tested a scenario where multiple guests placed orders while the barista updated statuses. Identified a few edge cases for the next sprint.
+Team discussion: Confirmed that customer accounts remain optional, so guests can keep ordering without signing up.
+
+### Standup 2 — Login and order history
+
+Participants: weiyiships, jooguh-dev
+
+**weiyiships**
+
+- Completed: Customer signup (#11 → #33).
+- Next: Login and logout with rate limiting and name autofill (#12), then the customer's My Orders page (#13).
+- Blockers: Need to test session expiration and unauthorized API access.
+
+**jooguh-dev**
+
+- Completed: Barista order history with picked-up and cancelled counts (#10 → #32).
+- Next: Finish the availability toggles and the server-side order guard (#9).
+- Blockers: Need to make sure cancelled and completed orders are excluded from the active queue.
+
+Team discussion: Tested several guests ordering while the barista updated statuses, and identified a few edge cases.
+
+### Standup 3 — End-to-end tests and CI
+
+Participants: weiyiships, jooguh-dev
+
+**weiyiships**
+
+- Completed: Login, logout, and rate limiting (#12 → #37) and My Orders (#13 → #38).
+- Next: Playwright tests for the guest, barista, and customer flows with axe checks, plus the coverage gate in CI (#14).
+- Blockers: Some automated tests need stable seeded data to avoid inconsistent results.
+
+**jooguh-dev**
+
+- Completed: Availability rules, endpoints, the server-side order guard, barista toggles, and the live guest menu (#9 → #36).
+- Next: Review the Sprint 2 pull requests and start a gap review against the course requirements for Sprint 3.
+- Blockers: None.
+
+Team discussion: Agreed that from Sprint 3 every pull request needs green CI checks and partner review before merging.
 
 ## Progress log
 
@@ -108,5 +118,5 @@ Written from the issues and pull requests above.
 
 **Partner feedback**
 
-- _jooguh-dev → weiyiships:_ Weiyi did a great job integrating the APIs and improving the user experience, especially the mobile layout and order tracking flow.
-- _weiyiships → jooguh-dev:_ Xuming was proactive in resolving queue management issues and helped ensure the backend supported real-time order tracking.
+- _jooguh-dev → weiyiships:_ …
+- _weiyiships → jooguh-dev:_ Xuming built the availability controls and order history, including the server-side check that rejects unavailable drinks.
