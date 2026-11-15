@@ -19,7 +19,7 @@ interface DrinkGridProps {
 /**
  * DrinkGrid — responsive grid of DrinkCards.
  *
- * Layout: horizontal cards in a 3 / 2 / 1 column grid (DESIGN.md, #42).
+ * Layout: horizontal cards in a 3 / 2 / 1 column grid (docs/DESIGN.md, #42).
  * Uses CSS custom properties from globals.css — no hard-coded hex.
  */
 export function DrinkGrid({ drinks, onSelect }: DrinkGridProps) {
