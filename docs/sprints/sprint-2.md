@@ -19,6 +19,10 @@ Committed: 20 points.
 
 Also delivered around the end of this sprint, outside the milestone: the home-page link fix ([#34](https://github.com/weiyiships/homebarista/issues/34) → [#35](https://github.com/weiyiships/homebarista/pull/35)), the menu UI refresh ([#40](https://github.com/weiyiships/homebarista/issues/40) → [#41](https://github.com/weiyiships/homebarista/pull/41)), the website layout ([#42](https://github.com/weiyiships/homebarista/issues/42) → [#43](https://github.com/weiyiships/homebarista/pull/43)), and the README ([#44](https://github.com/weiyiships/homebarista/issues/44) → [#45](https://github.com/weiyiships/homebarista/pull/45)).
 
+## Standups
+
+No standups were recorded during this sprint. There are no standup notes in the repository, issues, or pull requests, so none are reconstructed here; the progress log below comes from the commit history instead.
+
 ## Progress log
 
 > Reconstructed from the commit history (author dates), not written at the time. Days with no commits are not listed.
@@ -51,12 +55,14 @@ Written from the issues and pull requests above.
 - Work was again concentrated on a single day, which made the PRs large and hard to review in depth.
 - Until CI existed, quality checks depended on each partner running them locally; a few quick follow-up changes went in without waiting for a full review cycle.
 - Work was uneven inside the sprint: weiyiships delivered 4 of the 6 stories plus 4 unplanned issues; #14 was assigned to jooguh-dev but delivered by weiyiships.
+- Standups were skipped again: none were recorded this sprint.
 
 **What we'll change**
 
 - Commit and push at least every other day so progress is visible during the sprint.
 - With CI in place, every PR goes through green checks and partner review before merge (done from Sprint 3).
 - Rebalance: whoever has fewer stories picks up the next one.
+- Post three standups per partner in `sprint-3.md` during Sprint 3, on the day each one happens.
 
 **Partner feedback**
 

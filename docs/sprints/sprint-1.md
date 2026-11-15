@@ -23,6 +23,10 @@ Committed: 26 points.
 
 Also in this sprint, outside the milestone: shared rules in `AGENTS.md` ([#20](https://github.com/weiyiships/homebarista/pull/20)), design tokens in `DESIGN.md` ([#21](https://github.com/weiyiships/homebarista/pull/21)), and the repository layout ([#22](https://github.com/weiyiships/homebarista/issues/22) → [#23](https://github.com/weiyiships/homebarista/pull/23)).
 
+## Standups
+
+No standups were recorded during this sprint. There are no standup notes in the repository, issues, or pull requests, so none are reconstructed here; the progress log below comes from the commit history instead.
+
 ## Progress log
 
 > Reconstructed from the commit history (author dates), not written at the time. Days with no commits are not listed.
@@ -61,6 +65,7 @@ Written from the issues and pull requests above.
 - #3 was started three times (#16, #17, #18) before #25 landed: we hadn't agreed who owned it.
 - #28 bundled #3, #4, and #5 into one PR. CI wasn't set up yet (it arrived in #39), so #26 and #28 were merged on local checks while we were still putting the pipeline together.
 - Ownership drifted: #6 was assigned to jooguh-dev but delivered by weiyiships.
+- We didn't hold or record the three async standups per partner that our process calls for.
 
 **What we'll change**
 
@@ -68,6 +73,7 @@ Written from the issues and pull requests above.
 - Agree on one owner per issue before anyone writes code.
 - Push small PRs during the sprint instead of batching at the end.
 - Finish the CI pipeline so every PR is checked automatically before review.
+- Post standups in the sprint file as they happen.
 
 **Partner feedback**
 
