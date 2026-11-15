@@ -24,40 +24,47 @@ Committed: 26 points.
 Also in this sprint, outside the milestone: shared rules in `AGENTS.md` ([#20](https://github.com/weiyiships/homebarista/pull/20)), design tokens in `DESIGN.md` ([#21](https://github.com/weiyiships/homebarista/pull/21)), and the repository layout ([#22](https://github.com/weiyiships/homebarista/issues/22) → [#23](https://github.com/weiyiships/homebarista/pull/23)).
 
 ## Standups
+
 ### Standup 1 — Initial Setup
+
 Participants: weiyiships, jooguh-dev
 
 weiyiships
+
 - Completed: Reviewed the project requirements and created initial wireframes for the guest menu and ordering flow.
 - Next: Set up the Next.js frontend and build the basic menu page with sample coffee drinks.
 - Blockers: None.
-jooguh-dev
+  jooguh-dev
 - Completed: Reviewed the technical requirements and designed the initial database schema for drinks, customization options, and orders.
 - Next: Configure PostgreSQL and Drizzle ORM, then create the initial database tables.
 - Blockers: Need to finalize the order data structure before implementing the API.
-Team Discussion: Agreed to keep the first version simple and support guest ordering without requiring an account.
+  Team Discussion: Agreed to keep the first version simple and support guest ordering without requiring an account.
 
 ### Standup 2 — Menu & Database Integration
+
 Participants: weiyiships, jooguh-dev
 
 weiyiships
+
 - Completed: Built the initial guest menu UI with six coffee drinks and customization options for size, temperature, and milk.
 - Next: Connect the menu to the backend API and implement the order submission form.
 - Blockers: Waiting for the menu API response format to be finalized.
-jooguh-dev
+  jooguh-dev
 - Completed: Created the database schema and seed data for drinks and customization options.
 - Next: Implement the menu retrieval and order creation API endpoints with Zod validation.
 - Blockers: Need to agree on how customized drink options will be stored with each order.
-Team Discussion: Agreed on a shared API contract and validation rules so frontend and backend development can continue independently.
+  Team Discussion: Agreed on a shared API contract and validation rules so frontend and backend development can continue independently.
 
 ### Standup 3 — Basic Ordering Flow
+
 Participants: weiyiships, jooguh-dev
 
 weiyiships
+
 - Completed: Integrated the menu API and implemented the guest order submission flow.
 - Next: Build the order confirmation page and begin displaying order status.
 - Blockers: Need a consistent response from the order creation API to support navigation to the tracking page.
-jooguh-dev
+  jooguh-dev
 - Completed: Implemented the order creation endpoint and database persistence for guest orders.
 - Next: Build the order status API and introduce the order lifecycle: received, brewing, ready, and picked up.
 - Blockers: None.
@@ -112,5 +119,5 @@ Written from the issues and pull requests above.
 
 **Partner feedback**
 
-- _jooguh-dev → weiyiships: Weiyi built a clean and intuitive ordering interface and communicated frontend requirements clearly throughout the sprint.
-- _weiyiships → jooguh-dev: Xuming did a great job setting up the database and backend APIs, which made it easier for me to integrate the frontend.
+- _jooguh-dev → weiyiships:_ Weiyi built a clean and intuitive ordering interface and communicated frontend requirements clearly throughout the sprint.
+- _weiyiships → jooguh-dev:_ Xuming did a great job setting up the database and backend APIs, which made it easier for me to integrate the frontend.

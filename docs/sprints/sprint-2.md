@@ -20,40 +20,47 @@ Committed: 20 points.
 Also delivered around the end of this sprint, outside the milestone: the home-page link fix ([#34](https://github.com/weiyiships/homebarista/issues/34) → [#35](https://github.com/weiyiships/homebarista/pull/35)), the menu UI refresh ([#40](https://github.com/weiyiships/homebarista/issues/40) → [#41](https://github.com/weiyiships/homebarista/pull/41)), the website layout ([#42](https://github.com/weiyiships/homebarista/issues/42) → [#43](https://github.com/weiyiships/homebarista/pull/43)), and the README ([#44](https://github.com/weiyiships/homebarista/issues/44) → [#45](https://github.com/weiyiships/homebarista/pull/45)).
 
 ## Standups
+
 ### Standup 1 — Barista Dashboard
+
 Participants: weiyiships, jooguh-dev
 
 weiyiships
+
 - Completed: Built the order tracking UI with a progress indicator showing the current order status.
 - Next: Add queue position information and make the tracking page responsive on mobile devices.
 - Blockers: Queue position needs to be returned by the backend.
-jooguh-dev
+  jooguh-dev
 - Completed: Implemented the order state transition logic and basic barista queue API.
 - Next: Build the barista dashboard and support advancing or cancelling orders.
 - Blockers: Need to ensure invalid status transitions are rejected.
-Team Discussion: Decided to use periodic polling instead of WebSockets to keep the real-time implementation manageable for small gatherings.
+  Team Discussion: Decided to use periodic polling instead of WebSockets to keep the real-time implementation manageable for small gatherings.
 
 ### Standup 2 — Live Status Updates
+
 Participants: weiyiships, jooguh-dev
 
 weiyiships
+
 - Completed: Integrated order tracking with backend responses and added automatic refresh every 2.5 seconds.
 - Next: Improve loading and error states, and test order tracking on mobile screens.
 - Blockers: Noticed that queue position can briefly appear outdated after an order is cancelled.
-jooguh-dev
+  jooguh-dev
 - Completed: Implemented the barista queue dashboard and order status update endpoints.
 - Next: Fix queue position calculations and implement passcode-based barista authentication.
 - Blockers: Need to make sure cancelled and completed orders are excluded from the active queue.
-Team Discussion: Agreed to calculate queue position from active orders on the backend rather than maintaining a separate frontend count.
+  Team Discussion: Agreed to calculate queue position from active orders on the backend rather than maintaining a separate frontend count.
 
 ### Standup 3 — Queue Integration & Availability
+
 Participants: weiyiships, jooguh-dev
 
 weiyiships
+
 - Completed: Improved the mobile ordering experience and verified that order status changes appear on the guest tracking page.
 - Next: Add unavailable-item indicators to the guest menu and test the complete ordering workflow.
 - Blockers: None.
-jooguh-dev
+  jooguh-dev
 - Completed: Added barista passcode authentication, protected management endpoints, and corrected active queue calculations.
 - Next: Implement drink and milk availability controls and add order history.
 - Blockers: Need to ensure unavailable options are validated by the backend, not just disabled in the UI.
@@ -101,5 +108,5 @@ Written from the issues and pull requests above.
 
 **Partner feedback**
 
-- _jooguh-dev → weiyiships: Weiyi did a great job integrating the APIs and improving the user experience, especially the mobile layout and order tracking flow.
-- _weiyiships → jooguh-dev: Xuming was proactive in resolving queue management issues and helped ensure the backend supported real-time order tracking.
+- _jooguh-dev → weiyiships:_ Weiyi did a great job integrating the APIs and improving the user experience, especially the mobile layout and order tracking flow.
+- _weiyiships → jooguh-dev:_ Xuming was proactive in resolving queue management issues and helped ensure the backend supported real-time order tracking.
