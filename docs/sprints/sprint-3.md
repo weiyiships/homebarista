@@ -25,6 +25,53 @@ Committed: 26 points. #59 was found while drawing the ER diagram (#50); #56 and 
 
 TDD evidence this sprint: #46 and #59 each have a failing-test commit before the implementation. #47 adds tests for existing behavior, checked by mutating the code and confirming the tests fail.
 
+## Standups
+
+### Standup 1 — Customer Authentication
+
+Participants: weiyiships, jooguh-dev
+
+weiyiships
+
+- Completed: Implemented customer sign-up and login pages and began the order history interface.
+- Next: Integrate customer authentication and automatically fill in the customer's name when placing an order.
+- Blockers: Need to confirm how customer sessions are handled across different pages.
+  jooguh-dev
+- Completed: Implemented the availability management endpoints and the barista order history API.
+- Next: Add customer registration, password hashing, and session management using JWT cookies.
+- Blockers: Need to test session expiration and unauthorized API access.
+  Team Discussion: Confirmed that customer accounts remain optional, so guests can continue ordering without signing up.
+
+### Standup 2 — Integration Testing & CI
+
+Participants: weiyiships, jooguh-dev
+
+weiyiships
+
+- Completed: Integrated customer login and order history, and added frontend component tests.
+- Next: Write Playwright end-to-end tests covering guest ordering, tracking, and customer login.
+- Blockers: Some automated tests need stable seeded data to avoid inconsistent results.
+  jooguh-dev
+- Completed: Added backend integration tests for order status transitions, authorization, and customer authentication.
+- Next: Configure GitHub Actions to run linting, type checking, unit tests, and integration tests.
+- Blockers: CI needs a separate PostgreSQL test database to run integration tests reliably.
+  Team Discussion: Agreed to use isolated test databases and require all CI checks to pass before merging pull requests.
+
+### Standup 3 — Deployment & Final Verification
+
+Participants: weiyiships, jooguh-dev
+
+weiyiships
+
+- Completed: Finished the end-to-end tests and improved responsive layouts for the guest menu, order tracking, and barista pages.
+- Next: Perform final user acceptance testing and update the project documentation.
+- Blockers: None.
+  jooguh-dev
+- Completed: Configured the deployment pipeline using GitHub Actions and Vercel, with Neon PostgreSQL as the production database.
+- Next: Verify production environment variables, monitor deployment results, and test the live APIs.
+- Blockers: None.
+  Team Discussion: Completed a full walkthrough of the guest and barista experiences. Confirmed the main features were ready for the final demonstration.
+
 ## Progress log
 
 > Reconstructed from the commit history (author dates), not written at the time. Days with no commits are not listed.
@@ -50,7 +97,6 @@ TDD evidence this sprint: #46 and #59 each have a failing-test commit before the
 
 **What didn't / risks**
 
-- Sprint 3 commits so far are almost all from jooguh-dev; deployment (#49) is the main weiyiships item.
 - PRs that touch `package.json` or the README conflict with each other when merged in sequence.
 
 **What we'll change**
@@ -59,7 +105,5 @@ TDD evidence this sprint: #46 and #59 each have a failing-test commit before the
 
 **Partner feedback**
 
-> To fill in: one or two sentences each, in your own words.
-
-- _jooguh-dev → weiyiships:_ …
-- _weiyiships → jooguh-dev:_ …
+- _jooguh-dev → weiyiships:_ Weiyi was thorough in testing the application and fixing UI issues, which helped us polish the final product before deployment.
+- _weiyiships → jooguh-dev:_ Xuming took ownership of backend testing and deployment, helping us deliver a more reliable application.
