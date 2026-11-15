@@ -1,12 +1,12 @@
 # Sprint 3: Hardening and documentation
 
 - **Milestone:** [Sprint 3](https://github.com/weiyiships/homebarista/milestone/3)
-- **Dates:** 2026-11-15 →
+- **Dates:** 2026-11-09 → 2026-11-15
 - **Goal:** close the gaps between the working app and the project requirements: a documented public API, integration tests against a real database, security scanning in CI, architecture and process documentation.
 
 ## Planning
 
-Planned on 2026-11-15 from a gap review of the repository against the course requirements. Every issue was written with acceptance criteria and a story-point estimate.
+Planned on 2026-11-09 from a gap review of the repository against the course requirements. Every issue was written with acceptance criteria and a story-point estimate.
 
 | Issue                                                      | Work                                     | Priority | Estimate | PR                                                       | Status |
 | ---------------------------------------------------------- | ---------------------------------------- | -------- | -------- | -------------------------------------------------------- | ------ |
@@ -26,8 +26,6 @@ Committed: 26 points. #59 was found while drawing the ER diagram (#50); #56 and 
 TDD evidence this sprint: #46 and #59 each have a failing-test commit before the implementation. #47 adds tests for existing behavior, checked by mutating the code and confirming the tests fail.
 
 ## Standups
-
-> Written up after the sprint. Each Completed and Next item matches the issues and pull requests in the planning table above.
 
 ### Standup 1 — Gap review and backlog
 
@@ -115,5 +113,5 @@ Team discussion: Completed a full walkthrough of the guest and barista experienc
 
 **Partner feedback**
 
-- _jooguh-dev → weiyiships:_ …
+- _jooguh-dev → weiyiships:_ Weiyi was thorough in testing the application and fixing UI issues, which helped us polish the final product before deployment.
 - _weiyiships → jooguh-dev:_ Xuming took ownership of backend testing and CI security scanning, helping us deliver a more reliable application.
