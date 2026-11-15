@@ -9,7 +9,7 @@ Full-stack web app where guests order coffee by QR code and the host runs a live
   - What to build: §6 User stories, §7 Functional requirements and acceptance criteria
   - Quality bars: §8 Non-functional requirements
   - Architecture: §9 Technical approach
-- **UI tokens and rules:** [`DESIGN.md`](DESIGN.md)
+- **UI tokens and rules:** [`docs/DESIGN.md`](docs/DESIGN.md)
 - **API contract:** [`docs/api/openapi.yaml`](docs/api/openapi.yaml)
 - **Research and design artifacts:** `docs/research/`, `docs/design/`
 

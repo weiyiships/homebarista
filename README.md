@@ -276,7 +276,7 @@ npm run lint && npm run format:check && npm run typecheck && npm test
 ## Documentation
 
 - [`docs/PRD.md`](docs/PRD.md): product requirements: goals, user stories, acceptance criteria, non-functional requirements
-- [`DESIGN.md`](DESIGN.md): design tokens and UI rules
+- [`docs/DESIGN.md`](docs/DESIGN.md): design tokens and UI rules
 - [`AGENTS.md`](AGENTS.md): engineering workflow and code rules
 - [`docs/api/openapi.yaml`](docs/api/openapi.yaml): API contract
 
