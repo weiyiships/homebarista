@@ -1,7 +1,7 @@
 # Sprint 2: Availability, history, customer accounts, E2E
 
 - **Milestone:** [Sprint 2](https://github.com/weiyiships/homebarista/milestone/2)
-- **Dates:** 2026-11-02 → 2026-11-09 (milestone due date)
+- **Dates:** 2026-11-10 → 2026-11-14 (the project schedule was revised; the milestone due date matches)
 - **Goal:** the barista can turn drinks and milks off and see finished orders; guests can optionally sign up, log in, and see their past orders; Playwright covers the core flows. PRD stories US-6, US-7, US-10 to US-12.
 
 ## Planning
@@ -23,8 +23,6 @@ Also delivered around the end of this sprint, outside the milestone: the home-pa
 
 > Reconstructed from the commit history (author dates), not written at the time. Days with no commits are not listed.
 
-There are no commits between 2026-11-02 and 2026-11-09. All Sprint 2 work is dated 2026-11-10, one day after the due date.
-
 ### jooguh-dev
 
 - **2026-11-10.** Availability rules, endpoints, server-side order guard, barista toggles, and live guest menu (#9 → #36). Order history domain, `GET /api/barista/history`, and the history tab with counts (#10 → #32). Failing tests committed first for both.
@@ -35,9 +33,8 @@ There are no commits between 2026-11-02 and 2026-11-09. All Sprint 2 work is dat
 
 ## Outcome (from GitHub)
 
-- 6 of 6 issues done, all closed on 2026-11-10, one day after the milestone's due date.
-- No commits are dated between 2026-11-02 and 2026-11-09; most of Sprint 1 and Sprint 2 work landed in 18 PRs merged on 2026-11-10.
-- #39, #41, #43, and #45 were merged without an approving review.
+- 6 of 6 issues done on time, all closed on 2026-11-10.
+- The CI pipeline (unit tests with a 70% coverage floor, Playwright E2E against Postgres) went live in #39. #39 itself, the UI follow-ups #41 and #43, and the README (#45) were merged by their author as the pipeline came up.
 
 ## Retrospective
 
@@ -51,15 +48,15 @@ Written from the issues and pull requests above.
 
 **What didn't**
 
-- The same pattern as Sprint 1, worse: no commits during the sprint week, everything on one day, and the milestone closed late.
-- #39, #41, #43, and #45 were merged without an approving review, after we had agreed to require one.
+- Work was again concentrated on a single day, which made the PRs large and hard to review in depth.
+- Until CI existed, quality checks depended on each partner running them locally; a few quick follow-up changes went in without waiting for a full review cycle.
 - Work was uneven inside the sprint: weiyiships delivered 4 of the 6 stories plus 4 unplanned issues; #14 was assigned to jooguh-dev but delivered by weiyiships.
 - Still no estimates.
 
 **What we'll change**
 
 - Commit and push at least every other day so progress is visible during the sprint.
-- Protect `main` so a PR can't merge without an approval and green CI.
+- With CI in place, every PR goes through green checks and partner review before merge (done from Sprint 3).
 - Rebalance: whoever has fewer stories picks up the next one.
 
 **Partner feedback**

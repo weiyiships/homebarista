@@ -4,8 +4,8 @@ We run short Scrum sprints on GitHub. Each sprint is a [milestone](https://githu
 
 | Sprint                  | Dates                   | Goal                                                      | Issues |
 | ----------------------- | ----------------------- | --------------------------------------------------------- | ------ |
-| [Sprint 1](sprint-1.md) | 2026-10-26 → 2026-11-02 | Guest ordering and the barista queue (PRD P0 stories)     | 8      |
-| [Sprint 2](sprint-2.md) | 2026-11-02 → 2026-11-09 | Availability, history, customer accounts, E2E tests       | 6      |
+| [Sprint 1](sprint-1.md) | 2026-10-26 → 2026-11-10 | Guest ordering and the barista queue (PRD P0 stories)     | 8      |
+| [Sprint 2](sprint-2.md) | 2026-11-10 → 2026-11-14 | Availability, history, customer accounts, E2E tests       | 6      |
 | [Sprint 3](sprint-3.md) | 2026-11-15 →            | Hardening: API docs, integration tests, CI security, docs | 10     |
 
 Who did what across all sprints: [`docs/CONTRIBUTIONS.md`](../CONTRIBUTIONS.md).

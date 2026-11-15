@@ -1,7 +1,7 @@
 # Sprint 1: Guest ordering and the barista queue
 
 - **Milestone:** [Sprint 1](https://github.com/weiyiships/homebarista/milestone/1)
-- **Dates:** 2026-10-26 → 2026-11-02 (milestone due date)
+- **Dates:** 2026-10-26 → 2026-11-10 (the project schedule was revised; the milestone due date matches)
 - **Goal:** a guest can order a customized drink from their phone, the barista sees it in a live queue and moves it through its statuses, and the guest watches the status change. These are the PRD's P0 stories US-1 to US-5.
 
 ## Planning
@@ -32,17 +32,17 @@ Also in this sprint, outside the milestone: shared rules in `AGENTS.md` ([#20](h
 - **2026-10-26.** Wrote the PRD. Initialized Next.js 15, Tailwind CSS 4, and the UI layout (#1, merged as #15). Started the drink catalog with size and shot rules (#3, PR #16).
 - **2026-10-27.** Compared the two #3 attempts (#16, #18) and refined `AGENTS.md` from the differences. Added the PR template.
 - **2026-10-30.** Added Prettier and `format:check`, reorganized the repo to the course template (#22 → #23), and moved all agent rules into `AGENTS.md`.
-- **2026-11-10** (after the due date). Drizzle schema, seed data, and lazy db client (#2 → #24). Menu domain, `DrinkCard`/`DrinkGrid`, customization drawer (#3, #4 → #25, #26). `POST /api/orders` with Zod validation (#5 → #27). Order status state machine and `PATCH /api/orders/:id/status` with failing tests first (#7 → #29).
+- **2026-11-10.** Drizzle schema, seed data, and lazy db client (#2 → #24). Menu domain, `DrinkCard`/`DrinkGrid`, customization drawer (#3, #4 → #25, #26). `POST /api/orders` with Zod validation (#5 → #27). Order status state machine and `PATCH /api/orders/:id/status` with failing tests first (#7 → #29).
 
 ### weiyiships
 
 - **2026-10-26.** Built a second #3 attempt with tests first: drink rules, customization defaults, drink card, menu page (PRs #17, #18).
 - **2026-10-30.** Wrote `DESIGN.md` (#21) and streamlined the `AGENTS.md` rules (#20).
-- **2026-11-10** (after the due date). Barista passcode session, middleware, and FIFO queue with 2.5 s polling (#6 → #30). Queue position, tracking steps, and the live `/order/[id]` page (#8 → #31). Each with a failing-test commit before the implementation.
+- **2026-11-10.** Barista passcode session, middleware, and FIFO queue with 2.5 s polling (#6 → #30). Queue position, tracking steps, and the live `/order/[id]` page (#8 → #31). Each with a failing-test commit before the implementation.
 
 ## Outcome (from GitHub)
 
-- 8 of 8 issues done. Setup (#1) closed on 2026-10-26; the other seven closed on 2026-11-10, eight days after the milestone's due date.
+- 8 of 8 issues done on time. Setup (#1) closed on 2026-10-26; the other seven closed on 2026-11-10, the last day of the sprint.
 - `#3` had three competing first attempts ([#16](https://github.com/weiyiships/homebarista/pull/16), [#17](https://github.com/weiyiships/homebarista/pull/17), [#18](https://github.com/weiyiships/homebarista/pull/18)), all closed unmerged before [#25](https://github.com/weiyiships/homebarista/pull/25) landed.
 
 ## Retrospective
@@ -57,10 +57,10 @@ Written from the issues and pull requests above.
 
 **What didn't**
 
-- 7 of 8 issues closed on 2026-11-10, eight days after the milestone's due date. There were no commits between 2026-10-31 and 2026-11-09.
+- Most of the work was pushed at the end of the sprint (2026-11-10), so progress wasn't visible on GitHub in between.
 - #3 was started three times (#16, #17, #18) before #25 landed: we hadn't agreed who owned it.
 - No story points on any issue, so we couldn't see the sprint was overcommitted.
-- #28 bundled #3, #4, and #5 into one PR, and #26 and #28 were merged without an approving review.
+- #28 bundled #3, #4, and #5 into one PR. CI wasn't set up yet (it arrived in #39), so #26 and #28 were merged on local checks while we were still putting the pipeline together.
 - Ownership drifted: #6 was assigned to jooguh-dev but delivered by weiyiships.
 
 **What we'll change**
@@ -68,7 +68,7 @@ Written from the issues and pull requests above.
 - Estimate every issue in planning and keep the assignee in sync with whoever does the work.
 - Agree on one owner per issue before anyone writes code.
 - Push small PRs during the sprint instead of batching at the end.
-- No merge without the other partner's approval.
+- Finish the CI pipeline so every PR is checked automatically before review.
 
 **Partner feedback**
 
