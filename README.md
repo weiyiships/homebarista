@@ -251,7 +251,12 @@ GitHub Actions ([`.github/workflows`](.github/workflows)) runs on every pull req
 
 Production runs on Vercel at https://homebarista-theta.vercel.app, with a Neon Postgres database added through the Vercel integration. `DATABASE_URL` comes from the integration, while `JWT_SECRET` and `BARISTA_PASSCODE` are set as sensitive variables for Production and Preview.
 
-The repository isn't connected to Vercel's Git integration, so merges don't deploy on their own. To deploy from a linked checkout of `main`:
+The repository is connected to Vercel's Git integration:
+
+- Every push to `main` (including merged PRs) deploys to production.
+- Every other branch and pull request gets its own preview deployment, and Vercel posts the preview URL on the PR.
+
+To deploy by hand from a linked checkout (for example, to redeploy without a new commit):
 
 ```bash
 npx vercel deploy --prod
