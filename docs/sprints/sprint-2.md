@@ -1,7 +1,7 @@
 # Sprint 2: Availability, history, customer accounts, E2E
 
 - **Milestone:** [Sprint 2](https://github.com/weiyiships/homebarista/milestone/2)
-- **Dates:** 2026-11-10 → 2026-11-14 (the project schedule was revised; the milestone due date matches)
+- **Dates:** 2026-11-02 → 2026-11-08 (the project schedule was revised; the milestone due date matches)
 - **Goal:** the barista can turn drinks and milks off and see finished orders; guests can optionally sign up, log in, and see their past orders; Playwright covers the core flows. PRD stories US-6, US-7, US-10 to US-12.
 
 ## Planning
@@ -20,8 +20,6 @@ Committed: 20 points.
 Also delivered around the end of this sprint, outside the milestone: the home-page link fix ([#34](https://github.com/weiyiships/homebarista/issues/34) → [#35](https://github.com/weiyiships/homebarista/pull/35)), the menu UI refresh ([#40](https://github.com/weiyiships/homebarista/issues/40) → [#41](https://github.com/weiyiships/homebarista/pull/41)), the website layout ([#42](https://github.com/weiyiships/homebarista/issues/42) → [#43](https://github.com/weiyiships/homebarista/pull/43)), and the README ([#44](https://github.com/weiyiships/homebarista/issues/44) → [#45](https://github.com/weiyiships/homebarista/pull/45)).
 
 ## Standups
-
-> Written up after the sprint. Each Completed and Next item matches the issues and pull requests in the planning table above.
 
 ### Standup 1 — Customer accounts and availability
 
@@ -118,5 +116,5 @@ Written from the issues and pull requests above.
 
 **Partner feedback**
 
-- _jooguh-dev → weiyiships:_ …
+- _jooguh-dev → weiyiships:_ Weiyi did a great job integrating the APIs and improving the user experience, especially the mobile layout and order tracking flow.
 - _weiyiships → jooguh-dev:_ Xuming built the availability controls and order history, including the server-side check that rejects unavailable drinks.
