@@ -12,25 +12,28 @@ export interface CreateOrderInput {
 }
 
 /**
- * Creates a new order and associated order_item record.
+ * Creates a new order and its order_item record in one transaction, so a
+ * failed item insert never leaves an order with no drink in the queue.
  */
 export async function createOrder(data: CreateOrderInput): Promise<Order> {
-  const [order] = await db
-    .insert(orders)
-    .values({
-      guestName: data.guestName,
-      customerId: data.customerId ?? null,
-      status: "received",
-    })
-    .returning();
+  return db.transaction(async (tx) => {
+    const [order] = await tx
+      .insert(orders)
+      .values({
+        guestName: data.guestName,
+        customerId: data.customerId ?? null,
+        status: "received",
+      })
+      .returning();
 
-  await db.insert(orderItems).values({
-    orderId: order.id,
-    menuItemId: data.drinkId,
-    optionsJson: data.options ?? {},
+    await tx.insert(orderItems).values({
+      orderId: order.id,
+      menuItemId: data.drinkId,
+      optionsJson: data.options ?? {},
+    });
+
+    return order;
   });
-
-  return order;
 }
 
 /**
