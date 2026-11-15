@@ -1,7 +1,7 @@
 # Sprint 1: Guest ordering and the barista queue
 
 - **Milestone:** [Sprint 1](https://github.com/weiyiships/homebarista/milestone/1)
-- **Dates:** 2026-10-26 → 2026-11-10 (the project schedule was revised; the milestone due date matches)
+- **Dates:** 2026-10-26 → 2026-11-01 (the project schedule was revised; the milestone due date matches)
 - **Goal:** a guest can order a customized drink from their phone, the barista sees it in a live queue and moves it through its statuses, and the guest watches the status change. These are the PRD's P0 stories US-1 to US-5.
 
 ## Planning
@@ -24,8 +24,6 @@ Committed: 26 points.
 Also in this sprint, outside the milestone: shared rules in `AGENTS.md` ([#20](https://github.com/weiyiships/homebarista/pull/20)), design tokens in `DESIGN.md` ([#21](https://github.com/weiyiships/homebarista/pull/21)), and the repository layout ([#22](https://github.com/weiyiships/homebarista/issues/22) → [#23](https://github.com/weiyiships/homebarista/pull/23)).
 
 ## Standups
-
-> Written up after the sprint. Each Completed and Next item matches the issues and pull requests in the planning table above.
 
 ### Standup 1 — Initial setup
 
@@ -129,5 +127,5 @@ Written from the issues and pull requests above.
 
 **Partner feedback**
 
-- _jooguh-dev → weiyiships:_ …
+- _jooguh-dev → weiyiships:_ Weiyi did a great job integrating the APIs and improving the user experience, especially the mobile layout and order tracking flow.
 - _weiyiships → jooguh-dev:_ Xuming did a great job setting up the database and backend APIs, which made it easier for me to integrate the frontend.
