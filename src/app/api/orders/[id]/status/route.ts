@@ -8,6 +8,7 @@ import { resolveStatusTransition } from "@/lib/domain/orderStatus";
 import {
   OrderIdParamSchema,
   OrderStatusUpdateSchema,
+  type OrderStatusUpdateResponse,
 } from "@/lib/schemas/order";
 
 interface RouteContext {
@@ -77,11 +78,12 @@ export async function PATCH(request: Request, { params }: RouteContext) {
       );
     }
 
-    return NextResponse.json({
+    const responseBody: OrderStatusUpdateResponse = {
       id: updated.id,
       status: updated.status,
       updated_at: updated.updatedAt.toISOString(),
-    });
+    };
+    return NextResponse.json(responseBody);
   } catch {
     return NextResponse.json(
       { error: "Failed to update order" },

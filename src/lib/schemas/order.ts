@@ -77,3 +77,28 @@ export const OrderTrackingSchema = z.object({
 });
 
 export type OrderTracking = z.infer<typeof OrderTrackingSchema>;
+
+// ---------------------------------------------------------------------------
+// Route handler responses
+// ---------------------------------------------------------------------------
+
+/** Response of POST /api/orders. `order_id` mirrors `id` for older clients. */
+export const OrderCreatedResponseSchema = z.object({
+  id: z.string().uuid(),
+  order_id: z.string().uuid(),
+  status: OrderStatusEnum,
+  guest_name: z.string(),
+});
+
+export type OrderCreatedResponse = z.infer<typeof OrderCreatedResponseSchema>;
+
+/** Response of PATCH /api/orders/:id/status. */
+export const OrderStatusUpdateResponseSchema = z.object({
+  id: z.string().uuid(),
+  status: OrderStatusEnum,
+  updated_at: z.string().datetime(),
+});
+
+export type OrderStatusUpdateResponse = z.infer<
+  typeof OrderStatusUpdateResponseSchema
+>;

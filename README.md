@@ -137,21 +137,22 @@ Names are listed in [`.env.example`](.env.example). Never commit values; `.env.l
 
 ## Scripts
 
-| Command                 | What it does                                    |
-| ----------------------- | ----------------------------------------------- |
-| `npm run dev`           | Start the dev server at http://localhost:3000   |
-| `npm run build`         | Production build                                |
-| `npm start`             | Serve the production build                      |
-| `npm run lint`          | ESLint (`next lint`)                            |
-| `npm run format`        | Format everything with Prettier                 |
-| `npm run format:check`  | Check formatting without writing                |
-| `npm run typecheck`     | TypeScript type check (`tsc --noEmit`)          |
-| `npm test`              | Vitest unit and component tests                 |
-| `npm run test:watch`    | Vitest in watch mode                            |
-| `npm run test:coverage` | Vitest with the 70% coverage floor CI enforces  |
-| `npm run test:e2e`      | Playwright end-to-end tests                     |
-| `npm run db:generate`   | Generate SQL migrations from the Drizzle schema |
-| `npm run db:migrate`    | Apply generated migrations                      |
+| Command                 | What it does                                            |
+| ----------------------- | ------------------------------------------------------- |
+| `npm run dev`           | Start the dev server at http://localhost:3000           |
+| `npm run build`         | Production build                                        |
+| `npm start`             | Serve the production build                              |
+| `npm run lint`          | ESLint (`next lint`)                                    |
+| `npm run format`        | Format everything with Prettier                         |
+| `npm run format:check`  | Check formatting without writing                        |
+| `npm run typecheck`     | TypeScript type check (`tsc --noEmit`)                  |
+| `npm test`              | Vitest unit and component tests                         |
+| `npm run test:watch`    | Vitest in watch mode                                    |
+| `npm run test:coverage` | Vitest with the 70% coverage floor CI enforces          |
+| `npm run test:e2e`      | Playwright end-to-end tests                             |
+| `npm run db:generate`   | Generate SQL migrations from the Drizzle schema         |
+| `npm run db:migrate`    | Apply generated migrations                              |
+| `npm run openapi`       | Regenerate `docs/api/openapi.yaml` from the Zod schemas |
 
 ## Project structure
 
@@ -195,7 +196,13 @@ All endpoints return JSON. Barista endpoints need the barista session cookie set
 | `GET`/`PATCH`   | `/api/barista/availability` | Barista  | Read or change drink and milk availability |
 | `GET`           | `/api/barista/history`      | Barista  | Picked-up and cancelled orders             |
 
-The OpenAPI contract lives in [`docs/api/openapi.yaml`](docs/api/openapi.yaml). It doesn't describe these endpoints yet.
+The OpenAPI 3.1 contract is generated from the same Zod schemas the route handlers validate with ([`src/lib/openapi/document.ts`](src/lib/openapi/document.ts)):
+
+- **Swagger UI:** [`/api/docs`](https://homebarista-theta.vercel.app/api/docs)
+- **Raw spec:** [`/api/openapi.json`](https://homebarista-theta.vercel.app/api/openapi.json)
+- **Committed snapshot:** [`docs/api/openapi.yaml`](docs/api/openapi.yaml), regenerated with `npm run openapi`
+
+A unit test fails if a route handler is missing from the spec, or if the committed snapshot is out of date.
 
 ## Testing
 
