@@ -127,5 +127,5 @@ Written from the issues and pull requests above.
 
 **Partner feedback**
 
-- _jooguh-dev → weiyiships:_ Weiyi did a great job integrating the APIs and improving the user experience, especially the mobile layout and order tracking flow.
+- _jooguh-dev → weiyiships:_ Weiyi built a clean and intuitive ordering interface and communicated frontend requirements clearly throughout the sprint.
 - _weiyiships → jooguh-dev:_ Xuming did a great job setting up the database and backend APIs, which made it easier for me to integrate the frontend.
