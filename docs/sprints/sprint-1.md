@@ -24,7 +24,7 @@ Committed: 26 points.
 Also in this sprint, outside the milestone: shared rules in `AGENTS.md` ([#20](https://github.com/weiyiships/homebarista/pull/20)), design tokens in `DESIGN.md` ([#21](https://github.com/weiyiships/homebarista/pull/21)), and the repository layout ([#22](https://github.com/weiyiships/homebarista/issues/22) → [#23](https://github.com/weiyiships/homebarista/pull/23)).
 
 ## Standups
-Standup 1 — Initial Setup
+### Standup 1 — Initial Setup
 Participants: weiyiships, jooguh-dev
 
 weiyiships
@@ -37,7 +37,7 @@ jooguh-dev
 - Blockers: Need to finalize the order data structure before implementing the API.
 Team Discussion: Agreed to keep the first version simple and support guest ordering without requiring an account.
 
-Standup 2 — Menu & Database Integration
+### Standup 2 — Menu & Database Integration
 Participants: weiyiships, jooguh-dev
 
 weiyiships
@@ -50,7 +50,7 @@ jooguh-dev
 - Blockers: Need to agree on how customized drink options will be stored with each order.
 Team Discussion: Agreed on a shared API contract and validation rules so frontend and backend development can continue independently.
 
-Standup 3 — Basic Ordering Flow
+### Standup 3 — Basic Ordering Flow
 Participants: weiyiships, jooguh-dev
 
 weiyiships
