@@ -36,6 +36,7 @@ jooguh-dev
 - Next: Configure PostgreSQL and Drizzle ORM, then create the initial database tables.
 - Blockers: Need to finalize the order data structure before implementing the API.
 Team Discussion: Agreed to keep the first version simple and support guest ordering without requiring an account.
+
 Standup 2 — Menu & Database Integration
 Participants: weiyiships, jooguh-dev
 
@@ -48,6 +49,7 @@ jooguh-dev
 - Next: Implement the menu retrieval and order creation API endpoints with Zod validation.
 - Blockers: Need to agree on how customized drink options will be stored with each order.
 Team Discussion: Agreed on a shared API contract and validation rules so frontend and backend development can continue independently.
+
 Standup 3 — Basic Ordering Flow
 Participants: weiyiships, jooguh-dev
 
