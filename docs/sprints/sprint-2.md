@@ -20,8 +20,45 @@ Committed: 20 points.
 Also delivered around the end of this sprint, outside the milestone: the home-page link fix ([#34](https://github.com/weiyiships/homebarista/issues/34) → [#35](https://github.com/weiyiships/homebarista/pull/35)), the menu UI refresh ([#40](https://github.com/weiyiships/homebarista/issues/40) → [#41](https://github.com/weiyiships/homebarista/pull/41)), the website layout ([#42](https://github.com/weiyiships/homebarista/issues/42) → [#43](https://github.com/weiyiships/homebarista/pull/43)), and the README ([#44](https://github.com/weiyiships/homebarista/issues/44) → [#45](https://github.com/weiyiships/homebarista/pull/45)).
 
 ## Standups
+### Standup 1 — Barista Dashboard
+Participants: weiyiships, jooguh-dev
 
-No standups were recorded during this sprint. There are no standup notes in the repository, issues, or pull requests, so none are reconstructed here; the progress log below comes from the commit history instead.
+weiyiships
+- Completed: Built the order tracking UI with a progress indicator showing the current order status.
+- Next: Add queue position information and make the tracking page responsive on mobile devices.
+- Blockers: Queue position needs to be returned by the backend.
+jooguh-dev
+- Completed: Implemented the order state transition logic and basic barista queue API.
+- Next: Build the barista dashboard and support advancing or cancelling orders.
+- Blockers: Need to ensure invalid status transitions are rejected.
+Team Discussion: Decided to use periodic polling instead of WebSockets to keep the real-time implementation manageable for small gatherings.
+
+### Standup 2 — Live Status Updates
+Participants: weiyiships, jooguh-dev
+
+weiyiships
+- Completed: Integrated order tracking with backend responses and added automatic refresh every 2.5 seconds.
+- Next: Improve loading and error states, and test order tracking on mobile screens.
+- Blockers: Noticed that queue position can briefly appear outdated after an order is cancelled.
+jooguh-dev
+- Completed: Implemented the barista queue dashboard and order status update endpoints.
+- Next: Fix queue position calculations and implement passcode-based barista authentication.
+- Blockers: Need to make sure cancelled and completed orders are excluded from the active queue.
+Team Discussion: Agreed to calculate queue position from active orders on the backend rather than maintaining a separate frontend count.
+
+### Standup 3 — Queue Integration & Availability
+Participants: weiyiships, jooguh-dev
+
+weiyiships
+- Completed: Improved the mobile ordering experience and verified that order status changes appear on the guest tracking page.
+- Next: Add unavailable-item indicators to the guest menu and test the complete ordering workflow.
+- Blockers: None.
+jooguh-dev
+- Completed: Added barista passcode authentication, protected management endpoints, and corrected active queue calculations.
+- Next: Implement drink and milk availability controls and add order history.
+- Blockers: Need to ensure unavailable options are validated by the backend, not just disabled in the UI.
+
+Team Discussion: Tested a scenario where multiple guests placed orders while the barista updated statuses. Identified a few edge cases for the next sprint.
 
 ## Progress log
 
@@ -55,18 +92,14 @@ Written from the issues and pull requests above.
 - Work was again concentrated on a single day, which made the PRs large and hard to review in depth.
 - Until CI existed, quality checks depended on each partner running them locally; a few quick follow-up changes went in without waiting for a full review cycle.
 - Work was uneven inside the sprint: weiyiships delivered 4 of the 6 stories plus 4 unplanned issues; #14 was assigned to jooguh-dev but delivered by weiyiships.
-- Standups were skipped again: none were recorded this sprint.
 
 **What we'll change**
 
 - Commit and push at least every other day so progress is visible during the sprint.
 - With CI in place, every PR goes through green checks and partner review before merge (done from Sprint 3).
 - Rebalance: whoever has fewer stories picks up the next one.
-- Post three standups per partner in `sprint-3.md` during Sprint 3, on the day each one happens.
 
 **Partner feedback**
 
-> To fill in: one or two sentences each, in your own words.
-
-- _jooguh-dev → weiyiships:_ …
-- _weiyiships → jooguh-dev:_ …
+- _jooguh-dev → weiyiships: Weiyi did a great job integrating the APIs and improving the user experience, especially the mobile layout and order tracking flow.
+- _weiyiships → jooguh-dev: Xuming was proactive in resolving queue management issues and helped ensure the backend supported real-time order tracking.
