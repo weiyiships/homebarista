@@ -9,7 +9,7 @@ jobs:
   check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: actions/setup-node@v7
         with:
           node-version: 22
@@ -39,7 +39,7 @@ jobs:
     env:
       DATABASE_URL_TEST: postgres://postgres:postgres@localhost:5432/homebarista_test
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: actions/setup-node@v7
         with:
           node-version: 22
@@ -66,7 +66,7 @@ jobs:
     env:
       E2E_DATABASE_URL: postgres://postgres:postgres@localhost:5432/homebarista_e2e
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: actions/setup-node@v7
         with:
           node-version: 22
