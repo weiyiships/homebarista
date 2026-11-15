@@ -1,5 +1,5 @@
 /**
- * Page widths from DESIGN.md's Layout section: a centered 1200px site,
+ * Page widths from docs/DESIGN.md's Layout section: a centered 1200px site,
  * with narrower reading columns for focused pages.
  */
 const GUTTER = "mx-auto w-full px-4 sm:px-8";

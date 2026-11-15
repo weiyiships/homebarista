@@ -8,14 +8,14 @@ The tables below come from the GitHub history as of 2026-11-15. Regenerate the n
 
 | Measure                                      | weiyiships      | jooguh-dev     |
 | -------------------------------------------- | --------------- | -------------- |
-| Non-merge commits on `main`                  | 67              | 37             |
-| Lines added / removed (excl. `package-lock`) | +8,850 / −1,207 | +10,713 / −480 |
-| `test` commits on `main`                     | 28              | 11             |
-| PRs merged (authored)                        | 12              | 13             |
-| PRs reviewed with an approval                | 11              | 7              |
+| Non-merge commits on `main`                  | 67              | 45             |
+| Lines added / removed (excl. `package-lock`) | +8,850 / −1,207 | +10,954 / −503 |
+| `test` commits on `main`                     | 28              | 12             |
+| PRs merged (authored)                        | 12              | 18             |
+| PRs reviewed with an approval                | 16              | 7              |
 | Issues created                               | 4               | 25             |
 
-Open PRs (#55, #57, #60, #62) are not counted yet.
+Dependabot's 4 automated PRs are not counted.
 
 ## Who did what
 
@@ -53,14 +53,19 @@ Open PRs (#55, #57, #60, #62) are not counted yet.
 | OpenAPI + Swagger UI                      | jooguh-dev | [#53](https://github.com/weiyiships/homebarista/pull/53)                                                                                                                                                                               |
 | Integration tests                         | jooguh-dev | [#54](https://github.com/weiyiships/homebarista/pull/54)                                                                                                                                                                               |
 | Architecture and schema diagrams          | jooguh-dev | [#58](https://github.com/weiyiships/homebarista/pull/58)                                                                                                                                                                               |
+| Security scanning and patched postcss     | jooguh-dev | [#55](https://github.com/weiyiships/homebarista/pull/55)                                                                                                                                                                               |
+| Repository cleanup                        | jooguh-dev | [#57](https://github.com/weiyiships/homebarista/pull/57)                                                                                                                                                                               |
+| Atomic `createOrder`                      | jooguh-dev | [#60](https://github.com/weiyiships/homebarista/pull/60)                                                                                                                                                                               |
+| Vitest 4 upgrade                          | jooguh-dev | [#62](https://github.com/weiyiships/homebarista/pull/62)                                                                                                                                                                               |
+| AI workflow documentation                 | jooguh-dev | [#64](https://github.com/weiyiships/homebarista/pull/64)                                                                                                                                                                               |
 | Vercel deployment and Neon                | weiyiships | production setup; see README › Deployment                                                                                                                                                                                              |
 
 ### Reviews
 
-| Reviewer   | Approved PRs                                          |
-| ---------- | ----------------------------------------------------- |
-| weiyiships | #15, #23, #24, #25, #27, #29, #32, #36, #53, #54, #58 |
-| jooguh-dev | #21, #30, #31, #33, #35, #37, #38                     |
+| Reviewer   | Approved PRs                                                                   |
+| ---------- | ------------------------------------------------------------------------------ |
+| weiyiships | #15, #23, #24, #25, #27, #29, #32, #36, #53, #54, #55, #57, #58, #60, #62, #64 |
+| jooguh-dev | #21, #30, #31, #33, #35, #37, #38                                              |
 
 ## Regenerating the numbers
 

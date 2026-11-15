@@ -3,5 +3,5 @@ node_modules
 coverage
 package-lock.json
 next-env.d.ts
-DESIGN.md
+docs/DESIGN.md
 .vercel
