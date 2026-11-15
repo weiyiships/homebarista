@@ -3,7 +3,10 @@ import { getCustomerFromRequest } from "@/lib/auth/customerSession";
 import { getMenuItemById, listMilkOptions } from "@/lib/db/queries/menu";
 import { createOrder } from "@/lib/db/queries/orders";
 import { checkOrderAvailability } from "@/lib/domain/availability";
-import { OrderRequestSchema } from "@/lib/schemas/order";
+import {
+  OrderRequestSchema,
+  type OrderCreatedResponse,
+} from "@/lib/schemas/order";
 
 export async function POST(request: Request) {
   let body: unknown;
@@ -55,15 +58,13 @@ export async function POST(request: Request) {
       customerId: customer?.id ?? null,
     });
 
-    return NextResponse.json(
-      {
-        id: order.id,
-        order_id: order.id,
-        status: order.status,
-        guest_name: order.guestName,
-      },
-      { status: 201 },
-    );
+    const responseBody: OrderCreatedResponse = {
+      id: order.id,
+      order_id: order.id,
+      status: order.status,
+      guest_name: order.guestName,
+    };
+    return NextResponse.json(responseBody, { status: 201 });
   } catch {
     return NextResponse.json(
       { error: "Failed to create order" },
