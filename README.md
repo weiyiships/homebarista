@@ -284,6 +284,8 @@ npm run lint && npm run format:check && npm run typecheck && npm test
 ## Documentation
 
 - [`docs/architecture.md`](docs/architecture.md): system, layering, state machine, database schema (ER), auth flow, and CI/CD diagrams
+- [`docs/sprints/`](docs/sprints/README.md): sprint planning, progress logs, and retrospectives
+- [`docs/CONTRIBUTIONS.md`](docs/CONTRIBUTIONS.md): who did what
 - [`docs/ai-workflow.md`](docs/ai-workflow.md): how we used the AI IDE: rules file, context engineering, AI-assisted TDD
 - [`docs/PRD.md`](docs/PRD.md): product requirements: goals, user stories, acceptance criteria, non-functional requirements
 - [`docs/DESIGN.md`](docs/DESIGN.md): design tokens and UI rules
