@@ -247,6 +247,14 @@ GitHub Actions ([`.github/workflows`](.github/workflows)) runs on every pull req
 - **integration:** route handler tests against a Postgres 16 service container, with the 85% route-handler coverage floor
 - **e2e:** Playwright against a Postgres 16 service container; reports are uploaded when it fails
 
+[`security.yml`](.github/workflows/security.yml) runs on every pull request, every push to `main`, and weekly:
+
+- **npm audit:** fails on any high or critical advisory in production dependencies; the full report, including dev tooling, goes to the job summary
+- **Dependency review:** fails a PR that adds a dependency with a high or critical advisory
+- **CodeQL:** static analysis with the `security-extended` queries; findings appear under the repository's Security tab
+
+[Dependabot](.github/dependabot.yml) opens weekly update PRs for npm packages and GitHub Actions.
+
 ## Deployment
 
 Production runs on Vercel at https://homebarista-theta.vercel.app, with a Neon Postgres database added through the Vercel integration. `DATABASE_URL` comes from the integration, while `JWT_SECRET` and `BARISTA_PASSCODE` are set as sensitive variables for Production and Preview.
