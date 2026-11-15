@@ -127,31 +127,32 @@ Open http://localhost:3000. The guest menu is at `/menu` and the barista queue a
 
 Names are listed in [`.env.example`](.env.example). Never commit values; `.env.local` is git-ignored.
 
-| Variable            | Required | Purpose                                                                     |
-| ------------------- | -------- | --------------------------------------------------------------------------- |
-| `DATABASE_URL`      | Yes      | Postgres connection string used by the app and `drizzle-kit`.               |
-| `JWT_SECRET`        | Yes      | Signs barista and customer session cookies. Must be at least 32 characters. |
-| `BARISTA_PASSCODE`  | Yes      | Shared passcode the host uses to sign in at `/barista/login`.               |
-| `DATABASE_URL_TEST` | No       | Reserved for integration tests against a separate database.                 |
-| `E2E_DATABASE_URL`  | No       | Throwaway database for Playwright. Defaults to the local Docker one below.  |
+| Variable            | Required | Purpose                                                                           |
+| ------------------- | -------- | --------------------------------------------------------------------------------- |
+| `DATABASE_URL`      | Yes      | Postgres connection string used by the app and `drizzle-kit`.                     |
+| `JWT_SECRET`        | Yes      | Signs barista and customer session cookies. Must be at least 32 characters.       |
+| `BARISTA_PASSCODE`  | Yes      | Shared passcode the host uses to sign in at `/barista/login`.                     |
+| `DATABASE_URL_TEST` | No       | Throwaway local Postgres for `npm run test:integration`; truncated on every test. |
+| `E2E_DATABASE_URL`  | No       | Throwaway database for Playwright. Defaults to the local Docker one below.        |
 
 ## Scripts
 
-| Command                 | What it does                                    |
-| ----------------------- | ----------------------------------------------- |
-| `npm run dev`           | Start the dev server at http://localhost:3000   |
-| `npm run build`         | Production build                                |
-| `npm start`             | Serve the production build                      |
-| `npm run lint`          | ESLint (`next lint`)                            |
-| `npm run format`        | Format everything with Prettier                 |
-| `npm run format:check`  | Check formatting without writing                |
-| `npm run typecheck`     | TypeScript type check (`tsc --noEmit`)          |
-| `npm test`              | Vitest unit and component tests                 |
-| `npm run test:watch`    | Vitest in watch mode                            |
-| `npm run test:coverage` | Vitest with the 70% coverage floor CI enforces  |
-| `npm run test:e2e`      | Playwright end-to-end tests                     |
-| `npm run db:generate`   | Generate SQL migrations from the Drizzle schema |
-| `npm run db:migrate`    | Apply generated migrations                      |
+| Command                    | What it does                                    |
+| -------------------------- | ----------------------------------------------- |
+| `npm run dev`              | Start the dev server at http://localhost:3000   |
+| `npm run build`            | Production build                                |
+| `npm start`                | Serve the production build                      |
+| `npm run lint`             | ESLint (`next lint`)                            |
+| `npm run format`           | Format everything with Prettier                 |
+| `npm run format:check`     | Check formatting without writing                |
+| `npm run typecheck`        | TypeScript type check (`tsc --noEmit`)          |
+| `npm test`                 | Vitest unit and component tests                 |
+| `npm run test:watch`       | Vitest in watch mode                            |
+| `npm run test:coverage`    | Vitest with the 70% coverage floor CI enforces  |
+| `npm run test:e2e`         | Playwright end-to-end tests                     |
+| `npm run test:integration` | Route handler tests against `DATABASE_URL_TEST` |
+| `npm run db:generate`      | Generate SQL migrations from the Drizzle schema |
+| `npm run db:migrate`       | Apply generated migrations                      |
 
 ## Project structure
 
@@ -203,10 +204,12 @@ The OpenAPI contract lives in [`docs/api/openapi.yaml`](docs/api/openapi.yaml). 
 npm run lint && npm run format:check && npm run typecheck
 npm test                # Vitest unit and component tests
 npm run test:coverage   # same, with the 70% coverage floor CI enforces
+npm run test:integration  # route handlers against a real Postgres
 npm run test:e2e        # Playwright end-to-end tests with axe checks
 ```
 
 - **Unit and component tests** sit next to the code they test (`*.test.ts(x)`) and need no database.
+- **Integration tests** in `tests/integration/` call every route handler against a real Postgres (`DATABASE_URL_TEST`) with real session cookies: validation, auth, the order state machine, availability, and login rate limiting. Tables are truncated and reseeded before each test, and the setup refuses non-local databases outside CI. `npm run test:integration:coverage` enforces 85% on route handlers.
 - **End-to-end tests** in `e2e/` cover guest ordering and tracking, the barista queue, and customer sign-up, log-in and history. They run at a 375px phone width; `*.desktop.spec.ts` files run at 1280px to check the website layout. Every page is checked with axe for WCAG 2.1 AA.
 
 The end-to-end suite builds the app and runs it against a **throwaway** Postgres database. Every table is dropped and reseeded on each run, and the setup refuses non-local databases outside CI. To run it locally with Docker:
@@ -220,11 +223,21 @@ npm run test:e2e
 
 Set `E2E_DATABASE_URL` to use a different database.
 
+For the integration tests, start another throwaway database and point `DATABASE_URL_TEST` at it:
+
+```bash
+docker run -d --name hb-int-pg -e POSTGRES_PASSWORD=postgres \
+  -e POSTGRES_DB=homebarista_test -p 54330:5432 postgres:16-alpine
+DATABASE_URL_TEST=postgres://postgres:postgres@localhost:54330/homebarista_test \
+  npm run test:integration
+```
+
 ### Continuous integration
 
 GitHub Actions ([`.github/workflows`](.github/workflows)) runs on every pull request and every push to `main`:
 
 - **check:** lint, format check, type check, and unit tests with coverage
+- **integration:** route handler tests against a Postgres 16 service container, with the 85% route-handler coverage floor
 - **e2e:** Playwright against a Postgres 16 service container; reports are uploaded when it fails
 
 ## Deployment
