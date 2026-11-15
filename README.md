@@ -246,15 +246,19 @@ GitHub Actions ([`.github/workflows`](.github/workflows)) runs on every pull req
 - **check:** lint, format check, type check, and unit tests with coverage
 - **integration:** route handler tests against a Postgres 16 service container, with the 85% route-handler coverage floor
 - **e2e:** Playwright against a Postgres 16 service container; reports are uploaded when it fails
+- **deploy:** runs only after the three jobs above pass; deploys a Vercel preview for PRs and production for pushes to `main`
 
 ## Deployment
 
 Production runs on Vercel at https://homebarista-theta.vercel.app, with a Neon Postgres database added through the Vercel integration. `DATABASE_URL` comes from the integration, while `JWT_SECRET` and `BARISTA_PASSCODE` are set as sensitive variables for Production and Preview.
 
-The repository is connected to Vercel's Git integration:
+Deploys run from the `deploy` job in GitHub Actions, so nothing reaches Vercel until check, integration, and e2e pass:
 
-- Every push to `main` (including merged PRs) deploys to production.
-- Every other branch and pull request gets its own preview deployment, and Vercel posts the preview URL on the PR.
+- **Pull requests** deploy to a Vercel preview through the `preview` GitHub Environment. The preview URL appears on the PR as that environment's deployment.
+- **Pushes to `main`** (including merged PRs) deploy to production through the `production` GitHub Environment, which only accepts deployments from `main`.
+- PRs from forks skip the deploy, because GitHub doesn't give them environment secrets.
+
+Each GitHub Environment holds its own `VERCEL_TOKEN`, `VERCEL_ORG_ID`, and `VERCEL_PROJECT_ID` secrets. The repository is still linked to Vercel's Git integration, but `vercel.json` sets `git.deploymentEnabled` to `false` so Vercel doesn't deploy a second time on its own.
 
 To deploy by hand from a linked checkout (for example, to redeploy without a new commit):
 
