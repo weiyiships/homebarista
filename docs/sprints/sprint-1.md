@@ -10,16 +10,16 @@ Planned jointly on 2026-10-26: both partners wrote the [PRD](../PRD.md), split i
 
 | Issue                                                    | Story      | Owner      | Priority | Estimate | Delivered in                                                                                                       |
 | -------------------------------------------------------- | ---------- | ---------- | -------- | -------- | ------------------------------------------------------------------------------------------------------------------ |
-| [#1](https://github.com/weiyiships/homebarista/issues/1) | Setup      | jooguh-dev | p0       | _TBD_    | [#15](https://github.com/weiyiships/homebarista/pull/15)                                                           |
-| [#2](https://github.com/weiyiships/homebarista/issues/2) | Database   | jooguh-dev | p0       | _TBD_    | [#24](https://github.com/weiyiships/homebarista/pull/24)                                                           |
-| [#3](https://github.com/weiyiships/homebarista/issues/3) | US-1, US-2 | weiyiships | p0       | _TBD_    | [#25](https://github.com/weiyiships/homebarista/pull/25), [#28](https://github.com/weiyiships/homebarista/pull/28) |
-| [#4](https://github.com/weiyiships/homebarista/issues/4) | US-2       | weiyiships | p0       | _TBD_    | [#26](https://github.com/weiyiships/homebarista/pull/26), [#28](https://github.com/weiyiships/homebarista/pull/28) |
-| [#5](https://github.com/weiyiships/homebarista/issues/5) | US-1       | weiyiships | p0       | _TBD_    | [#27](https://github.com/weiyiships/homebarista/pull/27), [#28](https://github.com/weiyiships/homebarista/pull/28) |
-| [#6](https://github.com/weiyiships/homebarista/issues/6) | US-3       | jooguh-dev | p0       | _TBD_    | [#30](https://github.com/weiyiships/homebarista/pull/30) (by weiyiships)                                           |
-| [#7](https://github.com/weiyiships/homebarista/issues/7) | US-4       | jooguh-dev | p0       | _TBD_    | [#29](https://github.com/weiyiships/homebarista/pull/29)                                                           |
-| [#8](https://github.com/weiyiships/homebarista/issues/8) | US-5       | weiyiships | p0       | _TBD_    | [#31](https://github.com/weiyiships/homebarista/pull/31)                                                           |
+| [#1](https://github.com/weiyiships/homebarista/issues/1) | Setup      | jooguh-dev | p0       | 2        | [#15](https://github.com/weiyiships/homebarista/pull/15)                                                           |
+| [#2](https://github.com/weiyiships/homebarista/issues/2) | Database   | jooguh-dev | p0       | 3        | [#24](https://github.com/weiyiships/homebarista/pull/24)                                                           |
+| [#3](https://github.com/weiyiships/homebarista/issues/3) | US-1, US-2 | weiyiships | p0       | 5        | [#25](https://github.com/weiyiships/homebarista/pull/25), [#28](https://github.com/weiyiships/homebarista/pull/28) |
+| [#4](https://github.com/weiyiships/homebarista/issues/4) | US-2       | weiyiships | p0       | 2        | [#26](https://github.com/weiyiships/homebarista/pull/26), [#28](https://github.com/weiyiships/homebarista/pull/28) |
+| [#5](https://github.com/weiyiships/homebarista/issues/5) | US-1       | weiyiships | p0       | 3        | [#27](https://github.com/weiyiships/homebarista/pull/27), [#28](https://github.com/weiyiships/homebarista/pull/28) |
+| [#6](https://github.com/weiyiships/homebarista/issues/6) | US-3       | jooguh-dev | p0       | 5        | [#30](https://github.com/weiyiships/homebarista/pull/30) (by weiyiships)                                           |
+| [#7](https://github.com/weiyiships/homebarista/issues/7) | US-4       | jooguh-dev | p0       | 3        | [#29](https://github.com/weiyiships/homebarista/pull/29)                                                           |
+| [#8](https://github.com/weiyiships/homebarista/issues/8) | US-5       | weiyiships | p0       | 3        | [#31](https://github.com/weiyiships/homebarista/pull/31)                                                           |
 
-> **To fill in:** the issues were created without story points. Add the estimates you agreed on in planning (see the [scale](README.md#estimation-scale)), or mark them as estimated after the fact.
+Committed: 26 points.
 
 Also in this sprint, outside the milestone: shared rules in `AGENTS.md` ([#20](https://github.com/weiyiships/homebarista/pull/20)), design tokens in `DESIGN.md` ([#21](https://github.com/weiyiships/homebarista/pull/21)), and the repository layout ([#22](https://github.com/weiyiships/homebarista/issues/22) → [#23](https://github.com/weiyiships/homebarista/pull/23)).
 
@@ -59,13 +59,12 @@ Written from the issues and pull requests above.
 
 - Most of the work was pushed at the end of the sprint (2026-11-10), so progress wasn't visible on GitHub in between.
 - #3 was started three times (#16, #17, #18) before #25 landed: we hadn't agreed who owned it.
-- No story points on any issue, so we couldn't see the sprint was overcommitted.
 - #28 bundled #3, #4, and #5 into one PR. CI wasn't set up yet (it arrived in #39), so #26 and #28 were merged on local checks while we were still putting the pipeline together.
 - Ownership drifted: #6 was assigned to jooguh-dev but delivered by weiyiships.
 
 **What we'll change**
 
-- Estimate every issue in planning and keep the assignee in sync with whoever does the work.
+- Keep the assignee in sync with whoever does the work.
 - Agree on one owner per issue before anyone writes code.
 - Push small PRs during the sprint instead of batching at the end.
 - Finish the CI pipeline so every PR is checked automatically before review.

@@ -8,14 +8,14 @@
 
 | Issue                                                      | Story       | Owner      | Priority | Estimate | Delivered in                                                             |
 | ---------------------------------------------------------- | ----------- | ---------- | -------- | -------- | ------------------------------------------------------------------------ |
-| [#9](https://github.com/weiyiships/homebarista/issues/9)   | US-6        | jooguh-dev | p1       | _TBD_    | [#36](https://github.com/weiyiships/homebarista/pull/36)                 |
-| [#10](https://github.com/weiyiships/homebarista/issues/10) | US-7        | jooguh-dev | p1       | _TBD_    | [#32](https://github.com/weiyiships/homebarista/pull/32)                 |
-| [#11](https://github.com/weiyiships/homebarista/issues/11) | US-10       | weiyiships | p1       | _TBD_    | [#33](https://github.com/weiyiships/homebarista/pull/33)                 |
-| [#12](https://github.com/weiyiships/homebarista/issues/12) | US-11       | weiyiships | p1       | _TBD_    | [#37](https://github.com/weiyiships/homebarista/pull/37)                 |
-| [#13](https://github.com/weiyiships/homebarista/issues/13) | US-12       | weiyiships | p1       | _TBD_    | [#38](https://github.com/weiyiships/homebarista/pull/38)                 |
-| [#14](https://github.com/weiyiships/homebarista/issues/14) | E2E testing | jooguh-dev | p1       | _TBD_    | [#39](https://github.com/weiyiships/homebarista/pull/39) (by weiyiships) |
+| [#9](https://github.com/weiyiships/homebarista/issues/9)   | US-6        | jooguh-dev | p1       | 3        | [#36](https://github.com/weiyiships/homebarista/pull/36)                 |
+| [#10](https://github.com/weiyiships/homebarista/issues/10) | US-7        | jooguh-dev | p1       | 2        | [#32](https://github.com/weiyiships/homebarista/pull/32)                 |
+| [#11](https://github.com/weiyiships/homebarista/issues/11) | US-10       | weiyiships | p1       | 3        | [#33](https://github.com/weiyiships/homebarista/pull/33)                 |
+| [#12](https://github.com/weiyiships/homebarista/issues/12) | US-11       | weiyiships | p1       | 5        | [#37](https://github.com/weiyiships/homebarista/pull/37)                 |
+| [#13](https://github.com/weiyiships/homebarista/issues/13) | US-12       | weiyiships | p1       | 2        | [#38](https://github.com/weiyiships/homebarista/pull/38)                 |
+| [#14](https://github.com/weiyiships/homebarista/issues/14) | E2E testing | jooguh-dev | p1       | 5        | [#39](https://github.com/weiyiships/homebarista/pull/39) (by weiyiships) |
 
-> **To fill in:** story points agreed in planning.
+Committed: 20 points.
 
 Also delivered around the end of this sprint, outside the milestone: the home-page link fix ([#34](https://github.com/weiyiships/homebarista/issues/34) → [#35](https://github.com/weiyiships/homebarista/pull/35)), the menu UI refresh ([#40](https://github.com/weiyiships/homebarista/issues/40) → [#41](https://github.com/weiyiships/homebarista/pull/41)), the website layout ([#42](https://github.com/weiyiships/homebarista/issues/42) → [#43](https://github.com/weiyiships/homebarista/pull/43)), and the README ([#44](https://github.com/weiyiships/homebarista/issues/44) → [#45](https://github.com/weiyiships/homebarista/pull/45)).
 
@@ -51,7 +51,6 @@ Written from the issues and pull requests above.
 - Work was again concentrated on a single day, which made the PRs large and hard to review in depth.
 - Until CI existed, quality checks depended on each partner running them locally; a few quick follow-up changes went in without waiting for a full review cycle.
 - Work was uneven inside the sprint: weiyiships delivered 4 of the 6 stories plus 4 unplanned issues; #14 was assigned to jooguh-dev but delivered by weiyiships.
-- Still no estimates.
 
 **What we'll change**
 
