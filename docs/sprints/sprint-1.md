@@ -1,7 +1,7 @@
 # Sprint 1: Guest ordering and the barista queue
 
 - **Milestone:** [Sprint 1](https://github.com/weiyiships/homebarista/milestone/1)
-- **Dates:** 2026-10-26 → 2026-11-10 (the project schedule was revised; the milestone due date matches)
+- **Dates:** 2026-10-26 → 2026-11-01 (the project schedule was revised; the milestone due date matches)
 - **Goal:** a guest can order a customized drink from their phone, the barista sees it in a live queue and moves it through its statuses, and the guest watches the status change. These are the PRD's P0 stories US-1 to US-5.
 
 ## Planning
@@ -25,51 +25,59 @@ Also in this sprint, outside the milestone: shared rules in `AGENTS.md` ([#20](h
 
 ## Standups
 
-### Standup 1 — Initial Setup
+### Standup 1 — Initial setup
 
 Participants: weiyiships, jooguh-dev
 
-weiyiships
+**weiyiships**
 
 - Completed: Reviewed the project requirements and created initial wireframes for the guest menu and ordering flow.
-- Next: Set up the Next.js frontend and build the basic menu page with sample coffee drinks.
+- Next: Build a test-first version of the drink catalog and menu page (#3).
 - Blockers: None.
-  jooguh-dev
-- Completed: Reviewed the technical requirements and designed the initial database schema for drinks, customization options, and orders.
-- Next: Configure PostgreSQL and Drizzle ORM, then create the initial database tables.
+
+**jooguh-dev**
+
+- Completed: Wrote the PRD and initialized Next.js 15, Tailwind CSS 4, and Vitest (#1 → #15). Drafted the database schema for drinks, customization options, and orders.
+- Next: Configure PostgreSQL and Drizzle ORM, then create the initial tables (#2).
 - Blockers: Need to finalize the order data structure before implementing the API.
-  Team Discussion: Agreed to keep the first version simple and support guest ordering without requiring an account.
 
-### Standup 2 — Menu & Database Integration
+Team discussion: Agreed to keep the first version simple and support guest ordering without requiring an account.
+
+### Standup 2 — Menu, project rules, and database
 
 Participants: weiyiships, jooguh-dev
 
-weiyiships
+**weiyiships**
 
-- Completed: Built the initial guest menu UI with six coffee drinks and customization options for size, temperature, and milk.
-- Next: Connect the menu to the backend API and implement the order submission form.
+- Completed: Built a test-first drink catalog and menu page with size and shot selection (#17, #18).
+- Next: Write the design tokens in `DESIGN.md` (#21) and streamline the `AGENTS.md` rules (#20).
 - Blockers: Waiting for the menu API response format to be finalized.
-  jooguh-dev
-- Completed: Created the database schema and seed data for drinks and customization options.
-- Next: Implement the menu retrieval and order creation API endpoints with Zod validation.
-- Blockers: Need to agree on how customized drink options will be stored with each order.
-  Team Discussion: Agreed on a shared API contract and validation rules so frontend and backend development can continue independently.
 
-### Standup 3 — Basic Ordering Flow
+**jooguh-dev**
+
+- Completed: Compared the competing #3 attempts and turned the differences into `AGENTS.md` rules and the PR template. Added Prettier and reorganized the repository (#22 → #23).
+- Next: Drizzle schema and seed data (#2), then the menu and order creation API with Zod validation (#3, #5).
+- Blockers: Need to agree on how customized drink options will be stored with each order.
+
+Team discussion: Agreed on a shared API contract and validation rules so frontend and backend work can continue independently, and decided to use polling instead of WebSockets for live updates.
+
+### Standup 3 — Ordering flow and barista queue
 
 Participants: weiyiships, jooguh-dev
 
-weiyiships
+**weiyiships**
 
-- Completed: Integrated the menu API and implemented the guest order submission flow.
-- Next: Build the order confirmation page and begin displaying order status.
+- Completed: Barista passcode session, middleware, and the first-in, first-out queue with 2.5 s polling (#6 → #30).
+- Next: Build the live order tracking page with queue position (#8).
 - Blockers: Need a consistent response from the order creation API to support navigation to the tracking page.
-  jooguh-dev
-- Completed: Implemented the order creation endpoint and database persistence for guest orders.
-- Next: Build the order status API and introduce the order lifecycle: received, brewing, ready, and picked up.
+
+**jooguh-dev**
+
+- Completed: Schema and seed data (#2 → #24), the menu and customization drawer (#3, #4 → #25, #26), and `POST /api/orders` with Zod validation (#5 → #27).
+- Next: The order status state machine (received → brewing → ready → picked up, plus cancel) and its endpoint (#7).
 - Blockers: None.
 
-Team Discussion: Walked through the guest ordering flow and identified basic validation and error-handling cases to address in Sprint 2.
+Team discussion: Walked through the guest ordering flow. Agreed to calculate queue position from active orders on the backend rather than keeping a separate count in the frontend, and noted validation and error-handling cases for Sprint 2.
 
 ## Progress log
 
